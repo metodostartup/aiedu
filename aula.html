@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.layout-aula{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+.player{background:#000;border:1px solid var(--borda);border-radius:16px;overflow:hidden}
+.player .tela{aspect-ratio:16/9;display:grid;place-items:center;position:relative;
+  background:radial-gradient(600px 300px at 50% 40%, rgba(162,60,255,.25), #0b0510 75%)}
+.player .tela .play{width:74px;height:74px;border-radius:50%;background:var(--grad);display:grid;place-items:center;
+  font-size:24px;color:#fff;box-shadow:0 10px 34px rgba(255,45,138,.5);cursor:pointer;border:none;transition:var(--trans)}
+.player .tela .play:hover{transform:scale(1.07)}
+.player .tela .pulse{position:absolute;width:74px;height:74px;border-radius:50%;border:2px solid rgba(162,60,255,.6);animation:onda 2s infinite}
+@keyframes onda{to{transform:scale(1.9);opacity:0}}
+.player .ctrl{padding:14px 18px;background:var(--card);display:flex;flex-direction:column;gap:9px}
+.player .ctrl .linha{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--mut)}
+.player .ctrl button{background:none;border:none;color:var(--txt);font-size:14px;cursor:pointer;transition:var(--trans)}
+.player .ctrl button:hover{color:#fff;text-shadow:0 0 10px rgba(162,60,255,.8)}
+.player .ctrl .tempo{margin-left:auto;font-variant-numeric:tabular-nums}
+.player .barra{cursor:pointer}
+.lado-aula .card{padding:16px 18px;margin-bottom:13px}
+.lado-aula h4{font-size:13px;margin-bottom:10px}
+.lado-aula ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+.aula-item{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;font-size:12.5px}
+.aula-item:hover{background:rgba(200,140,255,.06)}
+.aula-item.atual{background:rgba(255,45,138,.14);border:1px solid rgba(255,45,138,.4)}
+.aula-item .tic{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--borda-forte);display:grid;place-items:center;font-size:9px;color:#fff;flex-shrink:0}
+.aula-item .tic.on{background:var(--grad);border-color:transparent}
+.aula-item .dur{margin-left:auto;color:var(--mut);font-size:10.5px}
+textarea.notas{width:100%;min-height:90px;background:var(--card-2);border:1px solid var(--borda);border-radius:10px;padding:11px 13px;resize:vertical;outline:none;font-size:12.5px;line-height:1.5}
+textarea.notas:focus{border-color:var(--borda-forte)}
+@media(max-width:1080px){.layout-aula{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-pagina="cursos.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+  <linearGradient id="ceu1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b0f52"/><stop offset=".55" stop-color="#7a1a8f"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <filter id="grao"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0"/></filter>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Aula"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <div class="pagehead">
+      <div><h1 style="font-size:20px">Escolhendo a ferramenta certa</h1>
+      <p>Módulo 2 · Aula 4 de 7 · <b style="color:var(--txt)">Fundamentos da Inteligência Artificial</b></p></div>
+      <div class="acoes">
+        <a class="btn btn-sec" href="curso.html?id=fundamentos">← Voltar ao curso</a>
+        <button class="btn btn-pri" id="btn-proxima">Próxima aula →</button>
+      </div>
+    </div>
+
+    <div class="layout-aula">
+      <div>
+        <div class="player">
+          <div class="tela">
+            <span class="pulse"></span>
+            <button class="play" id="btn-play" aria-label="Reproduzir">▶</button>
+          </div>
+          <div class="ctrl">
+            <div class="barra" id="barra-video"><i style="width:34%"></i></div>
+            <div class="linha">
+              <button id="c-volt" aria-label="Voltar 10s">⏪</button>
+              <button id="c-play" aria-label="Pausar">⏸</button>
+              <button id="c-avan" aria-label="Avançar 10s">⏩</button>
+              <span>14:20</span>
+              <span class="tempo" id="tempo">04:52 / 14:20</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="secao-tit"><h2>Sobre esta aula</h2></div>
+        <div class="card" style="padding:18px">
+          <p style="font-size:13px;line-height:1.65">Nesta aula comparamos as grandes famílias de ferramentas: assistentes de chat, geradores de imagem, ferramentas de voz e plataformas de automação. Você aprende um critério simples de escolha — <b style="color:#fff">tarefa → tipo de saída → ferramenta</b> — e vê três exemplos reais aplicados ao dia a dia de trabalho.</p>
+        </div>
+
+        <div class="secao-tit"><h2>Prompts usados na aula</h2></div>
+        <div class="card" style="padding:16px 18px;margin-bottom:13px">
+          <span class="tag">Comparação</span>
+          <h3 style="font-size:13.5px;margin-top:7px">Tabela de ferramentas por tarefa</h3>
+          <p class="prev-prompt" style="font-size:12px;color:var(--mut);margin-top:6px">“Compare as ferramentas A, B e C para a tarefa X. Critérios: custo, curva de aprendizagem, qualidade da saída e integrações. Responda em tabela.”</p>
+          <button class="btn btn-sec" style="margin-top:10px" data-copiar="Compare as ferramentas A, B e C para a tarefa X. Critérios: custo, curva de aprendizagem, qualidade da saída e integrações. Responda em tabela.">Copiar prompt</button>
+        </div>
+
+        <div class="secao-tit"><h2>Minhas notas</h2></div>
+        <div class="card" style="padding:16px 18px">
+          <textarea class="notas" id="notas" placeholder="Escreva suas notas sobre esta aula… (salvas automaticamente neste navegador)">Critério: tarefa → saída → ferramenta. Revisar slide do comparativo!</textarea>
+          <button class="btn btn-sec" style="margin-top:10px" id="btn-notas">Salvar notas</button>
+        </div>
+
+        <div class="secao-tit"><h2>Dúvidas</h2></div>
+        <div class="card" style="padding:16px 18px">
+          <textarea class="notas" id="duvida" placeholder="Pergunte algo sobre esta aula…"></textarea>
+          <button class="btn btn-pri" style="margin-top:10px" id="btn-duvida">Enviar dúvida</button>
+        </div>
+      </div>
+
+      <aside class="lado-aula">
+        <div class="card">
+          <h4>Módulos do curso</h4>
+          <ul>
+            <li class="aula-item"><span class="tic on">✓</span>O que é (e o que não é) IA<span class="dur">12:40</span></li>
+            <li class="aula-item"><span class="tic on">✓</span>Como os modelos aprendem<span class="dur">18:05</span></li>
+            <li class="aula-item"><span class="tic on">✓</span>Limites, vieses e riscos<span class="dur">15:30</span></li>
+            <li class="aula-item atual"><span class="tic"></span>Escolhendo a ferramenta certa<span class="dur">14:20</span></li>
+            <li class="aula-item"><span class="tic"></span>Prompts que funcionam<span class="dur">21:10</span></li>
+            <li class="aula-item"><span class="tic"></span>Avaliando resultados<span class="dur">16:45</span></li>
+            <li class="aula-item"><span class="tic"></span>Projeto: assistente pessoal<span class="dur">24:00</span></li>
+          </ul>
+          <button class="btn btn-pri" style="width:100%;justify-content:center;margin-top:12px" id="btn-concluida">Marcar como concluída</button>
+        </div>
+        <div class="card">
+          <h4>Downloads</h4>
+          <ul>
+            <li>📄 Slides da aula (PDF)</li>
+            <li>📊 Comparativo de ferramentas (XLSX)</li>
+            <li>🔗 Lista de links citados</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Transcrição</h4>
+          <p style="font-size:12px;color:var(--mut);line-height:1.6">“…e é por isso que, antes de escolher a ferramenta, a pergunta certa é: qual é a saída que eu preciso produzir? A partir daí o resto se resolve…”</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* player simulado */
+  let tocando = false, seg = 292, total = 860;
+  const fmt = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+  function pintar(){
+    document.querySelector('#barra-video i').style.width = (seg/total*100)+'%';
+    document.getElementById('tempo').textContent = fmt(seg)+' / '+fmt(total);
+  }
+  let timer = null;
+  function play(){
+    tocando = !tocando;
+    document.getElementById('btn-play').textContent = tocando ? '⏸' : '▶';
+    document.getElementById('c-play').textContent = tocando ? '⏸' : '▶';
+    clearInterval(timer);
+    if (tocando) timer = setInterval(()=>{ seg=Math.min(total,seg+5); pintar(); if(seg===total) clearInterval(timer); }, 250);
+  }
+  document.getElementById('btn-play').addEventListener('click', play);
+  document.getElementById('c-play').addEventListener('click', play);
+  document.getElementById('c-volt').addEventListener('click', ()=>{ seg=Math.max(0,seg-10); pintar(); });
+  document.getElementById('c-avan').addEventListener('click', ()=>{ seg=Math.min(total,seg+10); pintar(); });
+  document.getElementById('barra-video').addEventListener('click', e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    seg = Math.round((e.clientX-r.left)/r.width*total); pintar();
+  });
+  pintar();
+
+  /* concluir aula */
+  document.getElementById('btn-concluida').addEventListener('click', e => {
+    const tic = document.querySelector('.aula-item.atual .tic');
+    const done = tic.classList.toggle('on');
+    tic.textContent = done ? '✓' : '';
+    if (done) { window.toast('Aula marcada como concluída ✓'); window.confete(); }
+  });
+  document.getElementById('btn-notas').addEventListener('click', () => window.toast('Notas salvas ✓'));
+  document.getElementById('btn-duvida').addEventListener('click', () => {
+    const d = document.getElementById('duvida');
+    if (!d.value.trim()) return window.toast('Escreva sua dúvida antes de enviar', 'err');
+    d.value=''; window.toast('Dúvida enviada! O professor responde em até 24h ✓');
+  });
+  document.getElementById('btn-proxima').addEventListener('click', () => window.toast('Carregando próxima aula: “Prompts que funcionam”…'));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Squads | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* paleta extraída do teste.html */
+  --bg:#160a1c;            /* fundo geral */
+  --topbar:#1b0c21;        /* barra superior e sidebar */
+  --card:#1d0e24;          /* corpo dos cards */
+  --pri:#c026d3;           /* roxo principal */
+  --pri-soft:#a23cff;      /* lilás */
+  --txt:#d9cfe3;           /* texto */
+  --mut:#9a86ad;           /* texto secundário */
+  --borda:rgba(162,60,255,.16);
+  --borda-forte:rgba(162,60,255,.55);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:'Inter',system-ui,sans-serif;color:var(--txt);background:var(--bg);
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+svg{display:block}
+
+/* ================= TOPBAR FLUTUANTE ================= */
+.top-wrap{padding:14px 24px 0}
+.topbar{
+  height:56px;border-radius:14px;display:flex;align-items:center;gap:20px;padding:0 16px 0 22px;
+  background:linear-gradient(180deg,#221028,#1b0c21);
+  border:1px solid var(--borda);
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.6);
+}
+.logo{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.logo b{
+  font-family:'Sora',sans-serif;font-size:20px;font-weight:800;letter-spacing:.04em;color:#fff;
+  display:flex;align-items:center;gap:2px;
+}
+.logo b .ai{
+  color:#fff;background:var(--grad);border-radius:5px;padding:0 6px;margin-left:5px;
+  background:linear-gradient(120deg,var(--pri),var(--pri-soft));
+}
+.logo .divi{width:1px;height:20px;background:var(--borda-forte)}
+.logo .arsenal{font-size:12.5px;font-weight:800;letter-spacing:.22em;color:var(--txt)}
+.busca{
+  flex:1;max-width:400px;display:flex;align-items:center;gap:10px;
+  background:rgba(217,207,227,.06);border:1px solid var(--borda);border-radius:999px;
+  padding:9px 16px;transition:border-color .2s;
+}
+.busca:focus-within{border-color:var(--borda-forte)}
+.busca svg{flex-shrink:0;stroke:var(--mut)}
+.busca input{flex:1;background:none;border:none;outline:none;color:var(--txt);font:400 13px 'Inter',sans-serif}
+.busca input::placeholder{color:var(--mut)}
+.busca .kbd{font-size:11px;color:var(--mut);border:1px solid var(--borda);border-radius:6px;padding:2px 8px}
+.userbox{margin-left:auto;display:flex;align-items:center;gap:13px;flex-shrink:0}
+.gema{width:34px;height:34px;flex-shrink:0;
+  background:conic-gradient(from 220deg,#a23cff,#d9cfe3,#c026d3,#a23cff);
+  clip-path:polygon(50% 0,100% 38%,50% 100%,0 38%);
+  filter:drop-shadow(0 0 8px rgba(162,60,255,.6));}
+.xp{display:flex;flex-direction:column;gap:4px;width:150px}
+.xp .linha1{display:flex;justify-content:space-between;font-size:11px;color:var(--txt)}
+.xp .linha1 b{font-weight:700}
+.xp .trilha{height:4px;border-radius:3px;background:rgba(217,207,227,.16);overflow:hidden}
+.xp .trilha i{display:block;height:100%;width:3%;background:linear-gradient(90deg,var(--pri),var(--pri-soft));border-radius:3px}
+.xp .linha2{font-size:10.5px;color:var(--mut);text-align:right}
+.avatar{
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pri),var(--pri-soft));color:#fff;
+  font-size:11.5px;font-weight:800;box-shadow:0 0 0 2px var(--topbar),0 0 0 3.5px var(--borda-forte);
+}
+
+/* ================= SHELL ================= */
+.shell{flex:1;display:flex;gap:0;padding:8px 24px 0;min-height:0}
+.side{
+  width:212px;flex-shrink:0;padding:18px 10px 18px 2px;
+  display:flex;flex-direction:column;gap:2px;
+}
+.sitem{
+  display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;
+  font-size:13px;font-weight:500;color:var(--txt);border:1px solid transparent;transition:.18s;
+}
+.sitem:hover{background:rgba(217,207,227,.05);color:#fff}
+.sitem.active{
+  background:linear-gradient(120deg,rgba(192,38,211,.18),rgba(162,60,255,.08));
+  border-color:var(--borda-forte);color:#fff;font-weight:600;
+}
+.sitem.active svg{stroke:#e0b6ff}
+.sitem .ic{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+.sitem .ic svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sitem .ic.roxo{background:linear-gradient(135deg,var(--pri),var(--pri-soft))}
+.sitem .ic.rosa{background:linear-gradient(135deg,#ff2d8a,var(--pri))}
+.sitem .ic.lilas{background:linear-gradient(135deg,var(--pri-soft),#7b5cff)}
+.sitem .ic.laranja{background:linear-gradient(135deg,#ff8a3d,#ff5ea8)}
+.sitem .ic.azul{background:linear-gradient(135deg,#7b5cff,var(--pri-soft))}
+.sitem .ic.vinho{background:linear-gradient(135deg,#5c2a7a,var(--pri-soft))}
+.sitem svg.plain{width:15px;height:15px;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.slabel{font-size:9.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#7a6690;margin:16px 12px 7px}
+.sitem .count{margin-left:auto;font-size:10.5px;color:var(--mut)}
+.sitem.alvo{align-items:flex-start}
+.sitem.alvo .txt{line-height:1.3;font-size:12.5px}
+
+/* ================= MAIN ================= */
+.dmain{flex:1;padding:20px 0 30px 26px;min-width:0}
+.pagehead{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap}
+.pagehead h1{font-family:'Sora',sans-serif;font-size:23px;font-weight:800;color:#fff;letter-spacing:-.4px}
+.pagehead p{font-size:13px;color:var(--mut)}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
+
+/* ---- card ---- */
+.card{
+  border-radius:14px;overflow:hidden;display:flex;flex-direction:column;
+  background:var(--card);border:1px solid var(--borda);
+  transition:border-color .25s, box-shadow .25s, transform .25s;
+}
+.card:hover{border-color:var(--borda-forte);box-shadow:0 16px 36px -12px rgba(192,38,211,.3),0 8px 22px rgba(0,0,0,.4);transform:translateY(-2px)}
+.card.destaque{border-color:var(--borda-forte);box-shadow:0 0 0 1px var(--borda-forte),0 10px 30px -10px rgba(192,38,211,.35)}
+.capa{height:128px;position:relative;flex-shrink:0}
+.capa svg{width:100%;height:100%}
+.play{
+  position:absolute;inset:0;margin:auto;width:38px;height:38px;border-radius:50%;
+  background:rgba(22,10,28,.65);border:1px solid rgba(217,207,227,.4);backdrop-filter:blur(4px);
+  display:grid;place-items:center;color:#fff;font-size:11px;transition:.2s;
+}
+.card:hover .play{background:var(--pri);border-color:transparent;transform:scale(1.08)}
+.corpo{padding:12px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.tag{
+  font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:#fff;background:linear-gradient(120deg,var(--pri),var(--pri-soft));
+  border-radius:5px;padding:3px 9px;width:fit-content;
+}
+.card h3{font-size:14.5px;font-weight:700;color:#fff;line-height:1.25;font-family:'Inter',sans-serif;letter-spacing:-.1px}
+.card p{font-size:11.5px;color:var(--mut);line-height:1.4;flex:1}
+.btn-kit{
+  margin-top:5px;width:fit-content;font-size:12px;font-weight:700;color:#fff;
+  background:linear-gradient(120deg,var(--pri),var(--pri-soft));
+  border:none;border-radius:8px;padding:7.5px 17px;transition:.2s;
+  box-shadow:0 3px 12px rgba(192,38,211,.3);
+}
+.btn-kit:hover{filter:brightness(1.13);box-shadow:0 5px 18px rgba(192,38,211,.45);transform:translateY(-1px)}
+
+/* seta carrossel dos cards */
+.seta{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:rgba(22,10,28,.75);
+  border:1px solid rgba(217,207,227,.35);color:#fff;display:grid;place-items:center;
+  font-size:12px;cursor:pointer;opacity:0;transition:.2s;
+}
+.card:hover .seta{opacity:1}
+
+/* ================= RESPONSIVO ================= */
+@media(max-width:1080px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){
+  .side{display:none}
+  .xp{display:none}
+  .logo .divi,.logo .arsenal{display:none}
+}
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .top-wrap,.shell{padding-left:12px;padding-right:12px}
+  .dmain{padding-left:14px}
+  .busca{max-width:none}
+  .pagehead h1{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- defs globais: gradientes + grão das capas -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ceu1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b0f52"/><stop offset=".55" stop-color="#7a1a8f"/><stop offset="1" stop-color="#c026d3"/>
+    </linearGradient>
+    <linearGradient id="fita2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a23cff"/><stop offset=".5" stop-color="#d9cfe3"/><stop offset="1" stop-color="#c026d3"/>
+    </linearGradient>
+    <radialGradient id="portal3" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#e6c8ff"/><stop offset=".45" stop-color="#a23cff"/><stop offset="1" stop-color="#3b0f52" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="maleta4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a2be2"/><stop offset="1" stop-color="#3b0f52"/>
+    </linearGradient>
+    <linearGradient id="agulha5" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d9cfe3"/><stop offset="1" stop-color="#c026d3"/>
+    </linearGradient>
+    <radialGradient id="brilho6" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#d9a8ff"/><stop offset="1" stop-color="#a23cff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="grao"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0"/></filter>
+  </defs>
+</svg>
+
+<!-- TOPBAR -->
+<div class="top-wrap">
+  <header class="topbar">
+    <div class="logo">
+      <b>NEXORA<span class="ai">AI</span></b>
+      <span class="divi"></span>
+      <span class="arsenal">ARSENAL</span>
+    </div>
+
+    <label class="busca">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" placeholder="Buscar: reels, vendas, WhatsApp…" aria-label="Buscar">
+      <span class="kbd">/</span>
+    </label>
+
+    <div class="userbox">
+      <div class="gema" aria-hidden="true"></div>
+      <div class="xp">
+        <div class="linha1"><span>Recruta</span><b>Nível 1</b></div>
+        <div class="trilha"><i></i></div>
+        <div class="linha2">0 / 100 XP</div>
+      </div>
+      <button class="avatar" aria-label="Perfil">M</button>
+    </div>
+  </header>
+</div>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <a class="sitem" href="#">
+      <span class="ic roxo"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg></span>
+      Início
+    </a>
+    <a class="sitem" href="#">
+      <span class="ic rosa"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg></span>
+      Mais curtidos
+    </a>
+
+    <div class="slabel">Bibliotecas</div>
+    <a class="sitem" href="#">
+      <span class="ic roxo"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
+      Aplicativos
+    </a>
+    <a class="sitem" href="#">
+      <span class="ic lilas"><svg viewBox="0 0 24 24"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg></span>
+      Skills
+    </a>
+    <a class="sitem active" href="#" aria-current="page">
+      <span class="ic laranja"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M19 8v6"/><path d="M22 11h-6"/></svg></span>
+      Squads
+    </a>
+    <a class="sitem" href="#">
+      <span class="ic roxo"><svg viewBox="0 0 24 24"><path d="M14 2v6h6"/><path d="M4 4v16a2 2 0 0 0 2 2h8"/><path d="M14 2l6 6v10a2 2 0 0 1-2 2"/><path d="M8 12h6"/><path d="M8 16h6"/></svg></span>
+      Prompts
+    </a>
+    <a class="sitem" href="#">
+      <span class="ic azul"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="m10 9 5 3-5 3z"/></svg></span>
+      Cinema
+    </a>
+    <a class="sitem" href="#">
+      <span class="ic roxo"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></span>
+      Conexões e MCPs
+    </a>
+    <a class="sitem" href="#">
+      <span class="ic azul"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.22.49.7.86 1.26.97z"/></svg></span>
+      Guias e tutoriais
+    </a>
+    <a class="sitem" href="#">
+      <span class="ic roxo"><svg viewBox="0 0 24 24"><path d="M12 22v-9"/><path d="M12 13c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 13c0-4-3-6-7-6 0 4 3 6 7 6z"/></svg></span>
+      Plantas
+    </a>
+
+    <div class="slabel">Seu percurso</div>
+    <a class="sitem alvo" href="#">
+      <span class="ic vinho"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+      <span class="txt">Missões e progresso</span>
+      <span class="count">0/12</span>
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Squads</h1>
+      <p>Equipes de IAs que fazem o trabalho inteiro.</p>
+    </div>
+
+    <section class="grid">
+
+      <!-- 1. Comercial com IA -->
+      <article class="card">
+        <div class="capa">
+          <svg viewBox="0 0 400 128" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa: cena de cinema com telas">
+            <rect width="400" height="128" fill="#12061a"/>
+            <rect x="24" y="14" width="150" height="92" rx="7" fill="#2a0838" stroke="#a23cff" stroke-opacity=".5"/>
+            <rect x="30" y="20" width="138" height="60" rx="4" fill="url(#ceu1)"/>
+            <circle cx="99" cy="42" r="12" fill="#f3c6ff" opacity=".9"/>
+            <path d="M30 66 L60 48 L84 62 L110 42 L140 60 L168 50 L168 80 L30 80 Z" fill="#3b0f52"/>
+            <rect x="52" y="84" width="94" height="16" rx="3" fill="#d9cfe3" opacity=".16"/>
+            <rect x="186" y="24" width="90" height="60" rx="6" fill="#1d0d23" stroke="#a23cff" stroke-opacity=".4"/>
+            <rect x="192" y="30" width="78" height="34" rx="3" fill="url(#ceu1)" opacity=".8"/>
+            <rect x="192" y="68" width="78" height="4" rx="2" fill="#d9cfe3" opacity=".25"/>
+            <rect x="192" y="76" width="52" height="4" rx="2" fill="#d9cfe3" opacity=".16"/>
+            <rect x="288" y="14" width="90" height="70" rx="7" fill="#221028" stroke="#a23cff" stroke-opacity=".45"/>
+            <rect x="294" y="20" width="78" height="42" rx="4" fill="url(#ceu1)" opacity=".7"/>
+            <rect x="294" y="66" width="78" height="4" rx="2" fill="#d9cfe3" opacity=".2"/>
+            <path d="M20 122 Q 200 96 380 118 L380 128 L20 128 Z" fill="#2a0838"/>
+            <rect width="400" height="128" filter="url(#grao)"/>
+          </svg>
+          <button class="play" aria-label="Reproduzir">▶</button>
+        </div>
+        <div class="corpo">
+          <span class="tag">Squad</span>
+          <h3>Comercial com IA</h3>
+          <p>Do roteiro ao comercial pronto.</p>
+          <button class="btn-kit">Baixar kit</button>
+        </div>
+      </article>
+
+      <!-- 2. Editor de VSL -->
+      <article class="card destaque">
+        <div class="capa">
+          <svg viewBox="0 0 400 128" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa: onda fluida abstrata">
+            <rect width="400" height="128" fill="#0b0510"/>
+            <ellipse cx="200" cy="118" rx="240" ry="60" fill="#3b0f52" opacity=".5"/>
+            <g fill="none" stroke-linecap="round">
+              <path d="M-20 92 C 80 20, 180 128, 265 62 S 400 10, 430 52" stroke="url(#fita2)" stroke-width="17" opacity=".95"/>
+              <path d="M-20 104 C 90 40, 190 138, 275 76 S 400 26, 430 64" stroke="#c026d3" stroke-width="5" opacity=".5"/>
+              <path d="M-20 80 C 70 12, 170 116, 255 50 S 400 -4, 430 38" stroke="#d9cfe3" stroke-width="2" opacity=".45"/>
+            </g>
+            <circle cx="265" cy="62" r="8" fill="#fff"/>
+            <circle cx="265" cy="62" r="19" fill="#a23cff" opacity=".28"/>
+            <g transform="translate(340,22)">
+              <circle r="15" fill="none" stroke="#d9a8ff" stroke-opacity=".6" stroke-width="1.5"/>
+              <circle r="7" fill="url(#portal3)"/>
+              <path d="M-15 0 A 15 15 0 0 1 0 -15" stroke="#fff" stroke-width="2" fill="none" opacity=".8"/>
+            </g>
+            <rect width="400" height="128" filter="url(#grao)"/>
+          </svg>
+          <button class="play" aria-label="Reproduzir">▶</button>
+          <button class="seta" aria-label="Próximo">›</button>
+        </div>
+        <div class="corpo">
+          <span class="tag">Squad</span>
+          <h3>Editor de VSL</h3>
+          <p>A VSL editada do bruto ao final.</p>
+          <button class="btn-kit">Baixar kit</button>
+        </div>
+      </article>
+
+      <!-- 3. Marketing no Piloto Automático -->
+      <article class="card">
+        <div class="capa">
+          <svg viewBox="0 0 400 128" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa: mulher olhando pôr do sol em telas">
+            <rect width="400" height="128" fill="#160a1c"/>
+            <rect x="18" y="12" width="230" height="96" rx="8" fill="#221028" stroke="#a23cff" stroke-opacity=".45"/>
+            <rect x="25" y="19" width="216" height="68" rx="5" fill="url(#ceu1)"/>
+            <circle cx="150" cy="55" r="18" fill="#f3c6ff" opacity=".85"/>
+            <circle cx="150" cy="55" r="30" fill="#ff8ae8" opacity=".2"/>
+            <path d="M25 68 L80 42 L130 66 L180 40 L241 62 L241 87 L25 87 Z" fill="#2a0838"/>
+            <rect x="25" y="87" width="216" height="14" fill="#160a1c"/>
+            <rect x="255" y="22" width="60" height="86" rx="6" fill="#1d0d23" stroke="#a23cff" stroke-opacity=".4"/>
+            <rect x="260" y="28" width="50" height="60" rx="4" fill="url(#ceu1)" opacity=".85"/>
+            <circle cx="285" cy="48" r="9" fill="#f3c6ff" opacity=".8"/>
+            <path d="M260 66 L285 50 L310 68 L310 88 L260 88 Z" fill="#3b0f52"/>
+            <rect x="322" y="14" width="62" height="100" rx="7" fill="#221028" stroke="#a23cff" stroke-opacity=".4"/>
+            <rect x="327" y="20" width="52" height="70" rx="4" fill="url(#ceu1)" opacity=".7"/>
+            <circle cx="353" cy="42" r="8" fill="#f3c6ff" opacity=".75"/>
+            <path d="M327 58 L353 40 L379 60 L379 90 L327 90 Z" fill="#2a0838"/>
+            <rect width="400" height="128" filter="url(#grao)"/>
+          </svg>
+          <button class="play" aria-label="Reproduzir">▶</button>
+          <button class="seta" aria-label="Próximo">›</button>
+        </div>
+        <div class="corpo">
+          <span class="tag">Squad</span>
+          <h3>Marketing no Piloto Automático</h3>
+          <p>Posts criados e agendados.</p>
+          <button class="btn-kit">Baixar kit</button>
+        </div>
+      </article>
+
+      <!-- 4. Caçador de Clientes -->
+      <article class="card">
+        <div class="capa">
+          <svg viewBox="0 0 400 128" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa: maleta com verificação">
+            <rect width="400" height="128" fill="#0b0510"/>
+            <ellipse cx="200" cy="108" rx="200" ry="36" fill="#3b0f52" opacity=".5"/>
+            <g>
+              <path d="M158 42 v-9 a9 9 0 0 1 9-9 h32 a9 9 0 0 1 9 9 v9" fill="none" stroke="#d9a8ff" stroke-width="5.5" opacity=".85"/>
+              <rect x="128" y="42" width="112" height="62" rx="11" fill="url(#maleta4)" stroke="#d9a8ff" stroke-opacity=".55" stroke-width="1.5"/>
+              <path d="M128 66 h112" stroke="#d9cfe3" stroke-opacity=".4" stroke-width="2"/>
+              <rect x="174" y="60" width="22" height="13" rx="4" fill="#e6d4ff" opacity=".92"/>
+              <path d="M158 104 l-6 14 M208 104 l6 14 M128 92 l-14 10 M240 92 l14 10" stroke="#d9a8ff" stroke-opacity=".4" stroke-width="2"/>
+            </g>
+            <circle cx="248" cy="40" r="16" fill="#c026d3"/>
+            <path d="m240 40 6 6 11-12" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="272" y="30" width="52" height="64" rx="5" fill="#221028" stroke="#a23cff" stroke-opacity=".4"/>
+            <path d="M280 42 h36 M280 52 h36 M280 62 h24" stroke="#d9cfe3" stroke-opacity=".45" stroke-width="2.4"/>
+            <circle cx="306" cy="82" r="9" fill="#a23cff"/>
+            <path d="m302 82 3 3 5-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <rect width="400" height="128" filter="url(#grao)"/>
+          </svg>
+        </div>
+        <div class="corpo">
+          <span class="tag">Squad</span>
+          <h3>Caçador de Clientes</h3>
+          <p>Acha quem precisa do seu serviço.</p>
+          <button class="btn-kit">Baixar kit</button>
+        </div>
+      </article>
+
+      <!-- 5. Espião de Concorrentes -->
+      <article class="card">
+        <div class="capa">
+          <svg viewBox="0 0 400 128" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa: bússola com rota">
+            <rect width="400" height="128" fill="#0b0510"/>
+            <circle cx="188" cy="64" r="52" fill="#1d0d23" stroke="#a23cff" stroke-opacity=".65" stroke-width="2.5"/>
+            <circle cx="188" cy="64" r="42" fill="none" stroke="#d9cfe3" stroke-opacity=".2" stroke-width="1.5"/>
+            <g stroke="#d9cfe3" stroke-opacity=".5" stroke-width="2">
+              <path d="M188 16v8"/><path d="M188 104v8"/><path d="M140 64h8"/><path d="M228 64h8"/>
+            </g>
+            <path d="M188 30 202 64 188 98 174 64 Z" fill="url(#agulha5)"/>
+            <circle cx="188" cy="64" r="5" fill="#fff"/>
+            <path d="M188 112 Q 260 100 296 70 T 384 44" stroke="#c026d3" stroke-width="2.5" fill="none" stroke-dasharray="1 8" stroke-linecap="round"/>
+            <g fill="#a23cff"><circle cx="296" cy="70" r="4"/><circle cx="340" cy="55" r="4"/></g>
+            <g transform="translate(296,70)"><circle r="9" fill="none" stroke="#c026d3" stroke-opacity=".5"/><circle r="14" fill="none" stroke="#c026d3" stroke-opacity=".25"/></g>
+            <rect x="300" y="86" width="60" height="30" rx="6" fill="#221028" stroke="#a23cff" stroke-opacity=".4"/>
+            <path d="M308 96 h24 M308 104 h36" stroke="#d9cfe3" stroke-opacity=".4" stroke-width="2.2"/>
+            <rect width="400" height="128" filter="url(#grao)"/>
+          </svg>
+        </div>
+        <div class="corpo">
+          <span class="tag">Squad</span>
+          <h3>Espião de Concorrentes</h3>
+          <p>O que funciona para eles.</p>
+          <button class="btn-kit">Baixar kit</button>
+        </div>
+      </article>
+
+      <!-- 6. Conselho de Mentes Brilhantes -->
+      <article class="card">
+        <div class="capa">
+          <svg viewBox="0 0 400 128" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa: checklist com estrela de quatro pontas">
+            <rect width="400" height="128" fill="#0b0510"/>
+            <rect x="126" y="18" width="98" height="92" rx="10" fill="#1d0d23" stroke="#a23cff" stroke-opacity=".55" stroke-width="1.5"/>
+            <g stroke="#d9a8ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
+              <path d="m138 40 5 5 9-10"/><path d="m138 64 5 5 9-10"/><path d="m138 88 5 5 9-10"/>
+            </g>
+            <g stroke="#d9cfe3" stroke-opacity=".5" stroke-width="3" stroke-linecap="round">
+              <path d="M164 40h46"/><path d="M164 64h46"/><path d="M164 88h30"/>
+            </g>
+            <path d="M290 28 l9 24 24 9 -24 9 -9 24 -9 -24 -24 -9 24 -9 Z" fill="url(#brilho6)"/>
+            <path d="M290 44 l5 14 14 5 -14 5 -5 14 -5 -14 -14 -5 14 -5 Z" fill="#fff" opacity=".92"/>
+            <g fill="none" stroke="#d9a8ff" stroke-opacity=".4" stroke-width="1.5">
+              <rect x="318" y="24" width="48" height="34" rx="5"/>
+              <rect x="322" y="70" width="48" height="34" rx="5"/>
+            </g>
+            <g stroke="#d9cfe3" stroke-opacity=".4" stroke-width="2"><path d="M326 34h32M326 42h24"/><path d="M330 80h32M330 88h24"/></g>
+            <circle cx="106" cy="30" r="2.6" fill="#c026d3" opacity=".9"/>
+            <circle cx="360" cy="112" r="2.4" fill="#e6c8ff" opacity=".8"/>
+            <rect width="400" height="128" filter="url(#grao)"/>
+          </svg>
+        </div>
+        <div class="corpo">
+          <span class="tag">Squad</span>
+          <h3>Conselho de Mentes Brilhantes</h3>
+          <p>Decisões com outras cabeças.</p>
+          <button class="btn-kit">Baixar kit</button>
+        </div>
+      </article>
+
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinema | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.filme{position:relative;isolation:isolate;border-radius:16px;overflow:hidden;border:1px solid rgba(200,140,255,.2);transition:var(--trans);background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(110deg,rgba(255,122,24,.05),rgba(255,45,138,.07) 48%,rgba(162,60,255,.08));-webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 6px 0 #1f0e25,0 18px 36px -14px rgba(0,0,0,.7)}
+.filme:hover{transform:translateY(-3px);border-color:rgba(200,140,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 26px rgba(255,255,255,.08),0 0 22px rgba(255,45,138,.35),0 7px 0 #1f0e25,0 22px 44px -12px rgba(0,0,0,.7)}
+.filme .poster{height:210px;overflow:hidden}
+.filme .poster svg{width:100%;height:100%;display:block;transition:transform .6s}
+.filme:hover .poster svg{transform:scale(1.06)}
+.filme .info{padding:13px 15px}
+.filme h3{font-size:14px}
+.filme p{font-size:11.5px;color:var(--mut);margin-top:4px}
+.filme .dur{position:absolute;top:12px;right:12px;z-index:2;font-size:10.5px;font-weight:700;background:rgba(10,4,14,.75);border:1px solid var(--borda-forte);border-radius:7px;padding:3px 9px;color:#fff}
+</style>
+</head>
+<body data-pagina="cinema.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+  <linearGradient id="ceu1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b0f52"/><stop offset=".55" stop-color="#7a1a8f"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <linearGradient id="fita2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a23cff"/><stop offset=".5" stop-color="#d9cfe3"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <radialGradient id="portal3" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e6c8ff"/><stop offset=".45" stop-color="#a23cff"/><stop offset="1" stop-color="#3b0f52" stop-opacity="0"/></radialGradient>
+  <filter id="grao"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0"/></filter>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Cinema"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Cinema</h1>
+      <p>Documentários, masterclasses e aulas longas em formato de filme.</p>
+    </div>
+
+    <section class="grid" id="grid-cinema"></section>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const FILMES = [
+    { t:'A Máquina que Aprende', d:'Como o aprendizado de máquina mudou o trabalho para sempre.', dur:'1h 42m', capa:'ceu1', nota:'4.9' },
+    { t:'Ondas Generativas', d:'A história da arte feita com modelos generativos.', dur:'58m', capa:'fita2', nota:'4.7' },
+    { t:'Portais Para o Futuro', d:'Especialistas debatem os próximos 10 anos da IA.', dur:'1h 15m', capa:'portal3', nota:'4.8' },
+    { t:'O Código das Ideias', d:'Da escrita ao prompt: a nova alfabetização.', dur:'47m', capa:'grao', nota:'4.6' },
+    { t:'Mentes Sintéticas', d:'O que os agentes autónomos revelam sobre nós.', dur:'1h 30m', capa:'portal3', nota:'4.9' },
+    { t:'A Escola Invisível', d:'Educação na era dos assistentes inteligentes.', dur:'1h 05m', capa:'ceu1', nota:'4.7' }
+  ];
+  document.getElementById('grid-cinema').innerHTML = FILMES.map(f => `
+    <article class="filme">
+      <div class="poster">
+        <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${f.t}">
+          ${f.capa==='ceu1' ? '<rect width="400" height="210" fill="url(#ceu1)"/><circle cx="200" cy="140" r="46" fill="#f3c6ff" opacity=".85"/><g fill="#2a0838"><path d="M0 180 L90 110 L180 180 Z"/><path d="M150 180 L260 80 L380 180 Z"/></g><rect y="176" width="400" height="34" fill="#07040c"/>'
+          : f.capa==='fita2' ? '<rect width="400" height="210" fill="#12061a"/><path d="M-20 150 C 100 50, 220 200, 320 100 S 480 20, 520 80" stroke="url(#fita2)" stroke-width="18" fill="none" stroke-linecap="round"/>'
+          : '<rect width="400" height="210" fill="#07040c"/><circle cx="200" cy="105" r="80" fill="url(#portal3)" opacity=".9"/><ellipse cx="200" cy="105" rx="120" ry="42" fill="none" stroke="#d9a8ff" stroke-opacity=".5" transform="rotate(-18 200 105)"/>'}
+          <rect width="400" height="210" filter="url(#grao)"/>
+        </svg>
+      </div>
+      <span class="dur">⏱ ${f.dur}</span>
+      <div class="info"><h3>${f.t}</h3><p>${f.d}</p><div class="meta-linha" style="margin-top:7px"><span class="estrela">★ ${f.nota}</span><span>Original NEXORA</span></div></div>
+      <button class="btn btn-pri" style="margin:0 15px 15px" data-copiar>Assistir agora</button>
+    </article>`).join('');
+})();
+</script>
+</body>
+</html>

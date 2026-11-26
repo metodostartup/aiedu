@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missões e progresso | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.painel{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start}
+.missao-grande{display:flex;gap:14px;align-items:center;padding:15px 18px;background:linear-gradient(180deg,var(--card-2),var(--card));border:1px solid var(--borda);border-radius:var(--raio);margin-bottom:12px;transition:var(--trans)}
+.missao-grande:hover{border-color:rgba(200,140,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 26px rgba(255,255,255,.08),0 0 22px rgba(255,45,138,.35),0 7px 0 #1f0e25,0 22px 44px -12px rgba(0,0,0,.7);transform:translateY(-2px)}
+.missao-grande .tic{width:30px;height:30px;border-radius:10px;border:1.5px solid var(--borda-forte);display:grid;place-items:center;font-size:13px;color:#fff;flex-shrink:0;cursor:pointer;transition:var(--trans)}
+.missao-grande .tic.on{background:var(--grad);border-color:transparent}
+.missao-grande b{display:block;font-size:13.5px;color:#fff}
+.missao-grande .det{font-size:11px;color:var(--mut);margin-top:3px}
+.missao-grande .xp-pill{margin-left:auto;font-size:12px;font-weight:800;color:var(--pri-soft);background:rgba(162,60,255,.12);border-radius:8px;padding:6px 12px;flex-shrink:0}
+.nivel-card{text-align:center;padding:24px}
+.nivel-card .anel{width:120px;height:120px;margin:0 auto 14px}
+.nivel-card .anel circle{fill:none;stroke-width:9}
+.nivel-card .fundo{stroke:rgba(200,140,255,.12)}
+.nivel-card .valor{stroke:url(#gradRing);stroke-linecap:round;transform:rotate(-90deg);transform-origin:center}
+.nivel-card .selo{font-size:30px;margin-bottom:6px}
+.conquista{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--borda);text-align:left}
+.conquista:last-child{border:none}
+.conquista .med{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:17px;background:rgba(200,140,255,.08);flex-shrink:0}
+.conquista.on .med{background:var(--grad);box-shadow:var(--glow)}
+.conquista b{font-size:12.5px;color:#fff;display:block}
+.conquista span{font-size:11px;color:var(--mut)}
+.conquista.locked{opacity:.45}
+@media(max-width:1080px){.painel{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-pagina="missoes.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Missões e progresso"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <div class="pagehead"><h1>Missões e progresso</h1><p>Complete missões, ganhe XP e suba de nível.</p></div>
+
+    <div class="painel">
+      <div>
+        <div class="secao-tit" style="margin-top:0"><h2>Missões semanais</h2><span class="pct" id="resumo-missoes"></span></div>
+        <div id="lista-missoes"></div>
+
+        <div class="secao-tit"><h2>Conquistas</h2></div>
+        <div class="card" style="padding:16px 20px">
+          <div class="conquista on"><div class="med">🔥</div><div><b>7 dias seguidos</b><span>Estudou todos os dias desta semana</span></div></div>
+          <div class="conquista on"><div class="med">🎓</div><div><b>Primeiro curso concluído</b><span>Fundamentos da Inteligência Artificial</span></div></div>
+          <div class="conquista locked"><div class="med">🏆</div><div><b>Trilha completa</b><span>Conclua todas as aulas de uma trilha</span></div></div>
+          <div class="conquista locked"><div class="med">🧪</div><div><b>Criador de prompts</b><span>Guarde 10 prompts na sua biblioteca</span></div></div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card nivel-card">
+          <div class="selo">🎖️</div>
+          <svg class="anel" viewBox="0 0 120 120" role="img" aria-label="Progresso para o próximo nível">
+            <circle class="fundo" cx="60" cy="60" r="50"/>
+            <circle class="valor" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="276"/>
+            <text x="60" y="66" text-anchor="middle" fill="#fff" font-size="21" font-weight="800" font-family="Sora">12%</text>
+          </svg>
+          <h3 style="font-size:16px">Nível 1 — Recruta</h3>
+          <p style="font-size:12px;color:var(--mut);margin-top:5px">Faltam <b style="color:var(--pri-soft)">88 XP</b> para o nível 2: Explorador.</p>
+        </div>
+
+        <div class="card" style="padding:18px;margin-top:14px">
+          <h4 style="font-size:13px;margin-bottom:12px">Seu recorde</h4>
+          <div class="mini-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center">
+            <div><b style="font-family:'Sora';color:#fff;font-size:18px;display:block">18h40</b><span style="font-size:10.5px;color:var(--mut)">de estudo</span></div>
+            <div><b style="font-family:'Sora';color:#fff;font-size:18px;display:block">47</b><span style="font-size:10.5px;color:var(--mut)">aulas</span></div>
+            <div><b style="font-family:'Sora';color:#fff;font-size:18px;display:block">7 🔥</b><span style="font-size:10.5px;color:var(--mut)">dias seguidos</span></div>
+            <div><b style="font-family:'Sora';color:#fff;font-size:18px;display:block">2</b><span style="font-size:10.5px;color:var(--mut)">certificados</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const D = window.DEMO;
+  function render(){
+    const feitas = D.missoes.filter(m=>m.estado==='Completa').length;
+    document.getElementById('resumo-missoes').textContent = feitas + '/' + D.missoes.length + ' completas';
+    document.getElementById('lista-missoes').innerHTML = D.missoes.map(m => `
+      <div class="missao-grande ${m.estado==='Completa'?'':''}" style="${m.estado==='Completa'?'opacity:.6':''}">
+        <button class="tic ${m.estado==='Completa'?'on':''}" data-id="${m.id}" aria-label="Concluir missão">${m.estado==='Completa'?'✓':''}</button>
+        <div style="flex:1">
+          <b>${m.tit}</b>
+          <div class="det">${m.estado} · ${m.prog}/${m.meta}</div>
+          <div class="barra" style="margin-top:7px"><i style="width:${Math.round(m.prog/m.meta*100)}%"></i></div>
+        </div>
+        <span class="xp-pill">+${m.xp} XP</span>
+      </div>`).join('');
+  }
+  render();
+
+  document.getElementById('lista-missoes').addEventListener('click', e => {
+    const t = e.target.closest('.tic');
+    if (!t) return;
+    const m = D.missoes.find(x => x.id === t.dataset.id);
+    if (m.estado === 'Completa') return;
+    m.prog = m.meta; m.estado = 'Completa';
+    window.toast('Missão concluída! +' + m.xp + ' XP 🎉');
+    window.confete();
+    render();
+  });
+})();
+</script>
+</body>
+</html>

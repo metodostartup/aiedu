@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompts | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.prompt-card pre{font-family:'Inter',sans-serif;white-space:pre-wrap;background:rgba(10,4,14,.45);border:1px solid var(--borda);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--txt);line-height:1.55;max-height:110px;overflow:hidden;position:relative}
+.prompt-card pre::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(17,7,23,.95))}
+.prompt-rodape{display:flex;gap:9px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.prompt-rodape .autor{font-size:11px;color:var(--mut);margin-left:auto}
+</style>
+</head>
+<body data-pagina="prompts.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Prompts"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Library de Prompts</h1>
+      <p>Modelos testados e prontos para copiar, colar e adaptar.</p>
+      <div class="acoes"><button class="btn btn-pri" data-modal="modal-novo">+ Novo prompt</button></div>
+    </div>
+
+    <div class="filtros" id="filtros-prompts">
+      <button class="chip ativo" data-valor="Todas">Todos</button>
+      <button class="chip" data-valor="Copywriting">Copywriting</button>
+      <button class="chip" data-valor="Produtividade">Produtividade</button>
+      <button class="chip" data-valor="Marketing">Marketing</button>
+      <button class="chip" data-valor="Programação">Programação</button>
+      <button class="chip" data-valor="Vendas">Vendas</button>
+      <button class="chip" data-valor="Design">Design</button>
+    </div>
+
+    <section class="grid" id="grid-prompts" aria-live="polite"></section>
+    <div class="vazio" id="vazio-prompts" hidden><span class="ico">🔍</span>Nenhum prompt nesta categoria com essa pesquisa.</div>
+  </main>
+</div>
+
+<!-- modal novo prompt -->
+<div class="modal-fundo" id="modal-novo" role="dialog" aria-modal="true" aria-label="Novo prompt">
+  <div class="modal">
+    <h3>Guardar novo prompt</h3>
+    <p>Cole o prompt, escolha uma categoria e ele fica disponível na sua biblioteca pessoal.</p>
+    <textarea class="notas" id="novo-prompt-txt" style="width:100%;min-height:110px;background:var(--card-2);border:1px solid var(--borda);border-radius:10px;padding:11px 13px;margin-top:14px;outline:none" placeholder="Ex.: Aja como um…"></textarea>
+    <div class="acoes">
+      <button class="btn btn-sec" data-fechar>Cancelar</button>
+      <button class="btn btn-pri" id="btn-salvar-prompt">Salvar prompt</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const D = window.DEMO;
+  let estado = { cat:'Todas', q:'' };
+
+  function render(){
+    const lista = D.prompts.filter(p =>
+      (estado.cat==='Todas' || p.cat===estado.cat) &&
+      (p.tit+p.prev+p.cat+p.modelo+p.autor).toLowerCase().includes(estado.q)
+    );
+    document.getElementById('vazio-prompts').hidden = lista.length > 0;
+    document.getElementById('grid-prompts').innerHTML = lista.map(p => `
+      <article class="card prompt-card" style="padding:16px">
+        <div style="display:flex;gap:9px;align-items:center">
+          <span class="tag">${p.cat}</span>
+          <span class="nivel-pill ${p.nivel.toLowerCase()}" style="margin-left:auto">${p.nivel}</span>
+        </div>
+        <h3 style="margin-top:8px">${p.tit}</h3>
+        <pre>${p.prev}</pre>
+        <div class="meta-linha"><span class="estrela">★ ${p.nota}</span><span>${p.modelo}</span></div>
+        <div class="prompt-rodape">
+          <button class="btn btn-pri" data-copiar="${p.prev.replace(/"/g,'&quot;')}">Copiar</button>
+          <button class="btn btn-sec btn-fav" aria-label="Guardar prompt" aria-pressed="false">♡</button>
+          <span class="autor">por ${p.autor}</span>
+        </div>
+      </article>`).join('');
+  }
+
+  document.addEventListener('filtro:mudou', e => { if (e.detail.grupo==='filtros-prompts'){ estado.cat=e.detail.valor; render(); } });
+  document.addEventListener('busca:mudou', e => { estado.q=e.detail.q; render(); });
+
+  document.getElementById('btn-salvar-prompt').addEventListener('click', () => {
+    const v = document.getElementById('novo-prompt-txt').value.trim();
+    if (!v) return window.toast('Cole o prompt antes de salvar', 'err');
+    D.prompts.unshift({ id:'novo'+Date.now(), cat:'Sem categoria', tit: v.slice(0,42)+'…', prev:v, modelo:'Pessoal', nivel:'Iniciante', nota:'—', autor:'Você' });
+    document.getElementById('novo-prompt-txt').value='';
+    document.getElementById('modal-novo').classList.remove('aberto');
+    window.toast('Prompt salvo na sua biblioteca ✓');
+    window.confete();
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

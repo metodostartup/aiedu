@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Squads | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.squad-card .capa svg{height:128px}
+.squad-rodape{display:flex;gap:9px;align-items:center;margin-top:10px}
+.squad-rodape .membros{font-size:11px;color:var(--mut);margin-left:auto}
+</style>
+</head>
+<body data-pagina="squads.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+  <linearGradient id="ceu1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b0f52"/><stop offset=".55" stop-color="#7a1a8f"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <linearGradient id="fita2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a23cff"/><stop offset=".5" stop-color="#d9cfe3"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <radialGradient id="portal3" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e6c8ff"/><stop offset=".45" stop-color="#a23cff"/><stop offset="1" stop-color="#3b0f52" stop-opacity="0"/></radialGradient>
+  <linearGradient id="maleta4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a2be2"/><stop offset="1" stop-color="#3b0f52"/></linearGradient>
+  <linearGradient id="agulha5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9cfe3"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <radialGradient id="brilho6" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#d9a8ff"/><stop offset="1" stop-color="#a23cff" stop-opacity="0"/></radialGradient>
+  <filter id="grao"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0"/></filter>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Squads"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Squads</h1>
+      <p>Grupos de cursos que formam uma competência completa.</p>
+    </div>
+
+    <section class="grid" id="grid-squads"></section>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const capas = ['synth','onda','portal','maleta','bussola','checklist'];
+  document.getElementById('grid-squads').innerHTML = window.DEMO.squads.map((q,i) => `
+    <article class="card squad-card">
+      <div class="capa">${window.capaSVG(capas[i % capas.length], q.nome)}</div>
+      <div class="corpo">
+        <span class="tag">Squad</span>
+        <h3>${q.nome}</h3>
+        <p>${q.desc}</p>
+        <div class="meta-linha"><span class="nivel-pill ${q.nivel.toLowerCase()}">${q.nivel}</span><span><b>${q.cursos}</b> cursos</span></div>
+        <div class="squad-rodape">
+          <button class="btn btn-pri">Baixar kit</button>
+          <span class="membros">👥 ${(q.cursos*137)%900+120} membros</span>
+        </div>
+      </div>
+    </article>`).join('');
+})();
+</script>
+</body>
+</html>

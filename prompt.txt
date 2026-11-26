@@ -1,0 +1,82 @@
+1. Fundos (preto profundo)
+
+
+Cor	Uso
+#07040c	fundo principal (modo escuro)
+#0e0616	fundo do modo "lite"
+#050308	cabeçalho e rodapé (sólidos, sem gradiente)
+#2a0b3d → #0e0616 → #07040c	brilho radial roxo no topo (modo escuro)
+#3d1257 → #170a24 → #0e0616	brilho radial no topo (modo lite)
+
+
+2. Neon — a assinatura da página
+
+
+
+A linha de acento é sempre laranja → magenta → roxo:
+
+
+
+linear-gradient(90deg, #ff7a18, #ff2d8a, #a23cff)
+
+
+
+Cor	Papel
+#ff7a18	laranja (início do gradiente, parte final do título)
+#ff2d8a	magenta (meio do gradiente)
+#a23cff	roxo (fim do gradiente)
+#c026d3	roxo-magenta de apoio (menu ativo, números, bordas)
+#9b2cf0 / #6b1fb8	roxos de transição
+
+
+3. Roxos escuros (profundidade)
+
+
+
+#221028 · #28132e · #2a0838 · #2f1635 · #1f0e25 · #1d0d23 · #160a1c · #12081f · #0d0617
+
+
+
+4. Superfícies dos cards
+
+
+rgba(29,13,35,.96)  →  rgba(17,7,23,.98)   /* cards e painel */
+rgba(22,10,28,.96)  →  rgba(10,5,20,.98)   /* cards com borda giratória */
+rgba(41,19,47,.92)  →  rgba(21,9,27,.95)   /* cartões flutuantes */
+
+
+
+5. Bordas e brilhos
+
+
+Cor	Uso
+rgba(200,140,255,.16 / .18 / .25 / .3 / .45)	bordas lilás dos cards e do painel
+rgba(162,60,255,.12) / rgba(162,60,255,.07)	grade de fundo das seções
+rgba(255,138,61,.5) / rgba(255,45,138,.6) / rgba(192,38,211,.7)	sombras neon dos botões
+rgba(255,77,141,.22)	pontinhos nas laterais
+rgba(255,255,255,.35)	reflexo interno 3D no topo dos botões
+
+
+6. Texto
+
+
+Cor	Uso
+#ffffff	títulos e corpo principal
+#f3eef8	texto geral
+#d9cfe3	lilás claro (subtítulos, parte de baixo dos títulos)
+#cfc6d9	texto secundário
+#fff → #ffd0e6	números grandes e preços
+
+
+7. Botões
+
+
+
+
+Principal: linear-gradient(110deg, #ff7a18, #ff2d8a 48%, #a23cff) + sombra 3D 0 6px 0 #1f0e25
+
+
+Secundário ("Entrar"): miolo #12081f com contorno no gradiente neon
+
+
+Plano destacado: #2f1635 → #2a0838 com borda giratória #ff7a18 → #ff2d8a → #a23cff

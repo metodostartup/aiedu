@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursos | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.grid-filtros{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:start}
+.filtros-col{background:linear-gradient(180deg,var(--card-2),var(--card));border:1px solid var(--borda);border-radius:var(--raio);padding:18px;position:sticky;top:84px}
+.filtros-col h3{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:16px 0 9px}
+.filtros-col h3:first-child{margin-top:0}
+.filtros-col label{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:4.5px 0;cursor:pointer}
+.filtros-col input[type=checkbox],.filtros-col input[type=radio]{accent-color:#c026d3;width:14px;height:14px}
+.filtros-col .faixa{font-size:11px;color:var(--mut);margin-top:6px}
+.resultados{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(max-width:1080px){.grid-filtros{grid-template-columns:1fr}.filtros-col{position:static;display:grid;grid-template-columns:repeat(3,1fr);gap:6px 20px}.resultados{grid-template-columns:1fr}}
+@media(max-width:640px){.filtros-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-pagina="cursos.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+  <linearGradient id="ceu1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b0f52"/><stop offset=".55" stop-color="#7a1a8f"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <linearGradient id="fita2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a23cff"/><stop offset=".5" stop-color="#d9cfe3"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <radialGradient id="portal3" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e6c8ff"/><stop offset=".45" stop-color="#a23cff"/><stop offset="1" stop-color="#3b0f52" stop-opacity="0"/></radialGradient>
+  <linearGradient id="maleta4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a2be2"/><stop offset="1" stop-color="#3b0f52"/></linearGradient>
+  <linearGradient id="agulha5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9cfe3"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <radialGradient id="brilho6" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#d9a8ff"/><stop offset="1" stop-color="#a23cff" stop-opacity="0"/></radialGradient>
+  <filter id="grao"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0"/></filter>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Bibliotecas"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Cursos</h1>
+      <p id="conta-resultados"></p>
+      <div class="acoes">
+        <div class="filtros" id="ordenar" style="margin:0">
+          <label class="chip ativo" style="padding:0 14px">
+            <select id="sel-ordenar" aria-label="Ordenar por">
+              <option value="pop">Popularidade</option>
+              <option value="novo">Novidade</option>
+              <option value="nota">Avaliação</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="filtros" id="filtros-cats">
+      <button class="chip ativo" data-valor="Todas">Todas</button>
+      <button class="chip" data-valor="Fundamentos de IA">Fundamentos de IA</button>
+      <button class="chip" data-valor="Prompt Engineering">Prompt Engineering</button>
+      <button class="chip" data-valor="Ferramentas de IA">Ferramentas de IA</button>
+      <button class="chip" data-valor="Automação">Automação</button>
+      <button class="chip" data-valor="Marketing">Marketing</button>
+      <button class="chip" data-valor="Negócios">Negócios</button>
+      <button class="chip" data-valor="Programação">Programação</button>
+      <button class="chip" data-valor="Design">Design</button>
+      <button class="chip" data-valor="Vídeo">Vídeo</button>
+      <button class="chip" data-valor="Produtividade">Produtividade</button>
+    </div>
+
+    <div class="grid-filtros">
+      <aside class="filtros-col" aria-label="Filtros">
+        <h3>Nível</h3>
+        <label><input type="checkbox" class="f-nivel" value="Iniciante" checked> Iniciante</label>
+        <label><input type="checkbox" class="f-nivel" value="Intermédio" checked> Intermédio</label>
+        <label><input type="checkbox" class="f-nivel" value="Avançado" checked> Avançado</label>
+        <h3>Duração</h3>
+        <label><input type="radio" name="dur" class="f-dur" value="0" checked> Qualquer duração</label>
+        <label><input type="radio" name="dur" class="f-dur" value="180"> Até 3 horas</label>
+        <label><input type="radio" name="dur" class="f-dur" value="300"> Até 5 horas</label>
+        <p class="faixa">Duração total em minutos de vídeo.</p>
+        <h3>Progresso</h3>
+        <label><input type="radio" name="prog" class="f-prog" value="todos" checked> Todos</label>
+        <label><input type="radio" name="prog" class="f-prog" value="andamento"> Em andamento</label>
+        <label><input type="radio" name="prog" class="f-prog" value="nao"> Não iniciados</label>
+        <label><input type="radio" name="prog" class="f-prog" value="feitos"> Concluídos</label>
+      </aside>
+
+      <div>
+        <section class="resultados" id="grid-cursos" aria-live="polite"></section>
+        <div class="vazio" id="vazio-cursos" hidden><span class="ico">🔍</span>Nenhum curso corresponde a estes filtros.<br>Tente limpar a pesquisa ou mudar a categoria.</div>
+        <nav class="paginacao" id="paginacao" aria-label="Paginação"></nav>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const D = window.DEMO, capa = window.capaSVG;
+  const ordem = ['synth','onda','portal','maleta','bussola','checklist'];
+  const POR_PAG = 4;
+  let estado = { cat:'Todas', q:'', niveis:['Iniciante','Intermédio','Avançado'], dur:0, prog:'todos', ord:'pop', pag:1 };
+
+  const durMin = d => { const [h,m] = d.replace('h',' ').split(/\s+/); return (+h*60)+(+m||0); };
+
+  function aplicar(){
+    let lista = D.cursos.filter(c =>
+      (estado.cat==='Todas' || c.cat===estado.cat) &&
+      estado.niveis.includes(c.nivel) &&
+      durMin(c.dur) >= estado.dur &&
+      (c.tit + c.desc + c.cat + c.autor).toLowerCase().includes(estado.q)
+    );
+    if (estado.prog==='andamento') lista = lista.filter(c => c.prog>0 && c.prog<100);
+    if (estado.prog==='nao') lista = lista.filter(c => c.prog===0);
+    if (estado.prog==='feitos') lista = lista.filter(c => c.prog===100);
+    if (estado.ord==='nota') lista.sort((a,b)=>b.nota-a.nota);
+    if (estado.ord==='novo') lista.reverse();
+
+    const total = lista.length;
+    const pags = Math.max(1, Math.ceil(total/POR_PAG));
+    estado.pag = Math.min(estado.pag, pags);
+    const page = lista.slice((estado.pag-1)*POR_PAG, estado.pag*POR_PAG);
+
+    document.getElementById('conta-resultados').textContent = total + ' curso' + (total!==1?'s':'') + ' encontrados';
+    document.getElementById('vazio-cursos').hidden = total > 0;
+
+    document.getElementById('grid-cursos').innerHTML = page.map(c => {
+      const i = ordem.indexOf(D.cursos.indexOf(D.cursos.find(x=>x.id===c.id)) % ordem.length + ordem.length) % ordem.length;
+      return `
+      <article class="card">
+        <div class="capa">${capa(ordem[D.cursos.indexOf(D.cursos.find(x=>x.id===c.id)) % ordem.length], c.tit)}</div>
+        <div class="corpo">
+          <span class="tag">${c.cat}</span>
+          <h3>${c.tit}</h3>
+          <p>${c.desc}</p>
+          <div class="meta-linha"><span class="estrela">★ ${c.nota}</span><span><b>${c.alunos}</b> alunos</span><span>${c.dur}</span><span class="nivel-pill ${c.nivel.toLowerCase()}">${c.nivel}</span></div>
+          ${c.prog>0 ? `<div class="barra"><i style="width:${c.prog}%"></i></div><span class="pct">${c.prog===100?'Concluído ✓':'Em andamento · '+c.prog+'%'}</span>` : '<span class="pct">Não iniciado</span>'}
+          <div style="display:flex;gap:8px;margin-top:4px;align-items:center">
+            <a class="btn btn-pri" href="curso.html?id=${c.id}">Ver curso</a>
+            <button class="btn btn-sec btn-fav" aria-label="Guardar curso" aria-pressed="false">♡</button>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+
+    /* paginação */
+    const pg = document.getElementById('paginacao');
+    pg.innerHTML = '';
+    const ant = document.createElement('button'); ant.textContent='‹'; ant.disabled = estado.pag===1;
+    ant.onclick = () => { estado.pag--; aplicar(); };
+    pg.appendChild(ant);
+    for (let p=1; p<=pags; p++) {
+      const b = document.createElement('button'); b.textContent = p;
+      if (p===estado.pag) b.className='ativo';
+      b.onclick = () => { estado.pag = p; aplicar(); };
+      pg.appendChild(b);
+    }
+    const prox = document.createElement('button'); prox.textContent='›'; prox.disabled = estado.pag===pags;
+    prox.onclick = () => { estado.pag++; aplicar(); };
+    pg.appendChild(prox);
+  }
+
+  document.addEventListener('filtro:mudou', e => { if (e.detail.grupo==='filtros-cats'){ estado.cat=e.detail.valor; estado.pag=1; aplicar(); } });
+  document.addEventListener('busca:mudou', e => { estado.q=e.detail.q; estado.pag=1; aplicar(); });
+  document.getElementById('sel-ordenar').addEventListener('change', e => { estado.ord=e.target.value; aplicar(); });
+  $$('.f-nivel').forEach(c => c.addEventListener('change', () => { estado.niveis = $$('.f-nivel').filter(x=>x.checked).map(x=>x.value); aplicar(); }));
+  $$('.f-dur').forEach(c => c.addEventListener('change', () => { estado.dur=+c.value; aplicar(); }));
+  $$('.f-prog').forEach(c => c.addEventListener('change', () => { estado.prog=c.value; aplicar(); }));
+
+  aplicar();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.banner{height:210px;border-radius:16px;overflow:hidden;border:1px solid var(--borda);position:relative;margin-bottom:22px}
+.banner svg{width:100%;height:100%;display:block}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(22,10,28,.92))}
+.banner .info{position:absolute;left:26px;bottom:20px;z-index:2;max-width:640px}
+.banner .info h1{font-size:23px;margin-top:8px}
+.banner .info p{font-size:12.5px;color:var(--lav);opacity:.85;margin-top:4px}
+.banner .btns{position:absolute;right:26px;bottom:20px;z-index:2;display:flex;gap:10px}
+.layout-curso{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+.modulo{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(110deg,rgba(255,122,24,.05),rgba(255,45,138,.07) 48%,rgba(162,60,255,.08));-webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);border:1px solid rgba(200,140,255,.2);border-radius:var(--raio);padding:16px 18px;margin-bottom:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 5px 0 #1f0e25,0 14px 28px -12px rgba(0,0,0,.7)}
+.modulo h4{font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.modulo h4 span{font-size:11px;color:var(--mut);font-weight:600}
+.aula-linha{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid var(--borda);font-size:12.5px}
+.aula-linha:last-child{border:none}
+.aula-linha .tic{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--borda-forte);display:grid;place-items:center;font-size:10px;color:#fff;flex-shrink:0;cursor:pointer}
+.aula-linha .tic.on{background:var(--grad);border-color:transparent}
+.aula-linha .dur{margin-left:auto;color:var(--mut);font-size:11px;flex-shrink:0}
+.aula-linha a{color:var(--txt)}
+.aula-linha a:hover{color:#fff}
+.lado .card{padding:18px;margin-bottom:14px}
+.lado h4{font-size:13px;margin-bottom:10px}
+.lado ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+.lado li{display:flex;gap:9px;align-items:flex-start;line-height:1.45}
+.avaliacao{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--borda);font-size:12.5px}
+.avaliacao:last-child{border:none}
+.avaliacao b{color:#fff;display:block;font-size:12.5px}
+.avaliacao p{font-size:11.5px;color:var(--mut);margin-top:2px}
+@media(max-width:1080px){.layout-curso{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-pagina="cursos.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+  <linearGradient id="ceu1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b0f52"/><stop offset=".55" stop-color="#7a1a8f"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
+  <filter id="grao"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0"/></filter>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Cursos"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain" id="conteudo">
+    <div class="banner">
+      <svg viewBox="0 0 1200 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="1200" height="210" fill="url(#ceu1)"/>
+        <circle cx="600" cy="150" r="60" fill="#f3c6ff" opacity=".8"/>
+        <g fill="#2a0838"><path d="M0 180 L200 90 L380 180 Z"/><path d="M300 180 L520 60 L740 180 Z"/><path d="M680 180 L900 80 L1200 180 Z"/></g>
+        <rect y="176" width="1200" height="34" fill="#07040c"/>
+        <rect width="1200" height="210" filter="url(#grao)"/>
+      </svg>
+      <div class="info">
+        <span class="tag" id="c-cat">Fundamentos de IA</span>
+        <h1 id="c-tit">Fundamentos da Inteligência Artificial</h1>
+        <p id="c-desc">Conceitos essenciais, modelos, limites e boas práticas.</p>
+        <div class="meta-linha" id="c-meta" style="margin-top:8px"></div>
+      </div>
+      <div class="btns">
+        <button class="btn btn-pri" id="btn-comecar">Começar curso</button>
+        <button class="btn btn-sec btn-fav" aria-label="Adicionar aos guardados" aria-pressed="false">♡</button>
+      </div>
+    </div>
+
+    <div class="layout-curso">
+      <div>
+        <div class="secao-tit" style="margin-top:0"><h2>Conteúdo do curso</h2><span class="pct" id="c-prog"></span></div>
+        <div id="modulos"></div>
+        <div class="barra" style="margin-top:6px"><i id="barra-curso" style="width:0%"></i></div>
+
+        <div class="secao-tit"><h2>Materiais complementares</h2></div>
+        <div class="card" style="padding:16px 18px">
+          <ul style="list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:9px;font-size:12.5px">
+            <li>📄 Guia rápido — glossário de IA (PDF)</li>
+            <li>📊 Planilha comparativa de modelos</li>
+            <li>🔗 Lista de ferramentas com link de teste</li>
+            <li>🧩 Template de prompt estruturado</li>
+          </ul>
+        </div>
+
+        <div class="secao-tit"><h2>Prompts relacionados</h2></div>
+        <div class="grid-2" id="prompts-relacionados"></div>
+
+        <div class="secao-tit"><h2>Comentários e avaliações</h2></div>
+        <div class="card" style="padding:18px">
+          <div class="avaliacao"><div class="avatar" style="box-shadow:none">MC</div><div><b>Marina C.</b><p>“Melhor introdução ao tema que já fiz — direto e sem enrolação.”</p><span class="estrela">★★★★★</span></div></div>
+          <div class="avaliacao"><div class="avatar" style="box-shadow:none;background:linear-gradient(135deg,#a23cff,#d9cfe3)">RL</div><div><b>Rafael L.</b><p>“Os exercícios práticos valem o curso inteiro.”</p><span class="estrela">★★★★☆</span></div></div>
+        </div>
+      </div>
+
+      <aside class="lado">
+        <div class="card">
+          <h4>Professor</h4>
+          <div style="display:flex;gap:11px;align-items:center">
+            <div class="avatar" style="box-shadow:none">MC</div>
+            <div><b style="color:#fff;font-size:13px" id="c-autor">Marina Costa</b><div style="font-size:11px;color:var(--mut)">Especialista em IA aplicada · 4 cursos</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Skills desenvolvidas</h4>
+          <ul id="c-skills"><li>🧠 Pensamento com modelos</li><li>✍️ Escrita com IA</li><li>🔎 Pesquisa e análise</li></ul>
+        </div>
+        <div class="card">
+          <h4>Certificado</h4>
+          <p style="font-size:12.5px;color:var(--mut);line-height:1.5">Conclua todas as aulas para desbloquear o certificado com código único de verificação.</p>
+          <button class="btn btn-sec" style="margin-top:12px;width:100%;justify-content:center" disabled id="btn-cert">🔒 Bloqueado até concluir</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const D = window.DEMO;
+  const id = new URLSearchParams(location.search).get('id') || 'fundamentos';
+  const c = D.cursos.find(x => x.id === id) || D.cursos[0];
+
+  document.title = c.tit + ' | NEXORA AI';
+  document.getElementById('c-cat').textContent = c.cat;
+  document.getElementById('c-tit').textContent = c.tit;
+  document.getElementById('c-desc').textContent = c.desc;
+  document.getElementById('c-autor').textContent = c.autor;
+  document.getElementById('c-meta').innerHTML =
+    `<span class="estrela">★ ${c.nota}</span><span><b>${c.alunos}</b> alunos</span><span>${c.dur}</span><span class="nivel-pill ${c.nivel.toLowerCase()}">${c.nivel}</span>`;
+
+  /* módulos de demonstração */
+  const MODS = [
+    { t:'Módulo 1 — Panorama', aulas:[['O que é (e o que não é) IA','12:40',true],['Como os modelos aprendem','18:05',true],['Limites, vieses e riscos','15:30',true]] },
+    { t:'Módulo 2 — Na prática', aulas:[['Escolhendo a ferramenta certa','14:20',true],['Prompts que funcionam','21:10',false],['Avaliando resultados','16:45',false]] },
+    { t:'Módulo 3 — Aplicando', aulas:[['Projeto: assistente pessoal','24:00',false],['Boas práticas de equipe','13:35',false]] }
+  ];
+  let feitas = MODS.flatMap(m=>m.aulas).filter(a=>a[2]).length;
+  const totalAulas = MODS.flatMap(m=>m.aulas).length;
+
+  function renderModulos(){
+    document.getElementById('modulos').innerHTML = MODS.map((m,mi)=>`
+      <div class="modulo">
+        <h4>${m.t}<span>${m.aulas.length} aulas</span></h4>
+        ${m.aulas.map((a,ai)=>`
+          <div class="aula-linha">
+            <button class="tic ${a[2]?'on':''}" data-mod="${mi}" data-a="${ai}" aria-label="Marcar como concluída">${a[2]?'✓':''}</button>
+            <a href="aula.html">${a[0]}</a>
+            <span class="dur">${a[1]}</span>
+          </div>`).join('')}
+      </div>`).join('');
+    const pct = Math.round(feitas/totalAulas*100);
+    const barra = document.getElementById('barra-curso');
+    barra.style.width = pct+'%';
+    document.getElementById('c-prog').textContent = pct+'% concluído · '+feitas+'/'+totalAulas+' aulas';
+  }
+  renderModulos();
+
+  document.getElementById('modulos').addEventListener('click', e => {
+    const t = e.target.closest('.tic');
+    if (!t) return;
+    const a = MODS[+t.dataset.mod].aulas[+t.dataset.a];
+    a[2] = !a[2];
+    feitas += a[2] ? 1 : -1;
+    if (feitas === totalAulas) { window.toast('Curso concluído! Certificado desbloqueado 🎉'); window.confete(); document.getElementById('btn-cert').disabled=false; document.getElementById('btn-cert').textContent='🏆 Ver certificado'; }
+    renderModulos();
+  });
+
+  /* prompts relacionados */
+  document.getElementById('prompts-relacionados').innerHTML = D.prompts.slice(0,2).map(p=>`
+    <div class="card" style="padding:16px">
+      <span class="tag">${p.cat}</span>
+      <h3 style="margin-top:7px">${p.tit}</h3>
+      <p class="prev-prompt" style="margin-top:6px">${p.prev}</p>
+      <button class="btn btn-sec" style="margin-top:10px" data-copiar="${p.prev.replace(/"/g,'&quot;')}">Copiar prompt</button>
+    </div>`).join('');
+
+  document.getElementById('btn-comecar').addEventListener('click', () => { location.href='aula.html'; });
+})();
+</script>
+</body>
+</html>

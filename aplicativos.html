@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aplicativos | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.app-card{padding:18px}
+.app-head{display:flex;gap:13px;align-items:center}
+.app-logo{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#fff;background:var(--grad);flex-shrink:0}
+.app-head h3{font-size:15px}
+.app-head .cat{font-size:11px;color:var(--mut)}
+.preco{font-size:11.5px;color:var(--pri-soft);font-weight:700}
+</style>
+</head>
+<body data-pagina="aplicativos.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Aplicativos"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Aplicativos de IA</h1>
+      <p>As ferramentas certas para cada tarefa, com análise da equipe NEXORA.</p>
+    </div>
+
+    <div class="filtros" id="filtros-apps">
+      <button class="chip ativo" data-valor="Todas">Todas</button>
+      <button class="chip" data-valor="Assistente">Assistentes</button>
+      <button class="chip" data-valor="Imagem">Imagem</button>
+      <button class="chip" data-valor="Automação">Automação</button>
+      <button class="chip" data-valor="Voz">Voz</button>
+      <button class="chip" data-valor="Pesquisa">Pesquisa</button>
+    </div>
+
+    <section class="grid" id="grid-apps" aria-live="polite"></section>
+    <div class="vazio" id="vazio-apps" hidden><span class="ico">🔍</span>Nenhum aplicativo nesta categoria com essa pesquisa.</div>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const D = window.DEMO;
+  let estado = { cat:'Todas', q:'' };
+
+  function render(){
+    const lista = D.apps.filter(a =>
+      (estado.cat==='Todas' || a.cat===estado.cat) &&
+      (a.nome+a.desc+a.cat).toLowerCase().includes(estado.q)
+    );
+    document.getElementById('vazio-apps').hidden = lista.length>0;
+    document.getElementById('grid-apps').innerHTML = lista.map(a => `
+      <article class="card app-card">
+        <div class="app-head">
+          <div class="app-logo">${a.nome[0]}</div>
+          <div><h3>${a.nome}</h3><span class="cat">${a.cat}</span></div>
+          <span class="nivel-pill ${a.dificuldade.toLowerCase()}" style="margin-left:auto">${a.dificuldade}</span>
+        </div>
+        <p style="margin-top:12px">${a.desc}</p>
+        <div class="meta-linha" style="margin-top:8px"><span class="estrela">★ ${a.nota}</span><span class="preco">${a.preco}</span></div>
+        <div style="display:flex;gap:9px;margin-top:12px">
+          <button class="btn btn-pri" style="flex:1;justify-content:center" data-abrir-app="${a.nome}">Abrir app</button>
+          <button class="btn btn-sec btn-fav" aria-label="Guardar app" aria-pressed="false">♡</button>
+        </div>
+      </article>`).join('');
+  }
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-abrir-app]');
+    if (b) window.toast('Abrindo ' + b.dataset.abrirApp + ' em nova aba…');
+  });
+  document.addEventListener('filtro:mudou', e => { if (e.detail.grupo==='filtros-apps'){ estado.cat=e.detail.valor; render(); } });
+  document.addEventListener('busca:mudou', e => { estado.q=e.detail.q; render(); });
+
+  render();
+})();
+</script>
+</body>
+</html>

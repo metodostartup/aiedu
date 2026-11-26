@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificados e Conquistas | NEXORA AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.cert-card{position:relative;isolation:isolate;padding:22px;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(110deg,rgba(255,122,24,.05),rgba(255,45,138,.07) 48%,rgba(162,60,255,.08));-webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);background-clip:padding-box;border:1px solid rgba(200,140,255,.45);border-radius:16px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 0 #1f0e25,0 18px 36px -14px rgba(0,0,0,.7)}
+.cert-card::before{content:"";position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(162,60,255,.25),transparent 70%)}
+.cert-card .selo{width:52px;height:52px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:22px;box-shadow:var(--glow)}
+.cert-card h3{font-size:16px;margin-top:13px}
+.cert-card .cod{font-size:11px;color:var(--mut);letter-spacing:.05em;margin-top:6px;font-family:monospace}
+.cert-card .acoes{display:flex;gap:9px;margin-top:15px}
+.cert-card .acoes .btn{flex:1;justify-content:center}
+.conquista-g{padding:18px;text-align:center}
+.conquista-g .med{font-size:34px;display:block;margin-bottom:9px}
+.conquista-g.locked{opacity:.45;filter:grayscale(.8)}
+</style>
+</head>
+<body data-pagina="certificados.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Certificados"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <div class="pagehead"><h1>Certificados</h1><p>Seus certificados com código único de verificação.</p></div>
+
+    <section class="grid-2" style="margin-bottom:30px">
+      <article class="cert-card">
+        <div class="selo">🎓</div>
+        <h3>Fundamentos da Inteligência Artificial</h3>
+        <div class="meta-linha" style="margin-top:6px"><span>Concluído em 12/11/2026</span><span>4h 20m</span><span class="estrela">nota 4.9</span></div>
+        <div class="cod">#NEXORA-AIEDU-2481</div>
+        <div class="acoes">
+          <button class="btn btn-pri" data-cert="Fundamentos da IA">Baixar PDF</button>
+          <button class="btn btn-sec" data-copiar="#NEXORA-AIEDU-2481">Copiar código</button>
+        </div>
+      </article>
+      <article class="cert-card">
+        <div class="selo">🎓</div>
+        <h3>ChatGPT para Produtividade</h3>
+        <div class="meta-linha" style="margin-top:6px"><span>Concluído em 03/09/2026</span><span>2h 10m</span><span class="estrela">nota 4.9</span></div>
+        <div class="cod">#NEXORA-AIEDU-1957</div>
+        <div class="acoes">
+          <button class="btn btn-pri" data-cert="ChatGPT para Produtividade">Baixar PDF</button>
+          <button class="btn btn-sec" data-copiar="#NEXORA-AIEDU-1957">Copiar código</button>
+        </div>
+      </article>
+    </section>
+
+    <div class="secao-tit"><h2>Conquistas</h2><span class="pct">2 de 6 desbloqueadas</span></div>
+    <section class="grid" id="grid-conquistas"></section>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  document.getElementById('grid-conquistas').innerHTML = [
+    { m:'🔥', t:'7 dias seguidos', d:'Estudou todos os dias desta semana', on:true },
+    { m:'🎓', t:'Primeiro curso concluído', d:'Fundamentos da Inteligência Artificial', on:true },
+    { m:'🏆', t:'Trilha completa', d:'Conclua todas as aulas de uma trilha', on:false },
+    { m:'🧪', t:'Criador de prompts', d:'Guarde 10 prompts na sua biblioteca', on:false },
+    { m:'💬', t:'Primeira dúvida respondida', d:'Envie uma dúvida numa aula', on:false },
+    { m:'🚀', t:'Nível 5: Piloto', d:'Acumule 2.000 XP', on:false }
+  ].map(c => `<article class="card conquista-g ${c.on?'':'locked'}"><span class="med">${c.m}</span><h3 style="font-size:14px">${c.t}</h3><p style="font-size:11.5px;color:var(--mut);margin-top:4px">${c.d}</p></article>`).join('');
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-cert]');
+    if (b) window.toast('Gerando PDF do certificado: ' + b.dataset.cert + '…');
+  });
+})();
+</script>
+</body>
+</html>
