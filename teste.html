@@ -255,6 +255,27 @@ section{padding:36px 0}
 .plan .apartir + .price{margin-top:2px}
 .plan.pro .btn{background:#fff;color:var(--navy)}
 .plan .btn-outline{background:#fff;border:1px solid var(--line);color:var(--navy)}
+/* ===== PLANO VITALICIO DESTACADO ===== */
+.plan-vip-zone{display:flex;justify-content:center}
+.plan-vip{position:relative;isolation:isolate;width:100%;max-width:560px;border-radius:26px;padding:46px 44px 40px;text-align:center;color:#fff;background:linear-gradient(160deg,#1b0c21,#160a1c);border:1.5px solid rgba(192,38,211,.55);box-shadow:0 0 0 1px rgba(162,60,255,.15),0 30px 90px rgba(192,38,211,.35),0 10px 40px rgba(22,10,28,.6);overflow:hidden;display:flex;flex-direction:column;align-items:center}
+.plan-vip .pv-glow{position:absolute;inset:-40%;z-index:-1;background:conic-gradient(from 0deg,#c026d3,#ff8a3d,#a23cff,#ff2d8a,#c026d3);filter:blur(60px);opacity:.35;animation:pvSpin 9s linear infinite}
+@keyframes pvSpin{to{transform:rotate(360deg)}}
+.plan-vip .badge-top{position:static;display:inline-block;background:linear-gradient(135deg,#c026d3,#a23cff);color:#fff;font-size:12px;font-weight:700;border-radius:99px;padding:7px 18px;margin-bottom:18px;box-shadow:0 8px 24px rgba(192,38,211,.5)}
+.plan-vip .pv-tag{font-size:11.5px;font-weight:800;letter-spacing:2.5px;color:#ff8a3d;margin-bottom:10px}
+.plan-vip h4{font-family:'Sora',sans-serif;font-size:32px;font-weight:800;color:#fff}
+.plan-vip .pdesc{font-size:15px;color:#d9cfe3;margin:8px 0 6px;min-height:0}
+.plan-vip .price{margin:14px 0 2px;color:transparent;display:flex;align-items:baseline;gap:12px;justify-content:center;flex-wrap:wrap}
+.plan-vip .price b{font-family:'Sora',sans-serif;font-size:76px;font-weight:800;background:linear-gradient(135deg,#fff,#e9c8ff 55%,#ff8a3d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;text-shadow:0 0 60px rgba(192,38,211,.45)}
+.plan-vip .price span{font-size:14px;color:#d9cfe3;-webkit-text-fill-color:#d9cfe3}
+.plan-vip .pv-parcel{font-size:14px;color:#d9cfe3;margin-bottom:8px}
+.plan-vip ul{list-style:none;margin:18px 0 26px;text-align:left;width:100%;max-width:400px}
+.plan-vip li{font-size:14.5px;color:#e6dcf2;padding:8px 0;display:flex;gap:10px;align-items:center;border-bottom:1px solid rgba(217,207,227,.08)}
+.plan-vip li:last-child{border-bottom:none}
+.plan-vip li::before{content:"✓";color:#6ee7a8;font-weight:800;font-size:15px}
+.plan-vip .btn{width:100%;max-width:400px;justify-content:center;padding:17px 28px;font-size:16px;background:linear-gradient(135deg,#c026d3,#a23cff);color:#fff;box-shadow:0 14px 40px rgba(192,38,211,.5);animation:pvPulse 2.4s ease-in-out infinite}
+@keyframes pvPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+.plan-vip .fcta-g{margin-top:16px;justify-content:center;flex-wrap:wrap;gap:16px}
+@media(max-width:600px){.plan-vip{padding:36px 22px 30px}.plan-vip .price b{font-size:56px}.plan-vip h4{font-size:26px}}
 
 /* ===== FAQ ===== */
 .faq h2{text-align:center;font-size:26px;font-weight:800;color:var(--navy);margin-bottom:30px}
@@ -427,13 +448,35 @@ html.dark .theme-toggle .moon{display:none}
 .tool svg{width:22px;height:22px}
 /* ===== TESTIMONIALS ===== */
 .tst{padding:80px 0;background:var(--bg)}
-.tst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.tst-card{padding:26px;border-radius:18px;background:#fff;border:1px solid var(--line)}
-.tst-card .stars{color:#f5b301;letter-spacing:2px;margin-bottom:12px}
-.tst-card p{color:var(--ink);font-size:15px;line-height:1.65;margin-bottom:18px}
-.tst-who{display:flex;gap:12px;align-items:center}
-.tst-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;background:linear-gradient(135deg,#c026d3,#ff2d8a)}
-.tst-who b{display:block;color:var(--navy);font-size:14px}.tst-who span{font-size:12px;color:var(--gray)}
+.tst-carousel-zone{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto}
+.tst-carousel{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px 4px 18px;flex:1}
+.tst-carousel::-webkit-scrollbar{display:none}
+.v-card{flex:0 0 clamp(230px,28vw,290px);scroll-snap-align:start}
+.v-frame{position:relative;aspect-ratio:9/16;border-radius:20px;overflow:hidden;background:linear-gradient(160deg,#1b0c21,#160a1c);border:1px solid rgba(162,60,255,.28);cursor:pointer;box-shadow:0 18px 44px rgba(22,10,28,.45);transition:transform .3s,box-shadow .3s}
+.v-frame:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 26px 60px rgba(192,38,211,.35)}
+.v-frame video{width:100%;height:100%;object-fit:cover;display:none}
+.v-frame.playing video{display:block}
+.v-frame.playing .v-ph,.v-frame.playing .v-shade{display:none}
+.v-ph{position:absolute;inset:0;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 20%,rgba(192,38,211,.28),transparent 55%),radial-gradient(circle at 75% 80%,rgba(162,60,255,.22),transparent 55%)}
+.v-play{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;background:linear-gradient(135deg,#c026d3,#a23cff);box-shadow:0 0 0 8px rgba(192,38,211,.18),0 14px 30px rgba(192,38,211,.5);padding-left:4px}
+.v-note{font-size:12px;color:#d9cfe3;opacity:.8}
+.v-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,4,12,0) 45%,rgba(7,4,12,.85) 100%)}
+.v-info{position:absolute;left:14px;right:14px;bottom:14px;display:flex;align-items:flex-end;gap:10px;color:#fff}
+.v-av{width:38px;height:38px;border-radius:50%;flex:0 0 38px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:linear-gradient(135deg,#c026d3,#a23cff);border:2px solid rgba(255,255,255,.4)}
+.v-info b{display:block;font-size:14px}
+.v-info span{display:block;font-size:11.5px;color:#d9cfe3}
+.v-info .stars{margin-left:auto;color:#f5b301;font-size:11px;letter-spacing:1px;white-space:nowrap}
+.tst-nav{width:44px;height:44px;border-radius:50%;flex:0 0 44px;border:1px solid rgba(162,60,255,.35);background:rgba(255,255,255,.06);color:#d9cfe3;font-size:18px;cursor:pointer;transition:background .2s,color .2s}
+.tst-nav:hover{background:linear-gradient(135deg,#c026d3,#a23cff);color:#fff}
+.tst-dots{display:flex;gap:8px;justify-content:center;margin-top:6px}
+.tst-dots span{width:8px;height:8px;border-radius:99px;background:rgba(217,207,227,.25);transition:all .25s}
+.tst-dots span.on{width:24px;background:linear-gradient(90deg,#c026d3,#a23cff)}
+
+
+
+
+
+
 /* ===== FINAL CTA ===== */
 .fcta{padding:80px 0}
 .fcta-box{position:relative;overflow:hidden;border-radius:28px;padding:60px 40px;text-align:center;color:#fff;background:radial-gradient(800px 300px at 20% 0%,#b07ae0,transparent),radial-gradient(700px 300px at 90% 100%,#ff2d8a,transparent),#160a1c}
@@ -833,29 +876,108 @@ html.dark header,html.lite header,header{background:#050308!important;background
   <div class="tools-track"><div class="tool"><svg viewBox="0 0 24 24" fill="#D97757"><path d="M4.71 15.97l4.72-2.65.08-.23-.08-.13h-.23l-.79-.05-2.7-.07-2.34-.1-2.27-.12-.57-.12L0 11.79l.06-.35.48-.32.69.06 1.52.1 2.28.16 1.65.1 2.45.25h.39l.05-.16-.13-.1-.1-.1-2.36-1.6-2.55-1.68-1.34-.97-.72-.5-.36-.46-.16-1.01.65-.72.88.06.22.06.89.69 1.91 1.48 2.49 1.83.36.3.15-.1.02-.07-.17-.27-1.35-2.45-1.45-2.49-.64-1.03-.17-.62a2.99 2.99 0 0 1-.1-.73L6.3.06 6.71 0l.99.13.41.36.62 1.41 1 2.22 1.55 3.02.45.9.24.83.09.26h.16v-.15l.13-1.71.24-2.1.23-2.7.08-.76.37-.9.74-.49.58.28.48.68-.07.44-.28 1.85-.56 2.9-.36 1.95h.21l.24-.24.98-1.3 1.64-2.05.73-.82.84-.9.54-.42h1.02l.75 1.12-.34 1.15-1.05 1.34-.88 1.13-1.25 1.69-.78 1.35.07.11.19-.02 2.84-.6 1.53-.28 1.83-.31.83.39.09.39-.33.81-1.96.48-2.3.46-3.42.81-.04.03.05.06 1.54.15.66.03h1.61l3 .23.79.52.47.64-.08.48-1.2.62-1.63-.39-3.79-.9-1.3-.33h-.18v.11l1.08 1.06 1.99 1.8 2.5 2.32.12.57-.32.46-.34-.05-2.2-1.65-.85-.75-1.92-1.62h-.13v.17l.44.65 2.34 3.52.12 1.08-.17.35-.61.21-.67-.12-1.37-1.93-1.42-2.17-1.15-1.95-.14.08-.68 7.3-.32.37-.73.28-.61-.46-.32-.75.32-1.48.39-1.93.32-1.53.29-1.91.17-.63-.01-.04-.14.02-1.44 1.98-2.19 2.96-1.73 1.85-.42.17-.72-.37.07-.66.4-.59 2.4-3.05 1.45-1.89.93-1.09-.01-.16h-.06L4.25 18.4l-1.13.15-.49-.46.06-.75.23-.25 1.92-1.31z"/></svg>Claude</div><div class="tool"><svg viewBox="0 0 24 24"><defs><linearGradient id="lvg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset=".5" stop-color="#ff3d77"/><stop offset="1" stop-color="#7b5cff"/></linearGradient></defs><path fill="url(#lvg)" d="M12 21.6s-8.4-5.1-8.4-11.4A4.8 4.8 0 0 1 12 7.1a4.8 4.8 0 0 1 8.4 3.1c0 6.3-8.4 11.4-8.4 11.4z"/></svg>Lovable</div><div class="tool"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a3d" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="7" width="16" height="12" rx="4"/><path d="M12 3v4"/><circle cx="12" cy="3" r="1.2" fill="#ff8a3d"/><circle cx="9" cy="13" r="1.6" fill="#ff8a3d"/><circle cx="15" cy="13" r="1.6" fill="#ff8a3d"/><path d="M2 12v3M22 12v3"/></svg>GlokBot</div><div class="tool"><svg viewBox="0 0 24 24" fill="none" stroke="#ff5ea8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="14" height="14" rx="3"/><path d="M16.5 10l5-3v10l-5-3z"/><path d="M9.5 8.5l1 2.2 2.2 1-2.2 1-1 2.2-1-2.2-2.2-1 2.2-1z" fill="#ff5ea8"/></svg>GenJutsu</div><div class="tool"><svg viewBox="0 0 24 24"><path fill="#25F4EE" d="M9.4 9.6v-1a7 7 0 0 0-1-.1 6.6 6.6 0 0 0-3.8 12 6.6 6.6 0 0 1 4.8-10.9z"/><path fill="#25F4EE" d="M9.6 20.5a3 3 0 0 0 3-2.9V3.3h2.6a5 5 0 0 1-.1-1h-3.6v14.3a3 3 0 0 1-3 2.9 3 3 0 0 1-1.4-.3 3 3 0 0 0 2.5 1.3zM20 8.2V7.2a5 5 0 0 1-2.7-.8A5 5 0 0 0 20 8.2z"/><path fill="#FE2C55" d="M17.3 6.4a5 5 0 0 1-1.2-3.1h-1a5 5 0 0 0 2.2 3.1zM8.4 13.4a3 3 0 0 0-1.4 5.6 3 3 0 0 1 3.4-4.7V10.6a7 7 0 0 0-1-.1h-.2v2.8a3 3 0 0 0-.8.1z"/><path fill="currentColor" d="M20 8.2v2.8a8.5 8.5 0 0 1-5-1.6v7.2a6.6 6.6 0 0 1-10.4 5.4 6.6 6.6 0 0 0 11.4-4.5V10.3a8.5 8.5 0 0 0 5 1.6V8.4a5 5 0 0 1-1-.2zm-5 9.2v-7.2a8.5 8.5 0 0 0 5 1.6V8.2a5 5 0 0 1-2.7-1.8 5 5 0 0 1-2.2-3.1h-2.6v14.3a3 3 0 0 1-5.4 1.6 3 3 0 0 0 11.4-4.5z"/></svg>TikTok</div><div class="tool"><svg viewBox="0 0 24 24" fill="#10A37F"><path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.51-2.9A6.07 6.07 0 0 0 4.98 4.18a5.98 5.98 0 0 0-4 2.9 6.05 6.05 0 0 0 .74 7.1 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.51 2.9A5.98 5.98 0 0 0 13.26 24a6.06 6.06 0 0 0 5.77-4.21 5.99 5.99 0 0 0 4-2.9 6.06 6.06 0 0 0-.75-7.07zM13.26 22.43a4.48 4.48 0 0 1-2.88-1.04l.14-.08 4.78-2.76a.79.79 0 0 0 .39-.68v-6.74l2.02 1.17a.07.07 0 0 1 .04.05v5.58a4.5 4.5 0 0 1-4.49 4.5zM3.6 18.3a4.47 4.47 0 0 1-.53-3.01l.14.09 4.78 2.76a.77.77 0 0 0 .78 0l5.84-3.37v2.33a.08.08 0 0 1-.03.06L9.74 20a4.5 4.5 0 0 1-6.14-1.7zM2.34 7.9a4.48 4.48 0 0 1 2.37-1.97V11.6a.77.77 0 0 0 .39.68l5.83 3.37-2.02 1.17a.08.08 0 0 1-.07 0L4 14.03a4.5 4.5 0 0 1-1.66-6.14zm16.6 3.86-5.84-3.37 2.02-1.16a.08.08 0 0 1 .07 0l4.84 2.79a4.49 4.49 0 0 1-.69 8.1v-5.68a.79.79 0 0 0-.4-.68zm2.01-3.02-.14-.09-4.77-2.79a.78.78 0 0 0-.79 0L9.41 9.23V6.9a.07.07 0 0 1 .03-.06l4.84-2.78a4.5 4.5 0 0 1 6.68 4.66zM8.32 12.87 6.3 11.7a.08.08 0 0 1-.04-.06V6.07a4.5 4.5 0 0 1 7.38-3.45l-.14.08-4.78 2.76a.79.79 0 0 0-.39.68zm1.1-2.37 2.6-1.5 2.6 1.5v3l-2.6 1.5-2.6-1.5z"/></svg>ChatGPT</div><div class="tool"><svg viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.8"><path d="M12 2l2.4 6.4L21 10l-6.6 1.6L12 18l-2.4-6.4L3 10l6.6-1.6z"/></svg>Midjourney</div><div class="tool"><svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></svg>Gemini</div><div class="tool"><svg viewBox="0 0 24 24" fill="#e11d48"><path d="M20.7 8.2c-.2.1-2.5 1.4-2.5 4.3 0 3.3 2.9 4.5 3 4.5-.1.1-.5 1.6-1.5 3.2-.9 1.3-1.9 2.7-3.4 2.7s-1.9-.9-3.6-.9-2.2.9-3.5.9-2.4-1.6-3.5-3c-1.6-2.2-2.9-5.5-2.9-8.7 0-4.5 3-6.9 5.8-6.9 1.5 0 2.8 1 3.7 1s2.1-1 3.7-1c1.3 0 3.4.7 4.7 2.9zM15.4 4.1c.7-.9 1.2-2.1 1.2-3.1-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.9-1.2 3 1.1.1 2.1-.6 2.8-1.4z"/></svg>Apple Intelligence</div><div class="tool"><svg viewBox="0 0 24 24" fill="#111"><path d="M12 2c5.5 0 10 4 10 9s-4.5 9-10 9c-1 0-2-.1-2.9-.4L4 22l1.4-4.2C3.3 16.3 2 13.8 2 11 2 6 6.5 2 12 2z"/></svg>DeepSeek</div></div>
 </section>
 
-<!-- DEPOIMENTOS -->
+<!-- DEPOIMENTOS EM VIDEO -->
 <section class="tst"><div class="wrap">
-  <div class="sec-head"><h2>Quem entrou, não volta atrás</h2><p>Alunos que trocaram horas de vídeo solto por resultado de verdade.</p></div>
-  <div class="tst-grid">
-    <div class="tst-card"><div class="stars">★★★★★</div><p>“Em duas semanas na formação de Lovable eu já tinha meu primeiro aplicativo no ar e cobrando cliente. Isso aqui se paga sozinho.”</p><div class="tst-who"><div class="tst-av">MC</div><div><b>Mariana C.</b><span>Formação em Lovable</span></div></div></div>
-    <div class="tst-card"><div class="stars">★★★★★</div><p>“A automação de redes sociais mudou minha rotina: hoje publico em 5 redes sem perder horas todo dia. Minha agência triplicou de clientes.”</p><div class="tst-who"><div class="tst-av">RS</div><div><b>Rafael S.</b><span>Automação de Redes Sociais</span></div></div></div>
-    <div class="tst-card"><div class="stars">★★★★★</div><p>“Nunca tinha programado. Com o Claude Code e as aulas ao vivo, criei meus primeiros projetos sozinho e mudei de área em 3 meses.”</p><div class="tst-who"><div class="tst-av">JL</div><div><b>João L.</b><span>Free Claude Code</span></div></div></div>
+  <div class="sec-head"><h2>Quem entrou, não volta atrás</h2><p>Alunos de verdade, em vídeo, contando o resultado que tiveram.</p></div>
+  <div class="tst-carousel-zone">
+    <button class="tst-nav prev" aria-label="Anterior" onclick="tstScroll(-1)">←</button>
+    <div class="tst-carousel" id="tstCarousel">
+      <div class="v-card">
+        <div class="v-frame" data-video="depoimento-mariana.mp4">
+          <video playsinline preload="none" poster="" data-src="depoimento-mariana.mp4"></video>
+          <div class="v-ph"><span class="v-play">▶</span><span class="v-note">Vídeo em breve</span></div>
+          <div class="v-shade"></div>
+          <div class="v-info"><div class="v-av">MC</div><div><b>Mariana C.</b><span>Formação em Lovable</span></div><div class="stars">★★★★★</div></div>
+        </div>
+      </div>
+      <div class="v-card">
+        <div class="v-frame" data-video="depoimento-rafael.mp4">
+          <video playsinline preload="none" poster="" data-src="depoimento-rafael.mp4"></video>
+          <div class="v-ph"><span class="v-play">▶</span><span class="v-note">Vídeo em breve</span></div>
+          <div class="v-shade"></div>
+          <div class="v-info"><div class="v-av">RS</div><div><b>Rafael S.</b><span>Automação de Redes Sociais</span></div><div class="stars">★★★★★</div></div>
+        </div>
+      </div>
+      <div class="v-card">
+        <div class="v-frame" data-video="depoimento-joao.mp4">
+          <video playsinline preload="none" poster="" data-src="depoimento-joao.mp4"></video>
+          <div class="v-ph"><span class="v-play">▶</span><span class="v-note">Vídeo em breve</span></div>
+          <div class="v-shade"></div>
+          <div class="v-info"><div class="v-av">JL</div><div><b>João L.</b><span>Free Claude Code</span></div><div class="stars">★★★★★</div></div>
+        </div>
+      </div>
+      <div class="v-card">
+        <div class="v-frame" data-video="depoimento-4.mp4">
+          <video playsinline preload="none" poster="" data-src="depoimento-4.mp4"></video>
+          <div class="v-ph"><span class="v-play">▶</span><span class="v-note">Vídeo em breve</span></div>
+          <div class="v-shade"></div>
+          <div class="v-info"><div class="v-av">AC</div><div><b>Ana C.</b><span>Skills de IA</span></div><div class="stars">★★★★★</div></div>
+        </div>
+      </div>
+      <div class="v-card">
+        <div class="v-frame" data-video="depoimento-5.mp4">
+          <video playsinline preload="none" poster="" data-src="depoimento-5.mp4"></video>
+          <div class="v-ph"><span class="v-play">▶</span><span class="v-note">Vídeo em breve</span></div>
+          <div class="v-shade"></div>
+          <div class="v-info"><div class="v-av">PT</div><div><b>Pedro T.</b><span>Squads + Missões</span></div><div class="stars">★★★★★</div></div>
+        </div>
+      </div>
+    </div>
+    <button class="tst-nav next" aria-label="Próximo" onclick="tstScroll(1)">→</button>
   </div>
+  <div class="tst-dots" id="tstDots"></div>
 </div></section>
+<script>
+function tstScroll(dir){
+  var c=document.getElementById('tstCarousel');
+  var card=c.querySelector('.v-card');
+  var step=card?card.offsetWidth+18:300;
+  c.scrollBy({left:dir*step,behavior:'smooth'});
+}
+(function(){
+  var c=document.getElementById('tstCarousel');
+  if(!c)return;
+  var d=document.getElementById('tstDots');
+  function dots(){
+    d.innerHTML='';
+    var cards=c.querySelectorAll('.v-card').length;
+    var per=window.innerWidth>900?3:window.innerWidth>600?2:1;
+    var pages=Math.ceil(cards/per);
+    for(var i=0;i<pages;i++){var b=document.createElement('span');if(i===0)b.className='on';d.appendChild(b);}
+  }
+  dots();window.addEventListener('resize',dots);
+  c.addEventListener('scroll',function(){
+    var per=window.innerWidth>900?3:window.innerWidth>600?2:1;
+    var step=(c.querySelector('.v-card').offsetWidth+18)*per;
+    var i=Math.round(c.scrollLeft/step);
+    d.querySelectorAll('span').forEach(function(s,j){s.className=j===i?'on':'';});
+  },{passive:true});
+  document.querySelectorAll('.v-frame').forEach(function(f){
+    f.addEventListener('click',function(){
+      var v=f.querySelector('video'),src=v.getAttribute('data-src');
+      if(!src)return;
+      if(v.paused){if(!v.src)v.src=src;v.play();f.classList.add('playing');}
+      else{v.pause();f.classList.remove('playing');}
+    });
+  });
+})();
+</script>
 
 <!-- PLANO VITALICIO -->
 <section class="pricing" id="planos" style="padding-top:56px">
   <div class="wrap">
     <h2>Um pagamento. Acesso para sempre.</h2>
     <p style="text-align:center;font-size:15px;color:var(--gray);margin:10px auto 34px;max-width:560px">Sem mensalidade. Sem reajuste. Sem pegadinha. Você entra uma vez e leva tudo que a NEXORA produzir para o resto da vida.</p>
-    <div class="plans" style="justify-content:center">
-      <div class="plan pro" style="max-width:420px">
-        <div class="badge-top">Acesso vitalício</div>
+    <div class="plan-vip-zone">
+      <div class="plan-vip">
+        <div class="pv-glow"></div>
+        <div class="badge-top">⭐ Acesso vitalício — oferta de lançamento</div>
+        <div class="pv-tag">SÓ EXISTE UM PLANO. E ELE É SEU PARA SEMPRE.</div>
         <h4>Vitalício</h4>
         <div class="pdesc">Tudo de IA em uma única plataforma — para sempre.</div>
-        <div class="price" style="font-size:44px"><b>R$ 497</b><span style="font-size:15px;font-weight:500;color:var(--gray)">pagamento único</span></div>
-        <div style="font-size:13px;color:var(--gray);margin:0 0 14px">ou 12x de R$ 48,63 no cartão</div>
-        <ul style="text-align:left">
+        <div class="price"><b>R$ 497</b><span>pagamento único · à vista</span></div>
+        <div class="pv-parcel">ou 12x de R$ 48,63 no cartão</div>
+        <ul>
           <li>Acesso vitalício a todos os cursos e skills de IA</li>
           <li>Todas as trilhas de formação, do zero ao avançado</li>
           <li>Biblioteca completa de prompts prontos</li>
@@ -864,8 +986,8 @@ html.dark header,html.lite header,header{background:#050308!important;background
           <li>Certificados verificáveis ilimitados</li>
           <li>Todas as atualizações futuras incluídas</li>
         </ul>
-        <a href="/app?assinar=1" class="btn" style="width:100%;justify-content:center">Garantir meu acesso vitalício <span class="arrow">→</span></a>
-        <div class="fcta-g" style="justify-content:center;margin-top:14px"><span>✓ Garantia de 7 dias</span><span>✓ Pagamento único</span></div>
+        <a href="/app?assinar=1" class="btn">Garantir meu acesso vitalício <span class="arrow">→</span></a>
+        <div class="fcta-g"><span>✓ Garantia de 7 dias</span><span>✓ Pagamento único</span><span>✓ Acesso imediato</span></div>
       </div>
     </div>
   </div>
