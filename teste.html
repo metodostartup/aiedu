@@ -505,7 +505,8 @@ html.dark .fx-btn{display:flex}
 .rv.in{opacity:1;transform:none}
 /* ===== 3D MOCK ===== */
 .m3d-wrap{perspective:1600px;position:relative;padding:40px 30px}
-.m3d{position:relative;transform-style:preserve-3d;transform:rotateY(-14deg) rotateX(8deg);transition:transform .3s ease-out;animation:mFloat 7s ease-in-out infinite}
+.m3d{position:relative;transform-style:preserve-3d;transform:rotateY(-14deg) rotateX(8deg);animation:mFloat 7s ease-in-out infinite,mIn 1.1s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes mIn{from{opacity:0;transform:perspective(1400px) rotateY(-4deg) rotateX(32deg) translateY(80px) scale(.92)}}
 @keyframes mFloat{50%{translate:0 -12px}}
 .m-panel{display:grid;grid-template-columns:150px 1fr;border-radius:20px;overflow:hidden;background:linear-gradient(160deg,rgba(33,15,39,.95),rgba(17,7,23,.98));border:1px solid rgba(200,140,255,.25);box-shadow:0 50px 100px -30px rgba(0,0,0,.9),0 0 60px -20px rgba(192,38,211,.7);transform-style:preserve-3d;min-height:400px}
 .m-side{padding:18px 12px;background:rgba(0,0,0,.25);border-right:1px solid rgba(200,140,255,.12);display:flex;flex-direction:column;gap:4px}
@@ -568,7 +569,39 @@ html.dark .fx-btn{display:flex}
 .m-play{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ff2e63,#ff7a59);display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 0 16px #ff2e63}
 @media(max-width:960px){.m3d-wrap{padding:30px 10px;margin-top:20px}}
 @media(max-width:600px){.m3d{transform:rotateX(6deg)}.m-panel{grid-template-columns:1fr;min-height:0}.m-side{flex-direction:row;overflow-x:auto;padding:10px}.m-logo{display:none}.m-grid,.m-grid3{grid-template-columns:1fr 1fr}.m-float{display:none}.m-float.f3{display:flex;top:-20px;right:0}}
-@media(prefers-reduced-motion:reduce){.m3d,.m-float{animation:none}.rv{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.m3d,.m-float,.m3d::before,.m-aurora i,.m-shine::after,.m-card,.m-chart i,.m-ring .fgc{animation:none!important}.m-ring .fgc{stroke-dashoffset:34}.rv{opacity:1;transform:none}}
+
+/* ===== HERO 3D premium: aurora, anel neon, brilho, partículas ===== */
+.m-aurora{position:absolute;inset:-12%;pointer-events:none;z-index:0;filter:blur(52px)}
+.m-aurora i{position:absolute;border-radius:50%}
+.m-aurora i:nth-child(1){width:52%;height:52%;left:-6%;top:-4%;background:radial-gradient(circle,#c026d3 0%,transparent 65%);opacity:.5;animation:aurA 11s ease-in-out infinite alternate}
+.m-aurora i:nth-child(2){width:48%;height:48%;right:-4%;bottom:-2%;background:radial-gradient(circle,#ff8a3d 0%,transparent 65%);opacity:.4;animation:aurA 13s ease-in-out infinite alternate-reverse}
+.m-aurora i:nth-child(3){width:42%;height:42%;right:16%;top:-12%;background:radial-gradient(circle,#a23cff 0%,transparent 65%);opacity:.45;animation:aurA 9s ease-in-out infinite alternate;animation-delay:-4s}
+@keyframes aurA{to{transform:translate(7%,11%) scale(1.18)}}
+@property --ha{syntax:"<angle>";initial-value:0deg;inherits:false}
+.m3d::before{content:"";position:absolute;inset:-3px;border-radius:26px;background:conic-gradient(from var(--ha),#c026d3,#ff8a3d,#a23cff,#ff2d8a,#c026d3);filter:blur(22px);opacity:.55;z-index:-1;animation:haSpin 7s linear infinite}
+@keyframes haSpin{to{--ha:360deg}}
+.m-glow{position:absolute;inset:0;border-radius:20px;pointer-events:none;z-index:4;opacity:0;transition:opacity .35s;background:radial-gradient(420px circle at var(--gx,50%) var(--gy,0%),rgba(255,138,61,.16),rgba(192,38,211,.1) 40%,transparent 68%)}
+.m-panel:hover .m-glow{opacity:1}
+.m-shine{position:absolute;inset:0;border-radius:20px;overflow:hidden;pointer-events:none;z-index:4}
+.m-shine::after{content:"";position:absolute;top:-70%;left:-90%;width:48%;height:240%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);animation:mSweep 6s ease-in-out infinite;animation-delay:2.2s}
+@keyframes mSweep{0%,52%{left:-90%}82%,100%{left:170%}}
+.m-spark{position:absolute;width:6px;height:6px;border-radius:50%;background:#ffb0e8;box-shadow:0 0 12px 2px rgba(255,45,138,.8);pointer-events:none;z-index:5;animation:sparkFly .9s ease-out forwards}
+@keyframes sparkFly{0%{opacity:0;transform:translate(0,0) scale(.4)}12%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1)}}
+.m-card{animation:cardIn .8s cubic-bezier(.2,.8,.2,1) backwards}
+.m-card:nth-child(1){animation-delay:.55s}.m-card:nth-child(2){animation-delay:.68s}.m-card:nth-child(3){animation-delay:.81s}
+.m-card:nth-child(4){animation-delay:.94s}.m-card:nth-child(5){animation-delay:1.07s}.m-card:nth-child(6){animation-delay:1.2s}
+@keyframes cardIn{from{opacity:0;transform:translateZ(80px) translateY(30px) scale(.96)}to{opacity:1;transform:translateZ(25px)}}
+.m-chart i{transform-origin:bottom;animation:growH 1.2s ease backwards,chartP 3.4s ease-in-out infinite var(--d,0s)}
+@keyframes chartP{50%{transform:scaleY(.8)}}
+.m-float.f5{top:42%;right:-54px;transform:translateZ(105px);animation-delay:-4.5s}
+.m-ring{width:46px;height:46px;transform:rotate(-90deg)}
+.m-ring circle{fill:none;stroke-width:5;stroke-linecap:round}
+.m-ring .bgc{stroke:rgba(255,255,255,.12)}
+.m-ring .fgc{stroke:url(#ringG);stroke-dasharray:113;stroke-dashoffset:113;animation:ringIn 2s 1s cubic-bezier(.2,.8,.2,1) forwards,ringPulse 3s 3.2s ease-in-out infinite}
+@keyframes ringIn{to{stroke-dashoffset:34}}
+@keyframes ringPulse{50%{stroke-dashoffset:48}}
+@media(max-width:960px){.m-float.f5{display:none}}
 
 /* ===== TESTE THEME: noir + orange/magenta/purple ===== */
 html.dark body::before{background-image:radial-gradient(rgba(255,77,141,.22) 1px,transparent 1.4px)!important;background-size:22px 22px!important;-webkit-mask:linear-gradient(90deg,#000 0,transparent 18%,transparent 82%,#000 100%);mask:linear-gradient(90deg,#000 0,transparent 18%,transparent 82%,#000 100%)}
@@ -654,13 +687,14 @@ html.dark header,html.lite header,header{background:#050308!important;background
     </div>
 
     <!-- DASHBOARD MOCKUP -->
-    <div class="m3d-wrap"><div class="m3d" id="m3d">
+    <div class="m3d-wrap"><div class="m-aurora" aria-hidden="true"><i></i><i></i><i></i></div><div class="m3d" id="m3d">
       <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
         <linearGradient id="ceu1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b0f52"/><stop offset=".55" stop-color="#7a1a8f"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
         <linearGradient id="fita2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a23cff"/><stop offset=".5" stop-color="#d9cfe3"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
         <radialGradient id="portal3" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e6c8ff"/><stop offset=".45" stop-color="#a23cff"/><stop offset="1" stop-color="#3b0f52" stop-opacity="0"/></radialGradient>
+        <linearGradient id="ringG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset=".5" stop-color="#ff2d8a"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
       </defs></svg>
-      <div class="m-panel">
+      <div class="m-panel"><div class="m-glow"></div><div class="m-shine"></div>
         <aside class="m-side"><div class="m-logo">AI<b>Edu</b></div>
           <a class="m-nav"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg> Início</a>
           <a class="m-nav">Mais curtidos</a>
@@ -695,6 +729,7 @@ html.dark header,html.lite header,header{background:#050308!important;background
       <div class="m-float f2"><div class="m-cert">🎓</div><div><b>Certificado emitido ✓</b><small>Formação em Lovable</small></div></div>
       <div class="m-float f3"><b class="big">+12.000</b><small>alunos ativos</small></div>
       <div class="m-float f4"><div class="m-play">▶</div><div><b>Aula 07 · Prompts</b><div class="m-bar"><i style="--w:64%"></i></div></div></div>
+      <div class="m-float f5"><svg class="m-ring" viewBox="0 0 46 46" aria-hidden="true"><circle class="bgc" cx="23" cy="23" r="18"/><circle class="fgc" cx="23" cy="23" r="18"/></svg><div><b>+250 XP</b><small>Meta do dia: 70%</small></div></div>
     </div></div>
 </div>
 </section>
@@ -1140,7 +1175,17 @@ html.dark header,html.lite header,header{background:#050308!important;background
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
   document.querySelectorAll('section:not(.hero) .wrap > *, .fx-head, .tools .sec-head').forEach(function(el){el.classList.add('rv');io.observe(el)});
   var m=document.getElementById('m3d'),wrap=m&&m.parentElement;
-  if(m&&!touch){wrap.addEventListener('mousemove',function(e){var r=wrap.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;m.style.transform='rotateY('+(-14+x*18)+'deg) rotateX('+(8-y*14)+'deg)'});wrap.addEventListener('mouseleave',function(){m.style.transform=''})}
+  if(m&&!touch){var tx=-14,ty=8,cx=-14,cy=8;
+    wrap.addEventListener('mousemove',function(e){var r=wrap.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tx=-14+x*20;ty=8-y*16});
+    wrap.addEventListener('mouseleave',function(){tx=-14;ty=8});
+    (function loop(){cx+=(tx-cx)*.07;cy+=(ty-cy)*.07;m.style.transform='rotateY('+cx.toFixed(2)+'deg) rotateX('+cy.toFixed(2)+'deg)';requestAnimationFrame(loop)})();}
+  if(m){var panel=m.querySelector('.m-panel'),panelWrap=wrap||m.parentElement,last=0;
+    panel.addEventListener('mousemove',function(e){var r=panel.getBoundingClientRect();panel.style.setProperty('--gx',((e.clientX-r.left)/r.width*100)+'%');panel.style.setProperty('--gy',((e.clientY-r.top)/r.height*100)+'%');
+      if(!touch){var now=performance.now();if(now-last<110)return;last=now;
+        var pr=(panelWrap).getBoundingClientRect(),s=document.createElement('i');s.className='m-spark';
+        s.style.left=(e.clientX-pr.left)+'px';s.style.top=(e.clientY-pr.top)+'px';
+        s.style.setProperty('--dx',(Math.random()*90-45)+'px');s.style.setProperty('--dy',(-40-Math.random()*70)+'px');
+        panelWrap.appendChild(s);setTimeout(function(){s.remove()},950);}});}
   if(m){var navs=m.querySelectorAll('.m-nav'),tabs=m.querySelectorAll('.m-tab'),order=[1,2,4,3],i=0;
     function show(n){navs.forEach(function(a,k){a.classList.toggle('on',k===n)});var t=navs[n].dataset.t;tabs.forEach(function(x){x.classList.toggle('on',x.dataset.tab===t)})}
     navs.forEach(function(a,k){a.addEventListener('click',function(){show(k)})});
