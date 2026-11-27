@@ -198,9 +198,16 @@ textarea.notas:focus{border-color:var(--borda-forte)}
         if(curso) document.getElementById('link-curso').href='curso.html?id='+curso.id;
         total=a.duracao_seg||0;
         if(a.video_url){
-          VID=youtubeSrc(a.video_url);
-          document.getElementById('tela-video').innerHTML =
-            '<iframe src="'+VID+'?enablejsapi=1&rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen title="'+esc(a.titulo)+'"></iframe>';
+          const yt = String(a.video_url).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
+          if (yt) {
+            VID='https://www.youtube.com/embed/'+yt[1];
+            document.getElementById('tela-video').innerHTML =
+              '<iframe src="'+VID+'?enablejsapi=1&rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen title="'+esc(a.titulo)+'"></iframe>';
+          } else {
+            VID='arquivo';
+            document.getElementById('tela-video').innerHTML =
+              '<video src="'+esc(a.video_url)+'" controls autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;background:#000" title="'+esc(a.titulo)+'"></video>';
+          }
           document.getElementById('btn-play').style.display='none';
           document.querySelector('.player .pulse').style.display='none';
           document.querySelector('.player .ctrl .linha span').textContent='Vídeo';

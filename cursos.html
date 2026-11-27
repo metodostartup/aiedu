@@ -104,14 +104,26 @@
 <script>
 (function(){
   const D = window.DEMO, capa = window.capaSVG;
-  const ordem = ['synth','onda','portal','maleta','bussola','checklist'];
   const POR_PAG = 4;
+  let REAIS = [];
   let estado = { cat:'Todas', q:'', niveis:['Iniciante','Intermédio','Avançado'], dur:0, prog:'todos', ord:'pop', pag:1 };
 
   const durMin = d => { const [h,m] = d.replace('h',' ').split(/\s+/); return (+h*60)+(+m||0); };
+  const durMinSeg = s => Math.round((s||0)/60);
+  const durFmt = s => { s=durMinSeg(s); return s>=60 ? Math.floor(s/60)+'h '+String(s%60).padStart(2,'0')+'m' : s+'m'; };
+
+  /* mescla: cursos reais do banco primeiro; demo só preenche se não houver banco */
+  function fonte(){
+    return REAIS.length ? REAIS.map(c => ({
+      id:c.id, cat:c.categoria||'Geral', tit:c.titulo, desc:c.descricao||'',
+      nivel:c.nivel||'Iniciante', aulas:c.n_aulas||0, dur:durFmt(c.duracao_min*60),
+      prog:0, nota:c.nota||0, alunos:'—', autor:c.autor||'', capa_url:c.capa_url||''
+    })) : D.cursos;
+  }
 
   function aplicar(){
-    let lista = D.cursos.filter(c =>
+    const FONTE = fonte();
+    let lista = FONTE.filter(c =>
       (estado.cat==='Todas' || c.cat===estado.cat) &&
       estado.niveis.includes(c.nivel) &&
       durMin(c.dur) >= estado.dur &&
@@ -132,10 +144,12 @@
     document.getElementById('vazio-cursos').hidden = total > 0;
 
     document.getElementById('grid-cursos').innerHTML = page.map(c => {
-      const i = ordem.indexOf(D.cursos.indexOf(D.cursos.find(x=>x.id===c.id)) % ordem.length + ordem.length) % ordem.length;
+      const capaEl = c.capa_url
+        ? '<img src="'+c.capa_url+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">'
+        : capa(['synth','onda','portal','maleta','bussola','checklist'][D.cursos.indexOf(D.cursos.find(x=>x.id===c.id)) % 6], c.tit);
       return `
       <article class="card">
-        <div class="capa">${capa(ordem[D.cursos.indexOf(D.cursos.find(x=>x.id===c.id)) % ordem.length], c.tit)}</div>
+        <div class="capa">${capaEl}</div>
         <div class="corpo">
           <span class="tag">${c.cat}</span>
           <h3>${c.tit}</h3>
@@ -166,6 +180,14 @@
     prox.onclick = () => { estado.pag++; aplicar(); };
     pg.appendChild(prox);
   }
+
+  /* cursos reais do banco: quando existem, substituem a vitrine de demonstração */
+  window.db.from('cursos').select('*, modulos(aulas(id))').order('criado_em',{ascending:false}).then(r => {
+    if (!r.error && r.data && r.data.length){
+      REAIS = r.data.map(c => Object.assign(c,{ n_aulas:(c.modulos||[]).reduce((n,m)=>n+(m.aulas||[]).length,0) }));
+    }
+    aplicar();
+  });
 
   document.addEventListener('filtro:mudou', e => { if (e.detail.grupo==='filtros-cats'){ estado.cat=e.detail.valor; estado.pag=1; aplicar(); } });
   document.addEventListener('busca:mudou', e => { estado.q=e.detail.q; estado.pag=1; aplicar(); });
