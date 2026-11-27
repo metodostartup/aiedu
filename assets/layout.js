@@ -86,8 +86,14 @@
           '<div class="menu-perfil" id="menu-notif"><a href="#">🎉 Nova masterclass amanhã às 19h</a><a href="#">✅ Missão “Assistir a 3 aulas” em progresso</a><a href="#">🏅 Certificado disponível: Fundamentos de IA</a></div>' +
           '<div class="xp-meta"><div class="nivel">Recruta</div><div class="trilha"><i style="width:12%"></i></div><div class="pontos">0 / 100 XP</div></div>' +
           '<button class="avatar" data-menu="menu-perfil" aria-label="Menu do perfil">JM</button>' +
-          '<div class="menu-perfil" id="menu-perfil"><a href="#">Perfil</a><a href="missoes.html">Meu progresso</a><a href="certificados.html">Certificados</a><div class="sep"></div><button>Modo escuro ✓</button><button>Sair</button></div>' +
+          '<div class="menu-perfil" id="menu-perfil"><a href="#">Perfil</a><a href="missoes.html">Meu progresso</a><a href="certificados.html">Certificados</a><a href="login.html">Entrar / Registrar</a><a href="admin.html">Admin</a><div class="sep"></div><button>Modo escuro ✓</button><button data-sair>Sair</button></div>' +
         '</div>';
     }
+
+    /* sair da conta */
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-sair]');
+      if (b && window.db) window.db.auth.signOut().then(() => { location.href = 'login.html'; });
+    });
   });
 })();
