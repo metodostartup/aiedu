@@ -1,9 +1,9 @@
-/* NEXORA AI — cliente Supabase (browser)
+/* AI Edu — cliente Supabase (browser)
    Requer: config.js com window.NEXORA_CONFIG = { url, anonKey }  (NUNCA a service_role aqui) */
 (function () {
   'use strict';
   if (!window.NEXORA_CONFIG || !window.NEXORA_CONFIG.url || !window.NEXORA_CONFIG.anonKey) {
-    console.warn('[NEXORA] Preencha config.js com a URL e a anon key do projeto Supabase.');
+    console.warn('[AI Edu] Preencha config.js com a URL e a anon key do projeto Supabase.');
     return;
   }
   const client = supabase.createClient(window.NEXORA_CONFIG.url, window.NEXORA_CONFIG.anonKey);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conexões e MCPs | NEXORA AI</title>
+<title>Conexões e MCPs | AI Edu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
   <main class="dmain">
     <div class="pagehead">
       <h1>Conexões e MCPs</h1>
-      <p>Ligue a NEXORA aos seus serviços e agentes externos (Model Context Protocol).</p>
+      <p>Ligue a AI Edu aos seus serviços e agentes externos (Model Context Protocol).</p>
       <div class="acoes"><button class="btn btn-pri" data-modal="modal-mcp">+ Nova conexão</button></div>
     </div>
 
@@ -50,7 +50,7 @@
 <div class="modal-fundo" id="modal-mcp" role="dialog" aria-modal="true">
   <div class="modal">
     <h3>Nova conexão MCP</h3>
-    <p>Cole o endpoint do servidor MCP (por exemplo, <code>https://servidor.exemplo.com/sse</code>) e dê um nome. A NEXORA descobre as ferramentas automaticamente.</p>
+    <p>Cole o endpoint do servidor MCP (por exemplo, <code>https://servidor.exemplo.com/sse</code>) e dê um nome. A AI Edu descobre as ferramentas automaticamente.</p>
     <input class="notas" id="mcp-url" style="width:100%;background:var(--card-2);border:1px solid var(--borda);border-radius:10px;padding:11px 13px;margin-top:14px;outline:none" placeholder="https://…">
     <div class="acoes">
       <button class="btn btn-sec" data-fechar>Cancelar</button>
@@ -75,10 +75,10 @@
     { n:'Supabase', d:'Salvar progresso em banco próprio', on:false }
   ];
   const MCPS = [
-    { n:'@nexora/pesquisa-web', d:'Busca na web com fontes citadas' },
-    { n:'@nexora/analise-dados', d:'Consultas SQL sobre seus CSVs' },
-    { n:'@nexora/geracao-imagem', d:'Imagens a partir de texto' },
-    { n:'@nexora/transcricao', d:'Áudio e vídeo para texto' }
+    { n:'@aiedu/pesquisa-web', d:'Busca na web com fontes citadas' },
+    { n:'@aiedu/analise-dados', d:'Consultas SQL sobre seus CSVs' },
+    { n:'@aiedu/geracao-imagem', d:'Imagens a partir de texto' },
+    { n:'@aiedu/transcricao', d:'Áudio e vídeo para texto' }
   ];
   const sigla = n => n.split(' ').map(w=>w[0]).slice(0,2).join('');
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin — NEXORA AI</title>
+<title>Admin — AI Edu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -99,7 +99,7 @@ td .mini{display:inline-flex}
 <body>
 
 <header class="topo">
-  <a class="logo" href="teste.html"><span class="badge">✦</span><b>NEXORA AI</b></a>
+  <a class="logo" href="/"><img src="assets/logo-aiedu.png" alt="AI Edu" style="height:22px;width:auto"></a>
   <span class="tag">Painel Admin</span>
   <span class="espaco"></span>
   <button class="sair" id="sair">Sair</button>
@@ -269,7 +269,7 @@ cfg().auth.getUser().then(function(r){
     document.querySelector('.conteudo').outerHTML='';
     document.getElementById('abas').outerHTML='';
     var b=document.createElement('div');b.className='bloqueio';
-    b.innerHTML='<h1>Acesso restrito</h1><p>Sua conta não tem papel de administrador. Se você é o dono da plataforma, promova seu usuário na aba de admin ou no banco.</p><a href="teste.html">← Voltar para o site</a>';
+    b.innerHTML='<h1>Acesso restrito</h1><p>Sua conta não tem papel de administrador. Se você é o dono da plataforma, promova seu usuário na aba de admin ou no banco.</p><a href="/">← Voltar para o site</a>';
     document.body.appendChild(b);
     return;
   }

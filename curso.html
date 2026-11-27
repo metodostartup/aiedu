@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Curso | NEXORA AI</title>
+<title>Curso | AI Edu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
@@ -130,7 +130,7 @@
   const id = new URLSearchParams(location.search).get('id') || 'fundamentos';
   const c = D.cursos.find(x => x.id === id) || D.cursos[0];
 
-  document.title = c.tit + ' | NEXORA AI';
+  document.title = c.tit + ' | AI Edu';
   document.getElementById('c-cat').textContent = c.cat;
   document.getElementById('c-tit').textContent = c.tit;
   document.getElementById('c-desc').textContent = c.desc;

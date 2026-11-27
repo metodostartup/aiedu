@@ -1,4 +1,4 @@
-/* NEXORA AI — configuração do projeto Supabase
+/* AI Edu — configuração do projeto Supabase
    ATENÇÃO: apenas a anon/public key aqui — NUNCA a service_role key. */
 window.NEXORA_CONFIG = {
   url: 'https://tsqqqebuohgvrluhueka.supabase.co',

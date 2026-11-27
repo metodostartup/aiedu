@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plantas | NEXORA AI</title>
+<title>Plantas | AI Edu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
@@ -36,7 +36,7 @@
   <main class="dmain">
     <div class="pagehead">
       <h1>Plantas</h1>
-      <p>Planos de estudo passo a passo que a NEXORA monta para o seu objetivo.</p>
+      <p>Planos de estudo passo a passo que a AI Edu monta para o seu objetivo.</p>
       <div class="acoes"><button class="btn btn-pri" data-modal="modal-planta">+ Nova planta</button></div>
     </div>
 
@@ -47,7 +47,7 @@
 <div class="modal-fundo" id="modal-planta" role="dialog" aria-modal="true">
   <div class="modal">
     <h3>Criar nova planta</h3>
-    <p>Diga o seu objetivo e a NEXORA monta um plano com etapas, aulas e prompts sugeridos.</p>
+    <p>Diga o seu objetivo e a AI Edu monta um plano com etapas, aulas e prompts sugeridos.</p>
     <input class="notas" id="planta-obj" style="width:100%;background:var(--card-2);border:1px solid var(--borda);border-radius:10px;padding:11px 13px;margin-top:14px;outline:none" placeholder="Ex.: aprender a automatizar relatórios com IA">
     <div class="acoes">
       <button class="btn btn-sec" data-fechar>Cancelar</button>
@@ -114,7 +114,7 @@
     PLANTAS.unshift({ t:v.slice(0,48), obj:v.slice(0,30), etapas:[['Escolher as aulas certas','sugerido pela IA',0],['Praticar com prompts','3 sessões',0],['Construir um projeto real','entrega final',0]] });
     document.getElementById('planta-obj').value='';
     document.getElementById('modal-planta').classList.remove('aberto');
-    window.toast('Planta criada! A NEXORA está a montar as etapas…');
+    window.toast('Planta criada! A AI Edu está a montar as etapas…');
     render();
   });
 })();

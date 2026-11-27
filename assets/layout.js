@@ -1,4 +1,4 @@
-/* NEXORA AI — blocos HTML compartilhados (sidebar, topbar, capas SVG) */
+/* AI Edu — blocos HTML compartilhados (sidebar, topbar, capas SVG) */
 (function () {
   'use strict';
 
@@ -22,7 +22,7 @@
   function icones(nome) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONES[nome] || '') + '</svg>'; }
 
   const NAV = [
-    { href:'teste.html',     ic:'inicio',      t:'Início' },
+    { href:'/',              ic:'inicio',      t:'Início' },
     { href:'mais-curtidos.html', ic:'coracao', t:'Mais curtidos' },
     { sec:'Bibliotecas' },
     { href:'aplicativos.html', ic:'apps',    t:'Aplicativos' },
@@ -76,7 +76,7 @@
       top.innerHTML =
         '<div class="brand">' +
           '<button class="ic-btn menu-hamb" aria-label="Abrir menu">☰</button>' +
-          '<a class="logo-badge" href="teste.html"><span class="spark">✦</span>NEXORA AI</a>' +
+          '<a class="logo-badge" href="/"><img src="assets/logo-aiedu.png" alt="AI Edu" class="logo-img">AI Edu</a>' +
           '<span class="onde">/ <em>' + onde + '</em></span>' +
         '</div>' +
         '<label class="busca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +

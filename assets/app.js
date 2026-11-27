@@ -1,4 +1,4 @@
-/* NEXORA AI — interações globais compartilhadas */
+/* AI Edu — interações globais compartilhadas */
 (function () {
   'use strict';
 
