@@ -71,21 +71,47 @@
       <article class="filme">
         <div class="poster">${a.capa ? '<img src="'+a.capa+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">' : capas(i, a.titulo)}</div>
         <span class="dur">⏱ ${durFmt(a.duracao_seg)}</span>
-        <div class="info"><h3>${a.titulo}</h3><p>${a.curso||'Aula avulsa'}</p><div class="meta-linha" style="margin-top:7px"><span>Original AI Edu</span></div></div>
-        <a class="btn btn-pri" style="margin:0 15px 15px;text-decoration:none" href="aula.html?id=${a.id}">Assistir agora</a>
+        <span class="nivel" style="position:absolute;top:12px;left:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#fff;padding:4px 11px;border-radius:9px;background:linear-gradient(135deg,#ff7a18,${a.pct>=50?'#ff2d8a':'#c026d3'} ${a.pct>=50?'55%':'65%'},#a23cff);box-shadow:0 0 14px rgba(255,45,138,.45),inset 0 1px 0 rgba(255,255,255,.4)" aria-label="Nível ${a.pct}% do curso">${a.pct}%</span>
+        ${a.concluida ? '<span style="position:absolute;bottom:12px;right:12px;z-index:2;font-size:10px;font-weight:800;color:#9be89b;background:rgba(10,4,14,.8);border:1px solid rgba(155,232,155,.4);border-radius:7px;padding:3px 8px">✓ CONCLUÍDA</span>' : ''}
+        <div class="info"><h3>${a.titulo}</h3><p>${a.curso||'Aula avulsa'}</p>
+        <div class="barra-nivel" style="height:6px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:8px"><i style="display:block;height:100%;width:${a.pct}%;background:linear-gradient(90deg,#ff7a18,#ff2d8a,#a23cff);border-radius:4px"></i></div>
+        <div class="meta-linha" style="margin-top:7px;display:flex;justify-content:space-between;align-items:center"><span>Original AI Edu</span><span style="font-size:10.5px;font-weight:700;color:#d9a8ff">NÍVEL ${a.pct}%</span></div></div>
+        <a class="btn btn-pri" style="margin:0 15px 15px;text-decoration:none" href="aula.html?id=${a.id}">${a.concluida?'Revisar aula':'Assistir agora'}</a>
       </article>`).join('') || '<p style="color:var(--mut);grid-column:1/-1">Nenhuma aula publicada ainda — elas aparecem aqui assim que o admin adiciona cursos e aulas.</p>';
   }
   function carregar(){
-    window.db.from('aulas')
-      .select('id,titulo,duracao_seg,ordem,modulos:modulo_id(titulo,ordem,cursos:curso_id(titulo,capa_url))')
-      .order('ordem').then(r => {
-        if (r.error) { grid.innerHTML = '<p style="color:var(--mut);grid-column:1/-1">Não foi possível carregar as aulas. ' + r.message + '</p>'; return; }
-        desenhar((r.data||[]).map(a => ({
-          id:a.id, titulo:a.titulo, duracao_seg:a.duracao_seg,
-          curso:a.modulos && a.modulos.cursos ? a.modulos.cursos.titulo : null,
-          capa:a.modulos && a.modulos.cursos ? a.modulos.cursos.capa_url : null
-        })));
+    Promise.all([
+      window.db.from('aulas')
+        .select('id,titulo,duracao_seg,ordem,modulos:modulo_id(titulo,ordem,cursos:curso_id(titulo,capa_url))')
+        .order('ordem'),
+      window.db.auth.getUser()
+    ]).then(([r,u]) => {
+      if (r.error) { grid.innerHTML = '<p style="color:var(--mut);grid-column:1/-1">Não foi possível carregar as aulas. ' + r.error.message + '</p>'; return; }
+      const uid = u && u.data && u.data.user ? u.data.user.id : null;
+      window.db.from('aulas_concluidas').select('aula_id').eq('usuario_id', uid || '00000000-0000-0000-0000-000000000000').then(c => {
+        const feitas = new Set(((c.data)||[]).map(x => x.aula_id));
+        // progresso por curso: aulas concluídas do curso / total de aulas do curso
+        const porCurso = {};
+        (r.data||[]).forEach(a => {
+          const cid = a.modulos && a.modulos.cursos ? a.modulos.cursos.titulo : null;
+          if (!cid) return;
+          porCurso[cid] = porCurso[cid] || {total:0, feitas:0};
+          porCurso[cid].total++;
+          if (feitas.has(a.id)) porCurso[cid].feitas++;
+        });
+        desenhar((r.data||[]).map(a => {
+          const nomeCurso = a.modulos && a.modulos.cursos ? a.modulos.cursos.titulo : null;
+          const p = nomeCurso && porCurso[nomeCurso] ? porCurso[nomeCurso] : null;
+          return {
+            id:a.id, titulo:a.titulo, duracao_seg:a.duracao_seg,
+            curso:nomeCurso,
+            capa:a.modulos && a.modulos.cursos ? a.modulos.cursos.capa_url : null,
+            concluida:feitas.has(a.id),
+            pct:p && p.total ? Math.round(p.feitas/p.total*100) : 0
+          };
+        }));
       });
+    });
   }
   if (window.db) carregar();
   else window.addEventListener('load', carregar);
