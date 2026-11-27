@@ -684,6 +684,7 @@ document.getElementById('a-video-file').addEventListener('change',function(){
   preverVideo('');
   if(window.URL)document.getElementById('a-preview').innerHTML='<video src="'+URL.createObjectURL(f)+'" controls muted></video>';
 });
+function fecharModal(){if(typeof modal.close==='function')modal.close();else modal.removeAttribute('open');}
 function abrirModalAula(moduloId,aulaId){
   modal.dataset.modulo=moduloId;
   document.getElementById('a-id').value=aulaId||'';
@@ -708,16 +709,16 @@ function abrirModalAula(moduloId,aulaId){
   document.getElementById('aba-link').hidden=abaVideo!=='link';
   document.getElementById('aba-upload').hidden=abaVideo!=='upload';
   var bar=document.getElementById('a-bar');bar.hidden=true;
-  modal.showModal();
+  if(typeof modal.showModal==='function')modal.showModal();else modal.setAttribute('open','');
 }
-document.getElementById('a-cancelar').addEventListener('click',function(){modal.close();});
+document.getElementById('a-cancelar').addEventListener('click',function(){fecharModal();});
 function salvarAula(videoUrlFinal){
   var aulaId=val('a-id');
   var d={titulo:val('a-titulo'),duracao_seg:(+val('a-duracao')||0)*60,ordem:+val('a-ordem')||1,video_url:videoUrlFinal||''};
   var p=aulaId?db().from('aulas').update(d).eq('id',aulaId):db().from('aulas').insert(Object.assign({modulo_id:modal.dataset.modulo},d));
   p.then(function(r){
     if(r.error)return falha(r.error);
-    modal.close();msg(aulaId?'Aula atualizada.':'Aula adicionada.');
+    fecharModal();msg(aulaId?'Aula atualizada.':'Aula adicionada.');
     desenharModulos();cursos();visao();
   });
 }
