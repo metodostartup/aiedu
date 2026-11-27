@@ -55,6 +55,15 @@
   window.CAPAS = ['synth','onda','portal','maleta','bussola','checklist'];
   window.capaSVG = capasSVG;
 
+  /* acesso restrito: sem sessão → volta para o login.
+     Roda no 'load' porque layout.js carrega antes do supabase-client.js. */
+  window.addEventListener('load', function () {
+    if (!window.db) { location.href = 'login.html'; return; }
+    window.db.auth.getUser().then(function (r) {
+      if (!r || !r.data || !r.data.user) location.href = 'login.html';
+    });
+  });
+
   document.addEventListener('DOMContentLoaded', () => {
     const ativo = document.body.dataset.pagina;
 
@@ -76,7 +85,7 @@
       top.innerHTML =
         '<div class="brand">' +
           '<button class="ic-btn menu-hamb" aria-label="Abrir menu">☰</button>' +
-          '<a class="logo-badge" href="/"><img src="assets/logo-aiedu.png" alt="AI Edu" class="logo-img">AI Edu</a>' +
+          '<a class="logo-badge" href="/" aria-label="AI Edu"><img src="assets/logo-aiedu.png" alt="AI Edu" class="logo-img"></a>' +
           '<span class="onde">/ <em>' + onde + '</em></span>' +
         '</div>' +
         '<label class="busca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
