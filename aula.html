@@ -52,10 +52,10 @@ textarea.notas:focus{border-color:var(--borda-forte)}
 
   <main class="dmain">
     <div class="pagehead">
-      <div><h1 style="font-size:20px">Escolhendo a ferramenta certa</h1>
-      <p>Módulo 2 · Aula 4 de 7 · <b style="color:var(--txt)">Fundamentos da Inteligência Artificial</b></p></div>
+      <div><h1 style="font-size:20px" id="aula-titulo">Aula</h1>
+      <p id="aula-meta">Carregando…</p></div>
       <div class="acoes">
-        <a class="btn btn-sec" href="curso.html?id=fundamentos">← Voltar ao curso</a>
+        <a class="btn btn-sec" href="cursos.html" id="link-curso">← Voltar ao curso</a>
         <button class="btn btn-pri" id="btn-proxima">Próxima aula →</button>
       </div>
     </div>
@@ -63,7 +63,7 @@ textarea.notas:focus{border-color:var(--borda-forte)}
     <div class="layout-aula">
       <div>
         <div class="player">
-          <div class="tela">
+          <div class="tela" id="tela-video">
             <span class="pulse"></span>
             <button class="play" id="btn-play" aria-label="Reproduzir">▶</button>
           </div>
@@ -108,15 +108,7 @@ textarea.notas:focus{border-color:var(--borda-forte)}
       <aside class="lado-aula">
         <div class="card">
           <h4>Módulos do curso</h4>
-          <ul>
-            <li class="aula-item"><span class="tic on">✓</span>O que é (e o que não é) IA<span class="dur">12:40</span></li>
-            <li class="aula-item"><span class="tic on">✓</span>Como os modelos aprendem<span class="dur">18:05</span></li>
-            <li class="aula-item"><span class="tic on">✓</span>Limites, vieses e riscos<span class="dur">15:30</span></li>
-            <li class="aula-item atual"><span class="tic"></span>Escolhendo a ferramenta certa<span class="dur">14:20</span></li>
-            <li class="aula-item"><span class="tic"></span>Prompts que funcionam<span class="dur">21:10</span></li>
-            <li class="aula-item"><span class="tic"></span>Avaliando resultados<span class="dur">16:45</span></li>
-            <li class="aula-item"><span class="tic"></span>Projeto: assistente pessoal<span class="dur">24:00</span></li>
-          </ul>
+          <ul id="lista-aulas"></ul>
           <button class="btn btn-pri" style="width:100%;justify-content:center;margin-top:12px" id="btn-concluida">Marcar como concluída</button>
         </div>
         <div class="card">
@@ -143,37 +135,104 @@ textarea.notas:focus{border-color:var(--borda-forte)}
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  /* player simulado */
-  let tocando = false, seg = 292, total = 860;
-  const fmt = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+  const id = new URLSearchParams(location.search).get('id');
+  let AULA = null, IRMAAS = [], CONCLUIDAS = new Set(), EU = null;
+
+  const fmt = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(Math.round(s)%60).padStart(2,'0');
+  const durFmt = s => { s=Math.round((s||0)/60); return s>=60 ? Math.floor(s/60)+'h '+String(s%60).padStart(2,'0')+'m' : s+'m'; };
+
+  function esc(t){ const d=document.createElement('div'); d.textContent=t==null?'':t; return d.innerHTML; }
+
+  function youtubeSrc(u){
+    const m = String(u||'').match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
+    return m ? 'https://www.youtube.com/embed/'+m[1] : (u||'');
+  }
+
+  /* ---------- player ---------- */
+  let tocando=false, seg=0, total=860, timer=null;
   function pintar(){
-    document.querySelector('#barra-video i').style.width = (seg/total*100)+'%';
+    document.querySelector('#barra-video i').style.width = (total?seg/total*100:0)+'%';
     document.getElementById('tempo').textContent = fmt(seg)+' / '+fmt(total);
   }
-  let timer = null;
   function play(){
-    tocando = !tocando;
-    document.getElementById('btn-play').textContent = tocando ? '⏸' : '▶';
-    document.getElementById('c-play').textContent = tocando ? '⏸' : '▶';
-    clearInterval(timer);
-    if (tocando) timer = setInterval(()=>{ seg=Math.min(total,seg+5); pintar(); if(seg===total) clearInterval(timer); }, 250);
+    if (VID){ const f=document.querySelector('#tela-video iframe'); if(f){ f.contentWindow.postMessage(JSON.stringify({event:'command',func:tocando?'pauseVideo':'playVideo',args:[]}),'*'); } tocando=!tocando; }
+    else {
+      tocando=!tocando;
+      clearInterval(timer);
+      if(tocando) timer=setInterval(()=>{ seg=Math.min(total,seg+5); pintar(); if(seg>=total)clearInterval(timer); },250);
+    }
+    document.getElementById('btn-play').textContent=tocando?'⏸':'▶';
+    document.getElementById('c-play').textContent=tocando?'⏸':'▶';
   }
-  document.getElementById('btn-play').addEventListener('click', play);
-  document.getElementById('c-play').addEventListener('click', play);
-  document.getElementById('c-volt').addEventListener('click', ()=>{ seg=Math.max(0,seg-10); pintar(); });
-  document.getElementById('c-avan').addEventListener('click', ()=>{ seg=Math.min(total,seg+10); pintar(); });
-  document.getElementById('barra-video').addEventListener('click', e => {
-    const r = e.currentTarget.getBoundingClientRect();
-    seg = Math.round((e.clientX-r.left)/r.width*total); pintar();
-  });
-  pintar();
+  let VID=null;
+  document.getElementById('btn-play').addEventListener('click',play);
+  document.getElementById('c-play').addEventListener('click',play);
+  document.getElementById('c-volt').addEventListener('click',()=>{ if(VID)return; seg=Math.max(0,seg-10); pintar(); });
+  document.getElementById('c-avan').addEventListener('click',()=>{ if(VID)return; seg=Math.min(total,seg+10); pintar(); });
+  document.getElementById('barra-video').addEventListener('click',e=>{ if(VID)return; const r=e.currentTarget.getBoundingClientRect(); seg=Math.round((e.clientX-r.left)/r.width*total); pintar(); });
 
-  /* concluir aula */
+  /* ---------- lista lateral ---------- */
+  function desenharLista(){
+    document.getElementById('lista-aulas').innerHTML = IRMAAS.map(a => `
+      <li class="aula-item ${a.id===id?'atual':''}">
+        <a href="aula.html?id=${a.id}" style="display:flex;align-items:center;gap:9px;color:inherit;text-decoration:none;flex:1">
+          <span class="tic ${CONCLUIDAS.has(a.id)?'on':''}">${CONCLUIDAS.has(a.id)?'✓':''}</span>${esc(a.titulo)}
+        </a>
+        <span class="dur">${durFmt(a.duracao_seg)}</span>
+      </li>`).join('');
+  }
+
+  function carregar(){
+    if(!window.db) return;
+    window.db.auth.getUser().then(function(u){
+      EU = u && u.data ? u.data.user : null;
+      if(!id){ document.getElementById('aula-meta').textContent='Aula não encontrada.'; return null; }
+    window.db.from('aulas').select('*,modulos:modulo_id(id,titulo,ordem,cursos:curso_id(id,titulo))').eq('id',id).single()
+      .then(function(r){
+        if(r.error||!r.data){ document.getElementById('aula-meta').textContent='Aula não encontrada. '+(r.error?r.message:''); return; }
+        const a=r.data; AULA=a;
+        const curso=a.modulos&&a.modulos.cursos;
+        document.title = a.titulo+' | AI Edu';
+        document.getElementById('aula-titulo').textContent=a.titulo;
+        document.getElementById('aula-meta').innerHTML = esc(a.modulos?a.modulos.titulo:'')+' · <b style="color:var(--txt)">'+esc(curso?curso.titulo:'')+'</b>';
+        if(curso) document.getElementById('link-curso').href='curso.html?id='+curso.id;
+        total=a.duracao_seg||0;
+        if(a.video_url){
+          VID=youtubeSrc(a.video_url);
+          document.getElementById('tela-video').innerHTML =
+            '<iframe src="'+VID+'?enablejsapi=1&rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen title="'+esc(a.titulo)+'"></iframe>';
+          document.getElementById('btn-play').style.display='none';
+          document.querySelector('.player .pulse').style.display='none';
+          document.querySelector('.player .ctrl .linha span').textContent='Vídeo';
+          document.getElementById('tempo').textContent='reproduzindo';
+        } else { pintar(); }
+        return window.db.from('aulas').select('id,titulo,duracao_seg,ordem,modulo_id')
+          .eq('modulo_id',a.modulo_id).order('ordem').then(function(r2){
+            IRMAAS=r2.data||[];
+            if(!EU) return {data:[]};
+            return window.db.from('aulas_concluidas').select('aula_id').eq('usuario_id',EU.id);
+          }).then(function(r3){
+            (r3.data||[]).forEach(x=>CONCLUIDAS.add(x.aula_id));
+            desenharLista();
+          });
+      });
+    });
+  }
+  if(window.db) carregar(); else window.addEventListener('load',carregar);
+
+  /* concluir aula (persistido no banco) */
   document.getElementById('btn-concluida').addEventListener('click', e => {
-    const tic = document.querySelector('.aula-item.atual .tic');
-    const done = tic.classList.toggle('on');
-    tic.textContent = done ? '✓' : '';
-    if (done) { window.toast('Aula marcada como concluída ✓'); window.confete(); }
+    if(!AULA) return;
+    const done = CONCLUIDAS.has(AULA.id);
+    const p = done
+      ? window.db.from('aulas_concluidas').delete().eq('aula_id',AULA.id).eq('usuario_id',EU.id)
+      : window.db.from('aulas_concluidas').insert({aula_id:AULA.id,usuario_id:EU.id});
+    p.then(function(r){
+      if(r.error) return window.toast(r.message,'err');
+      done?CONCLUIDAS.delete(AULA.id):CONCLUIDAS.add(AULA.id);
+      desenharLista();
+      if(!done){ window.toast('Aula marcada como concluída ✓'); window.confete(); }
+    });
   });
   document.getElementById('btn-notas').addEventListener('click', () => window.toast('Notas salvas ✓'));
   document.getElementById('btn-duvida').addEventListener('click', () => {
@@ -181,7 +240,12 @@ textarea.notas:focus{border-color:var(--borda-forte)}
     if (!d.value.trim()) return window.toast('Escreva sua dúvida antes de enviar', 'err');
     d.value=''; window.toast('Dúvida enviada! O professor responde em até 24h ✓');
   });
-  document.getElementById('btn-proxima').addEventListener('click', () => window.toast('Carregando próxima aula: “Prompts que funcionam”…'));
+  document.getElementById('btn-proxima').addEventListener('click', () => {
+    const i = IRMAAS.findIndex(a=>a.id===id);
+    const prox = IRMAAS[i+1];
+    if(prox) location.href='aula.html?id='+prox.id;
+    else window.toast('Esta é a última aula do módulo ✓');
+  });
 })();
 </script>
 </body>

@@ -51,28 +51,43 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  const FILMES = [
-    { t:'A Máquina que Aprende', d:'Como o aprendizado de máquina mudou o trabalho para sempre.', dur:'1h 42m', capa:'ceu1', nota:'4.9' },
-    { t:'Ondas Generativas', d:'A história da arte feita com modelos generativos.', dur:'58m', capa:'fita2', nota:'4.7' },
-    { t:'Portais Para o Futuro', d:'Especialistas debatem os próximos 10 anos da IA.', dur:'1h 15m', capa:'portal3', nota:'4.8' },
-    { t:'O Código das Ideias', d:'Da escrita ao prompt: a nova alfabetização.', dur:'47m', capa:'grao', nota:'4.6' },
-    { t:'Mentes Sintéticas', d:'O que os agentes autónomos revelam sobre nós.', dur:'1h 30m', capa:'portal3', nota:'4.9' },
-    { t:'A Escola Invisível', d:'Educação na era dos assistentes inteligentes.', dur:'1h 05m', capa:'ceu1', nota:'4.7' }
-  ];
-  document.getElementById('grid-cinema').innerHTML = FILMES.map(f => `
-    <article class="filme">
-      <div class="poster">
-        <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${f.t}">
-          ${f.capa==='ceu1' ? '<rect width="400" height="210" fill="url(#ceu1)"/><circle cx="200" cy="140" r="46" fill="#f3c6ff" opacity=".85"/><g fill="#2a0838"><path d="M0 180 L90 110 L180 180 Z"/><path d="M150 180 L260 80 L380 180 Z"/></g><rect y="176" width="400" height="34" fill="#07040c"/>'
-          : f.capa==='fita2' ? '<rect width="400" height="210" fill="#12061a"/><path d="M-20 150 C 100 50, 220 200, 320 100 S 480 20, 520 80" stroke="url(#fita2)" stroke-width="18" fill="none" stroke-linecap="round"/>'
-          : '<rect width="400" height="210" fill="#07040c"/><circle cx="200" cy="105" r="80" fill="url(#portal3)" opacity=".9"/><ellipse cx="200" cy="105" rx="120" ry="42" fill="none" stroke="#d9a8ff" stroke-opacity=".5" transform="rotate(-18 200 105)"/>'}
-          <rect width="400" height="210" filter="url(#grao)"/>
-        </svg>
-      </div>
-      <span class="dur">⏱ ${f.dur}</span>
-      <div class="info"><h3>${f.t}</h3><p>${f.d}</p><div class="meta-linha" style="margin-top:7px"><span class="estrela">★ ${f.nota}</span><span>Original AI Edu</span></div></div>
-      <button class="btn btn-pri" style="margin:0 15px 15px" data-copiar>Assistir agora</button>
-    </article>`).join('');
+  const grid = document.getElementById('grid-cinema');
+  function durFmt(seg){
+    seg = Math.round((seg||0)/60);
+    const h = Math.floor(seg/60), m = seg%60;
+    return h ? h + 'h ' + String(m).padStart(2,'0') + 'm' : m + 'm';
+  }
+  function capas(i, t){
+    const tipo = ['ceu1','fita2','portal3'][i % 3];
+    const svg = tipo==='ceu1'
+      ? '<rect width="400" height="210" fill="url(#ceu1)"/><circle cx="200" cy="140" r="46" fill="#f3c6ff" opacity=".85"/><g fill="#2a0838"><path d="M0 180 L90 110 L180 180 Z"/><path d="M150 180 L260 80 L380 180 Z"/></g><rect y="176" width="400" height="34" fill="#07040c"/>'
+      : tipo==='fita2'
+      ? '<rect width="400" height="210" fill="#12061a"/><path d="M-20 150 C 100 50, 220 200, 320 100 S 480 20, 520 80" stroke="url(#fita2)" stroke-width="18" fill="none" stroke-linecap="round"/>'
+      : '<rect width="400" height="210" fill="#07040c"/><circle cx="200" cy="105" r="80" fill="url(#portal3)" opacity=".9"/><ellipse cx="200" cy="105" rx="120" ry="42" fill="none" stroke="#d9a8ff" stroke-opacity=".5" transform="rotate(-18 200 105)"/>';
+    return '<svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" role="img" aria-label="'+t.replace(/"/g,'&quot;')+'">'+svg+'<rect width="400" height="210" filter="url(#grao)"/></svg>';
+  }
+  function desenhar(itens){
+    grid.innerHTML = itens.map((a,i) => `
+      <article class="filme">
+        <div class="poster">${capas(i, a.titulo)}</div>
+        <span class="dur">⏱ ${durFmt(a.duracao_seg)}</span>
+        <div class="info"><h3>${a.titulo}</h3><p>${a.curso||'Aula avulsa'}</p><div class="meta-linha" style="margin-top:7px"><span>Original AI Edu</span></div></div>
+        <a class="btn btn-pri" style="margin:0 15px 15px;text-decoration:none" href="aula.html?id=${a.id}">Assistir agora</a>
+      </article>`).join('') || '<p style="color:var(--mut);grid-column:1/-1">Nenhuma aula publicada ainda — elas aparecem aqui assim que o admin adiciona cursos e aulas.</p>';
+  }
+  function carregar(){
+    window.db.from('aulas')
+      .select('id,titulo,duracao_seg,ordem,modulos:modulo_id(titulo,ordem,cursos:curso_id(titulo))')
+      .order('ordem').then(r => {
+        if (r.error) { grid.innerHTML = '<p style="color:var(--mut);grid-column:1/-1">Não foi possível carregar as aulas. ' + r.message + '</p>'; return; }
+        desenhar((r.data||[]).map(a => ({
+          id:a.id, titulo:a.titulo, duracao_seg:a.duracao_seg,
+          curso:a.modulos && a.modulos.cursos ? a.modulos.cursos.titulo : null
+        })));
+      });
+  }
+  if (window.db) carregar();
+  else window.addEventListener('load', carregar);
 })();
 </script>
 </body>

@@ -374,6 +374,7 @@ function desenharModulos(){
         (m.aulas||[]).map(function(a){
           return '<div class="aula"><span>'+(a.ordem||'·')+'</span><b>'+esc(a.titulo)+'</b>'+
             '<small style="color:var(--muted)">'+Math.round((a.duracao_seg||0)/60)+' min</small><span class="espaco"></span>'+
+            '<button class="acao mini ghost" data-editar-aula="'+a.id+'" data-mod="'+m.id+'">Editar</button> '+
             '<button class="acao mini perigo" data-apagar-aula="'+a.id+'">Apagar</button></div>';
         }).join('')+
         '<form class="grade" style="margin-top:10px" data-modulo="'+m.id+'">'+
@@ -393,13 +394,36 @@ document.getElementById('form-modulo').addEventListener('submit',function(e){
 document.getElementById('painel-modulos').addEventListener('submit',function(e){
   var f=e.target.closest('form[data-modulo]');if(!f)return;e.preventDefault();
   var d=new FormData(f);
-  cfg().from('aulas').insert({modulo_id:f.dataset.modulo,titulo:d.get('titulo').trim(),
-    duracao_seg:+d.get('duracao_seg')||0,ordem:+d.get('ordem')||1,video_url:d.get('video_url')||null})
-    .then(function(r){if(r.error)return falha(r.error);msg('Aula adicionada.');desenharModulos();visao();});
+  var dados={titulo:d.get('titulo').trim(),duracao_seg:+d.get('duracao_seg')||0,
+    ordem:+d.get('ordem')||1,video_url:d.get('video_url')||null};
+  var editando=f.dataset.editandoAula;
+  var p=editando
+    ? cfg().from('aulas').update(dados).eq('id',editando)
+    : cfg().from('aulas').insert(Object.assign({modulo_id:f.dataset.modulo},dados));
+  p.then(function(r){
+    if(r.error)return falha(r.error);
+    msg(editando?'Aula atualizada.':'Aula adicionada.');
+    delete f.dataset.editandoAula;
+    f.querySelector('button[type=submit],button.fim').textContent='Adicionar aula';
+    desenharModulos();visao();});
 });
 document.getElementById('painel-modulos').addEventListener('click',function(e){
   var b=e.target.closest('button');if(!b)return;
-  if(b.dataset.apagarModulo){
+  if(b.dataset.editarAula){
+    cfg().from('aulas').select('*').eq('id',b.dataset.editarAula).single().then(function(r){
+      if(r.error)return falha(r.error);
+      var a=r.data,f=document.querySelector('form[data-modulo="'+b.dataset.mod+'"]');
+      if(!f)return;
+      f.dataset.editandoAula=a.id;
+      f.elements.titulo.value=a.titulo||'';
+      f.elements.duracao_seg.value=a.duracao_seg||0;
+      f.elements.ordem.value=a.ordem||1;
+      f.elements.video_url.value=a.video_url||'';
+      f.querySelector('button[type=submit],button.fim').textContent='Salvar aula';
+      f.scrollIntoView({behavior:'smooth',block:'center'});
+      f.elements.titulo.focus();
+    });
+  } else if(b.dataset.apagarModulo){
     if(!confirm('Apagar o módulo e suas aulas?'))return;
     cfg().from('modulos').delete().eq('id',b.dataset.apagarModulo).then(function(r){
       if(r.error)return falha(r.error);msg('Módulo apagado.');desenharModulos();visao();});
