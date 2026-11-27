@@ -22,7 +22,7 @@
   function icones(nome) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONES[nome] || '') + '</svg>'; }
 
   const NAV = [
-    { href:'/',              ic:'inicio',      t:'Início' },
+    { href:'inicio.html',    ic:'inicio',      t:'Início' },
     { href:'mais-curtidos.html', ic:'coracao', t:'Mais curtidos' },
     { sec:'Bibliotecas' },
     { href:'aplicativos.html', ic:'apps',    t:'Aplicativos' },
@@ -61,6 +61,10 @@
     if (!window.db) { location.href = 'login.html'; return; }
     window.db.auth.getUser().then(function (r) {
       if (!r || !r.data || !r.data.user) location.href = 'login.html';
+      else window.db.from('perfis').select('papel').eq('id', r.data.user.id).single().then(function (p) {
+        const link = document.getElementById('link-admin');
+        if (link) link.hidden = !(p && p.data && p.data.papel === 'admin');
+      });
     });
   });
 
@@ -85,7 +89,7 @@
       top.innerHTML =
         '<div class="brand">' +
           '<button class="ic-btn menu-hamb" aria-label="Abrir menu">☰</button>' +
-          '<a class="logo-badge" href="/" aria-label="AI Edu"><img src="assets/logo-aiedu.png" alt="AI Edu" class="logo-img"></a>' +
+          '<a class="logo-badge" href="inicio.html" aria-label="AI Edu"><img src="assets/logo-aiedu.png" alt="AI Edu" class="logo-img"></a>' +
           '<span class="onde">/ <em>' + onde + '</em></span>' +
         '</div>' +
         '<label class="busca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
@@ -95,7 +99,7 @@
           '<div class="menu-perfil" id="menu-notif"><a href="#">🎉 Nova masterclass amanhã às 19h</a><a href="#">✅ Missão “Assistir a 3 aulas” em progresso</a><a href="#">🏅 Certificado disponível: Fundamentos de IA</a></div>' +
           '<div class="xp-meta"><div class="nivel">Recruta</div><div class="trilha"><i style="width:12%"></i></div><div class="pontos">0 / 100 XP</div></div>' +
           '<button class="avatar" data-menu="menu-perfil" aria-label="Menu do perfil">JM</button>' +
-          '<div class="menu-perfil" id="menu-perfil"><a href="#">Perfil</a><a href="missoes.html">Meu progresso</a><a href="certificados.html">Certificados</a><a href="login.html">Entrar / Registrar</a><a href="admin.html">Admin</a><div class="sep"></div><button>Modo escuro ✓</button><button data-sair>Sair</button></div>' +
+          '<div class="menu-perfil" id="menu-perfil"><a href="inicio.html">Perfil</a><a href="missoes.html">Meu progresso</a><a href="certificados.html">Certificados</a><a href="login.html">Entrar / Registrar</a><a href="admin.html" id="link-admin" hidden>Admin</a><div class="sep"></div><button>Modo escuro ✓</button><button data-sair>Sair</button></div>' +
         '</div>';
     }
 

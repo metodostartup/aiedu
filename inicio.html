@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Início | AI Edu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+/* ---------- Início: analytics do aluno ---------- */
+.boas-vindas{display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin-bottom:26px}
+.avatar-zone{position:relative;width:96px;height:96px;flex-shrink:0;cursor:pointer}
+.avatar-zone img,.avatar-zone .iniciais{width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;
+  border:3px solid rgba(162,60,255,.7);box-shadow:0 0 24px rgba(192,38,211,.4),inset 0 1px 0 rgba(255,255,255,.4)}
+.avatar-zone .iniciais{display:flex;align-items:center;justify-content:center;font-family:var(--fonte-titulo);font-size:34px;color:#fff;background:linear-gradient(135deg,#3b0f52,#a23cff 70%,#c026d3)}
+.avatar-zone .trocar{position:absolute;inset:auto 0 0 0;margin:auto;text-align:center;font-size:9.5px;font-weight:700;letter-spacing:.05em;color:#fff;background:rgba(10,4,14,.82);padding:3px 0;border-radius:0 0 96px 96px;opacity:0;transition:opacity .2s}
+.avatar-zone:hover .trocar{opacity:1}
+.avatar-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.boas-vindas h1{font-family:var(--fonte-titulo);font-size:28px;color:#fff;margin:0 0 4px}
+.boas-vindas p{margin:0;font-size:13.5px;color:var(--mut)}
+.ring-xp{display:flex;align-items:center;gap:14px;margin-left:auto;padding:14px 20px;border-radius:var(--raio);
+  background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),linear-gradient(180deg,var(--card-2),var(--card));
+  border:1px solid rgba(200,140,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 6px 0 #1f0e25}
+.ring-xp svg{width:74px;height:74px;transform:rotate(-90deg)}
+.ring-xp .fundo{fill:none;stroke:rgba(255,255,255,.12);stroke-width:6}
+.ring-xp .valor{fill:none;stroke:url(#grad-aneis);stroke-width:6;stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:283;transition:stroke-dashoffset 1s cubic-bezier(.2,.7,.3,1)}
+.ring-xp b{display:block;font-family:var(--fonte-titulo);font-size:20px;color:#fff}
+.ring-xp span{font-size:11.5px;color:var(--mut);display:block}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:26px}
+.stat{background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),linear-gradient(180deg,var(--card-2),var(--card));border:1px solid rgba(200,140,255,.2);border-radius:var(--raio);padding:16px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 5px 0 #1f0e25;transition:var(--trans)}
+.stat:hover{transform:translateY(-2px);border-color:rgba(200,140,255,.45)}
+.stat b{display:block;font-family:var(--fonte-titulo);font-size:28px;color:#fff;line-height:1.15}
+.stat span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+
+.secao-tit{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:30px 0 14px}
+.secao-tit h2{font-family:var(--fonte-titulo);font-size:19px;color:#fff;margin:0}
+.secao-tit a{font-size:12px;color:#d9a8ff;text-decoration:none}
+.secao-tit a:hover{text-decoration:underline}
+
+.progresso-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.prog-card{background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(180deg,var(--card-2),var(--card));border:1px solid rgba(200,140,255,.2);border-radius:var(--raio);padding:14px;display:flex;gap:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 5px 0 #1f0e25;transition:var(--trans)}
+.prog-card:hover{transform:translateY(-2px);border-color:rgba(200,140,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 0 20px rgba(255,45,138,.28),0 6px 0 #1f0e25}
+.prog-card .thumb{width:92px;height:60px;border-radius:10px;overflow:hidden;flex-shrink:0;border:1px solid rgba(200,140,255,.25)}
+.prog-card .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.prog-card .info{flex:1;min-width:0}
+.prog-card h3{margin:0 0 6px;font-size:13.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.barra{height:7px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden;margin:6px 0 4px}
+.barra i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#ff7a18,#ff2d8a,#a23cff);transition:width .8s cubic-bezier(.2,.7,.3,1)}
+.prog-card .pct{font-size:11px;color:var(--mut)}
+.prog-card .pct b{color:#d9a8ff}
+.vazio{padding:26px;border:1px dashed rgba(200,140,255,.3);border-radius:var(--raio);text-align:center;color:var(--mut);font-size:13px;grid-column:1/-1}
+.vazio a{color:#d9a8ff}
+
+.skills-linha{display:flex;gap:12px;flex-wrap:wrap}
+.skill-pill{display:flex;align-items:center;gap:9px;padding:10px 16px;border-radius:12px;border:1px solid rgba(200,140,255,.2);
+  background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),linear-gradient(180deg,var(--card-2),var(--card));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 4px 0 #1f0e25;font-size:13px;color:var(--txt);transition:var(--trans)}
+.skill-pill:hover{transform:translateY(-2px);border-color:rgba(200,140,255,.5)}
+.skill-pill svg{width:15px;height:15px;stroke:#d9a8ff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* recomendações: cards de vídeo verticais com rolagem */
+.rec-scroller{display:grid;grid-auto-flow:column;grid-auto-columns:230px;gap:16px;overflow-x:auto;padding:4px 4px 16px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:rgba(162,60,255,.5) transparent}
+.rec-scroller::-webkit-scrollbar{height:8px}
+.rec-scroller::-webkit-scrollbar-thumb{background:rgba(162,60,255,.4);border-radius:6px}
+.rec-card{scroll-snap-align:start;text-decoration:none;color:inherit;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(110deg,rgba(255,122,24,.05),rgba(255,45,138,.07) 48%,rgba(162,60,255,.08));-webkit-backdrop-filter:blur(40px);backdrop-filter:blur(40px);border:1px solid rgba(200,140,255,.2);border-radius:var(--raio);overflow:hidden;position:relative;isolation:isolate;box-shadow:0 5px 0 #1f0e25;transition:var(--trans)}
+.rec-card:hover{transform:translateY(-4px);border-color:rgba(200,140,255,.55);box-shadow:0 0 22px rgba(255,45,138,.32),0 6px 0 #1f0e25,0 20px 40px -12px rgba(0,0,0,.7)}
+.rec-card .poster{position:relative;height:300px;overflow:hidden}
+.rec-card .poster img,.rec-card .poster svg{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.3,1)}
+.rec-card:hover .poster img{transform:scale(1.06)}
+.rec-card .poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,7,23,.15) 30%,rgba(17,7,23,.95) 96%)}
+.rec-card .play{position:absolute;inset:0;margin:auto;width:52px;height:52px;z-index:2;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(10,4,14,.65);border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(8px);transition:var(--trans)}
+.rec-card:hover .play{background:linear-gradient(135deg,#c026d3,#a23cff);box-shadow:0 0 24px rgba(192,38,211,.7);transform:scale(1.08)}
+.rec-card .play svg{width:20px;height:20px;fill:#fff;margin-left:3px}
+.rec-card .dur{position:absolute;right:10px;top:10px;z-index:2;font-size:10.5px;font-weight:700;color:#fff;background:rgba(10,4,14,.8);border:1px solid rgba(255,255,255,.25);border-radius:7px;padding:3px 8px}
+.rec-card .corpo{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:14px}
+.rec-card .tag{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#d9a8ff}
+.rec-card h3{margin:4px 0 0;font-size:14px;line-height:1.35;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:640px){
+  .boas-vindas{gap:14px}
+  .ring-xp{margin-left:0;width:100%;justify-content:space-between}
+  .rec-scroller{grid-auto-columns:200px}
+}
+</style>
+</head>
+<body data-pagina="inicio.html">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="grad-aneis" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/>
+  </linearGradient>
+</defs></svg>
+
+<header class="topbar" id="topbar" data-onde="Início"></header>
+
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+
+  <main class="dmain">
+    <!-- saudação + foto + anel de XP -->
+    <section class="boas-vindas">
+      <label class="avatar-zone" title="Trocar minha foto">
+        <span id="avatar-alvo" class="iniciais">…</span>
+        <span class="trocar">TROCAR FOTO</span>
+        <input type="file" id="input-avatar" accept="image/png,image/jpeg,image/webp" aria-label="Enviar foto de perfil">
+      </label>
+      <div>
+        <h1 id="ola">Olá 👋</h1>
+        <p id="frase-data"></p>
+      </div>
+      <div class="ring-xp" aria-label="Progresso de XP do nível">
+        <svg viewBox="0 0 100 100"><circle class="fundo" cx="50" cy="50" r="45"/><circle class="valor" id="anel-xp" cx="50" cy="50" r="45"/></svg>
+        <div><b id="nivel-txt">Nível —</b><span id="xp-txt">— XP neste nível</span></div>
+      </div>
+    </section>
+
+    <!-- estatísticas -->
+    <section class="stats" id="stats" aria-label="Resumo do progresso"></section>
+
+    <!-- progresso nos cursos -->
+    <div class="secao-tit"><h2>Seu progresso nos cursos</h2><a href="cursos.html">Ver catálogo →</a></div>
+    <section class="progresso-grid" id="progresso-cursos"></section>
+
+    <!-- skills -->
+    <div class="secao-tit"><h2>Skills que você está desbloqueando</h2><a href="skills.html">Ver todas →</a></div>
+    <section class="skills-linha" id="skills-linha"></section>
+
+    <!-- recomendações -->
+    <div class="secao-tit"><h2>Recomendados para você</h2><a href="cinema.html">Ver todas as aulas →</a></div>
+    <section class="rec-scroller" id="rec-scroller" aria-label="Vídeos recomendados"></section>
+  </main>
+</div>
+
+<div class="aviso" id="aviso" aria-live="polite" style="position:fixed;right:18px;bottom:18px;z-index:99;font-size:13px;padding:11px 16px;border-radius:10px;background:#1b0c21;border:1px solid #ff2d8a;color:#fff;opacity:0;pointer-events:none;transition:opacity .25s;max-width:340px"></div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script>
+(function(){
+'use strict';
+const aviso=document.getElementById('aviso');
+function msg(t){aviso.textContent=t;aviso.style.opacity='1';setTimeout(function(){aviso.style.opacity='0';},3500);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function minFmt(seg){const m=Math.round((seg||0)/60);return m>=60?Math.floor(m/60)+'h '+String(m%60).padStart(2,'0')+'m':m+'m';}
+
+const DIAS=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+document.getElementById('frase-data').textContent='Hoje é '+DIAS[new Date().getDay()]+'. Bora continuar a jornada?';
+
+let EU=null, PERFIL=null;
+
+function iniciais(nome){
+  const p=String(nome||'').trim().split(/\s+/);
+  return ((p[0]||'?').charAt(0)+(p.length>1?p[p.length-1].charAt(0):'')).toUpperCase()||'?';
+}
+function pintaAvatar(url,nome){
+  const alvo=document.getElementById('avatar-alvo');
+  alvo.outerHTML=url
+    ? '<img id="avatar-alvo" src="'+esc(url)+'" alt="Sua foto de perfil">'
+    : '<span id="avatar-alvo" class="iniciais">'+esc(iniciais(nome))+'</span>';
+}
+function anelXP(xp,nivel){
+  const noNivel=xp%100, pct=noNivel/100;
+  document.getElementById('anel-xp').style.strokeDashoffset=String(283-283*pct);
+  document.getElementById('nivel-txt').textContent='Nível '+nivel;
+  document.getElementById('xp-txt').textContent=noNivel+' / 100 XP neste nível';
+}
+document.getElementById('input-avatar').addEventListener('change',function(){
+  const f=this.files[0];if(!f||!EU)return;
+  if(!/image\/(png|jpe?g|webp)/.test(f.type))return msg('Use uma imagem PNG, JPG ou WebP.');
+  if(f.size>2*1024*1024)return msg('A foto deve ter no máximo 2 MB.');
+  const ext=(f.name.split('.').pop()||'jpg').toLowerCase();
+  window.db.storage.from('avatars').upload(EU.id+'/avatar.'+ext,f,{upsert:true}).then(function(r){
+    if(r.error)return msg('Falha no upload: '+r.message);
+    const url=window.db.storage.from('avatars').getPublicUrl(EU.id+'/avatar.'+ext).data.publicUrl;
+    return window.db.from('perfis').update({avatar_url:url}).eq('id',EU.id).then(function(r2){
+      if(r2.error)return msg('Falha ao salvar: '+r2.message);
+      pintaAvatar(url,PERFIL&&PERFIL.nome);msg('Foto atualizada!');});
+  });
+});
+
+function pintaStats(n){
+  const itens=[
+    [n.xp,'XP total'],[n.nivel,'Nível'],[n.concluidas,'Aulas concluídas'],
+    [n.emAndamento,'Cursos em andamento'],[n.salvos,'Prompts salvos'],[n.streak,'Dias de ofensiva']
+  ];
+  document.getElementById('stats').innerHTML=itens.map(i=>'<div class="stat"><b>'+i[0]+'</b><span>'+i[1]+'</span></div>').join('');
+}
+function pintaCursos(cursos,concluidas){
+  const el=document.getElementById('progresso-cursos');
+  if(!cursos.length){el.innerHTML='<div class="vazio">Você ainda não começou nenhum curso. <a href="cursos.html">Escolha o primeiro →</a></div>';return;}
+  el.innerHTML=cursos.map(c=>{
+    const total=c.totalAulas||0,feitas=c.feitas||0,pct=total?Math.round(feitas/total*100):0;
+    return '<a class="prog-card" href="curso.html?id='+esc(c.id)+'" style="text-decoration:none">'+
+      '<div class="thumb">'+(c.capa_url?'<img src="'+esc(c.capa_url)+'" alt="" loading="lazy">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--fonte-titulo);color:#fff;background:linear-gradient(135deg,#3b0f52,#a23cff 70%,#c026d3)">'+esc((c.titulo||'?').charAt(0).toUpperCase())+'</div>')+'</div>'+
+      '<div class="info"><h3>'+esc(c.titulo)+'</h3>'+
+      '<div class="barra"><i style="width:'+pct+'%"></i></div>'+
+      '<span class="pct"><b>'+pct+'%</b> · '+feitas+' de '+total+' aulas</span></div></a>';
+  }).join('');
+}
+function pintaSkills(skills){
+  const el=document.getElementById('skills-linha');
+  if(!skills.length){el.innerHTML='<div class="vazio" style="flex:1">Nenhuma skill cadastrada ainda.</div>';return;}
+  el.innerHTML=skills.slice(0,10).map(s=>'<a class="skill-pill" href="skills.html" style="text-decoration:none">'+
+    '<svg viewBox="0 0 24 24"><path d="M12 2 9.8 8.8H3l5.6 4.3-2.2 6.9 5.6-4.4 5.6 4.4-2.2-6.9L21 8.8h-6.8z"/></svg>'+
+    esc(s.nome)+'</a>').join('');
+}
+function pintaRec(aulas){
+  const el=document.getElementById('rec-scroller');
+  if(!aulas.length){el.innerHTML='<div class="vazio">As próximas aulas recomendadas aparecem aqui assim que os cursos forem publicados.</div>';return;}
+  el.innerHTML=aulas.map(function(a,i){
+    const fallback=window.capaSVG(window.CAPAS[i%window.CAPAS.length],a.titulo);
+    return '<a class="rec-card" href="aula.html?id='+esc(a.id)+'">'+
+      '<span class="dur">'+minFmt(a.duracao_seg)+'</span>'+
+      '<div class="poster">'+(a.capa?'<img src="'+esc(a.capa)+'" alt="" loading="lazy">':fallback)+
+      '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>'+
+      '<div class="corpo"><span class="tag">'+esc(a.curso||'Aula')+'</span><h3>'+esc(a.titulo)+'</h3></div></a>';
+  }).join('');
+}
+
+window.addEventListener('load',function(){
+  if(!window.db)return;
+  window.db.auth.getUser().then(function(r){
+    if(!r||!r.data||!r.data.user){location.href='login.html';return Promise.reject('sem sessão');}
+    EU=r.data.user;
+    return Promise.all([
+      window.db.from('perfis').select('*').eq('id',EU.id).single(),
+      window.db.from('aulas_concluidas').select('aula_id').eq('usuario_id',EU.id),
+      window.db.from('cursos').select('id,titulo,capa_url,modulos(aulas(id))').order('criado_em',{ascending:false}),
+      window.db.from('skills').select('nome').order('nome'),
+      window.db.from('prompts_salvos').select('id').eq('usuario_id',EU.id)
+    ]).then(function(rs){
+      const p=rs[0].data||{};PERFIL=p;
+      const xp=p.xp||0,nivel=p.nivel||1;
+      document.getElementById('ola').textContent='Olá, '+(p.nome?p.nome.split(' ')[0]:'aluno')+' 👋';
+      pintaAvatar(p.avatar_url,p.nome);
+      anelXP(xp,nivel);
+      const concluidas=new Set((rs[1].data||[]).map(x=>x.aula_id));
+      const cursos=(rs[2].data||[]).map(c=>{
+        let total=0,feitas=0;(c.modulos||[]).forEach(m=>{(m.aulas||[]).forEach(a=>{total++;if(concluidas.has(a.id))feitas++;});});
+        return {id:c.id,titulo:c.titulo,capa_url:c.capa_url,totalAulas:total,feitas:feitas};
+      });
+      pintaStats({xp:xp,nivel:nivel,concluidas:concluidas.size,
+        emAndamento:cursos.filter(c=>c.feitas>0&&c.feitas<c.totalAulas).length,
+        salvos:(rs[4].data||[]).length,streak:p.streak_dias||0});
+      pintaCursos(cursos,concluidas);
+      pintaSkills(rs[3].data||[]);
+      const recomenda=[];
+      (rs[2].data||[]).forEach(c=>{(c.modulos||[]).forEach(m=>{(m.aulas||[]).forEach(a=>{
+        if(a.video_url)recomenda.push({id:a.id,titulo:a.titulo,duracao_seg:a.duracao_seg,curso:c.titulo,capa:c.capa_url});});});});
+      pintaRec(recomenda.slice(0,8));
+    });
+  }).catch(function(e){if(e&&e!=='sem sessão')msg('Erro ao carregar: '+(e.message||e));});
+});
+})();
+</script>
+</body>
+</html>
