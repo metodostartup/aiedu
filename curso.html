@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/app.css">
 <style>
-.banner{height:210px;border-radius:16px;overflow:hidden;border:1px solid var(--borda);position:relative;margin-bottom:22px}
+.banner{height:210px;border-radius:16px;overflow:hidden;border:1px solid var(--borda);position:relative;margin-bottom:22px;background:#07040c center/cover no-repeat}
 .banner svg{width:100%;height:100%;display:block}
 .banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(22,10,28,.92))}
 .banner .info{position:absolute;left:26px;bottom:20px;z-index:2;max-width:640px}
@@ -22,23 +22,21 @@
 .modulo h4 span{font-size:11px;color:var(--mut);font-weight:600}
 .aula-linha{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid var(--borda);font-size:12.5px}
 .aula-linha:last-child{border:none}
-.aula-linha .tic{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--borda-forte);display:grid;place-items:center;font-size:10px;color:#fff;flex-shrink:0;cursor:pointer}
+.aula-linha .tic{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--borda-forte);display:grid;place-items:center;font-size:10px;color:#fff;flex-shrink:0}
 .aula-linha .tic.on{background:var(--grad);border-color:transparent}
 .aula-linha .dur{margin-left:auto;color:var(--mut);font-size:11px;flex-shrink:0}
-.aula-linha a{color:var(--txt)}
+.aula-linha a{color:var(--txt);text-decoration:none;flex:1}
 .aula-linha a:hover{color:#fff}
+.aula-linha .travada{color:var(--mut);flex:1;cursor:not-allowed}
 .lado .card{padding:18px;margin-bottom:14px}
 .lado h4{font-size:13px;margin-bottom:10px}
 .lado ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:12.5px}
 .lado li{display:flex;gap:9px;align-items:flex-start;line-height:1.45}
-.avaliacao{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--borda);font-size:12.5px}
-.avaliacao:last-child{border:none}
-.avaliacao b{color:#fff;display:block;font-size:12.5px}
-.avaliacao p{font-size:11.5px;color:var(--mut);margin-top:2px}
 @media(max-width:1080px){.layout-curso{grid-template-columns:1fr}}
+@media(max-width:640px){.banner{height:190px}.banner .info{left:16px;right:16px}.banner .btns{left:16px;right:16px;bottom:16px;justify-content:flex-end}.banner .info{bottom:64px}}
 </style>
 </head>
-<body data-pagina="cursos.html">
+<body data-pagina="cinema.html">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
   <linearGradient id="ceu1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b0f52"/><stop offset=".55" stop-color="#7a1a8f"/><stop offset="1" stop-color="#c026d3"/></linearGradient>
@@ -51,7 +49,7 @@
   <aside class="side" id="sidebar"></aside>
 
   <main class="dmain" id="conteudo">
-    <div class="banner">
+    <div class="banner" id="banner">
       <svg viewBox="0 0 1200 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <rect width="1200" height="210" fill="url(#ceu1)"/>
         <circle cx="600" cy="150" r="60" fill="#f3c6ff" opacity=".8"/>
@@ -60,54 +58,34 @@
         <rect width="1200" height="210" filter="url(#grao)"/>
       </svg>
       <div class="info">
-        <span class="tag" id="c-cat">Fundamentos de IA</span>
-        <h1 id="c-tit">Fundamentos da Inteligência Artificial</h1>
-        <p id="c-desc">Conceitos essenciais, modelos, limites e boas práticas.</p>
+        <span class="tag" id="c-cat">Curso</span>
+        <h1 id="c-tit">Carregando…</h1>
+        <p id="c-desc"></p>
         <div class="meta-linha" id="c-meta" style="margin-top:8px"></div>
       </div>
       <div class="btns">
-        <button class="btn btn-pri" id="btn-comecar">Começar curso</button>
-        <button class="btn btn-sec btn-fav" aria-label="Adicionar aos guardados" aria-pressed="false">♡</button>
+        <button class="btn btn-pri" id="btn-comecar" disabled>Começar curso</button>
       </div>
     </div>
 
     <div class="layout-curso">
       <div>
         <div class="secao-tit" style="margin-top:0"><h2>Conteúdo do curso</h2><span class="pct" id="c-prog"></span></div>
-        <div id="modulos"></div>
+        <div id="modulos"><p class="vazio"><span class="ico">⏳</span>Carregando aulas…</p></div>
         <div class="barra" style="margin-top:6px"><i id="barra-curso" style="width:0%"></i></div>
-
-        <div class="secao-tit"><h2>Materiais complementares</h2></div>
-        <div class="card" style="padding:16px 18px">
-          <ul style="list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:9px;font-size:12.5px">
-            <li>📄 Guia rápido — glossário de IA (PDF)</li>
-            <li>📊 Planilha comparativa de modelos</li>
-            <li>🔗 Lista de ferramentas com link de teste</li>
-            <li>🧩 Template de prompt estruturado</li>
-          </ul>
-        </div>
-
-        <div class="secao-tit"><h2>Prompts relacionados</h2></div>
-        <div class="grid-2" id="prompts-relacionados"></div>
-
-        <div class="secao-tit"><h2>Comentários e avaliações</h2></div>
-        <div class="card" style="padding:18px">
-          <div class="avaliacao"><div class="avatar" style="box-shadow:none">MC</div><div><b>Marina C.</b><p>“Melhor introdução ao tema que já fiz — direto e sem enrolação.”</p><span class="estrela">★★★★★</span></div></div>
-          <div class="avaliacao"><div class="avatar" style="box-shadow:none;background:linear-gradient(135deg,#a23cff,#d9cfe3)">RL</div><div><b>Rafael L.</b><p>“Os exercícios práticos valem o curso inteiro.”</p><span class="estrela">★★★★☆</span></div></div>
-        </div>
       </div>
 
       <aside class="lado">
         <div class="card">
           <h4>Professor</h4>
           <div style="display:flex;gap:11px;align-items:center">
-            <div class="avatar" style="box-shadow:none">MC</div>
-            <div><b style="color:#fff;font-size:13px" id="c-autor">Marina Costa</b><div style="font-size:11px;color:var(--mut)">Especialista em IA aplicada · 4 cursos</div></div>
+            <div class="avatar" style="box-shadow:none" id="c-autor-av">AI</div>
+            <div><b style="color:#fff;font-size:13px" id="c-autor">Equipe AI Edu</b><div style="font-size:11px;color:var(--mut)" id="c-autor-sub">Instrutor da plataforma</div></div>
           </div>
         </div>
         <div class="card">
-          <h4>Skills desenvolvidas</h4>
-          <ul id="c-skills"><li>🧠 Pensamento com modelos</li><li>✍️ Escrita com IA</li><li>🔎 Pesquisa e análise</li></ul>
+          <h4>Progresso</h4>
+          <ul id="c-resumo"><li>—</li></ul>
         </div>
         <div class="card">
           <h4>Certificado</h4>
@@ -126,65 +104,146 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  const D = window.DEMO;
-  const id = new URLSearchParams(location.search).get('id') || 'fundamentos';
-  const c = D.cursos.find(x => x.id === id) || D.cursos[0];
+  const id = new URLSearchParams(location.search).get('id');
+  const DIA = 86400000;
+  let CURSO = null, MODULOS = [], CONCLUIDAS = new Set(), INICIO = null, EU = null;
 
-  document.title = c.tit + ' | AI Edu';
-  document.getElementById('c-cat').textContent = c.cat;
-  document.getElementById('c-tit').textContent = c.tit;
-  document.getElementById('c-desc').textContent = c.desc;
-  document.getElementById('c-autor').textContent = c.autor;
-  document.getElementById('c-meta').innerHTML =
-    `<span class="estrela">★ ${c.nota}</span><span><b>${c.alunos}</b> alunos</span><span>${c.dur}</span><span class="nivel-pill ${c.nivel.toLowerCase()}">${c.nivel}</span>`;
-
-  /* módulos de demonstração */
-  const MODS = [
-    { t:'Módulo 1 — Panorama', aulas:[['O que é (e o que não é) IA','12:40',true],['Como os modelos aprendem','18:05',true],['Limites, vieses e riscos','15:30',true]] },
-    { t:'Módulo 2 — Na prática', aulas:[['Escolhendo a ferramenta certa','14:20',true],['Prompts que funcionam','21:10',false],['Avaliando resultados','16:45',false]] },
-    { t:'Módulo 3 — Aplicando', aulas:[['Projeto: assistente pessoal','24:00',false],['Boas práticas de equipe','13:35',false]] }
-  ];
-  let feitas = MODS.flatMap(m=>m.aulas).filter(a=>a[2]).length;
-  const totalAulas = MODS.flatMap(m=>m.aulas).length;
-
-  function renderModulos(){
-    document.getElementById('modulos').innerHTML = MODS.map((m,mi)=>`
-      <div class="modulo">
-        <h4>${m.t}<span>${m.aulas.length} aulas</span></h4>
-        ${m.aulas.map((a,ai)=>`
-          <div class="aula-linha">
-            <button class="tic ${a[2]?'on':''}" data-mod="${mi}" data-a="${ai}" aria-label="Marcar como concluída">${a[2]?'✓':''}</button>
-            <a href="aula.html">${a[0]}</a>
-            <span class="dur">${a[1]}</span>
-          </div>`).join('')}
-      </div>`).join('');
-    const pct = Math.round(feitas/totalAulas*100);
-    const barra = document.getElementById('barra-curso');
-    barra.style.width = pct+'%';
-    document.getElementById('c-prog').textContent = pct+'% concluído · '+feitas+'/'+totalAulas+' aulas';
+  function nivelClasse(n){ return String(n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function durFmt(seg){
+    seg = Math.round((seg||0)/60);
+    const h = Math.floor(seg/60), m = seg%60;
+    return h ? h + 'h ' + String(m).padStart(2,'0') + 'm' : m + 'm';
   }
-  renderModulos();
+  function todasAulas(){ return MODULOS.flatMap(m => m.aulas || []); }
+  function diasRestantes(a){
+    if(!a || !a.bloqueada) return 0;
+    const dias = Math.max(0, +a.libera_em_dias || 0);
+    if(!dias) return 0;
+    if(!INICIO) return dias;
+    const falta = Math.ceil((new Date(INICIO).getTime() + dias*DIA - Date.now())/DIA);
+    return falta > 0 ? falta : 0;
+  }
+  function vazio(msg, ico){
+    document.getElementById('modulos').innerHTML = '<p class="vazio"><span class="ico">'+(ico||'🎓')+'</span>'+esc(msg)+'</p>';
+  }
 
+  function pintarCabecalho(){
+    const c = CURSO;
+    document.title = c.titulo + ' | AI Edu';
+    document.getElementById('c-cat').textContent = c.categoria || 'Curso';
+    document.getElementById('c-tit').textContent = c.titulo;
+    document.getElementById('c-desc').textContent = c.descricao || '';
+    if(c.capa_url){
+      const b = document.getElementById('banner');
+      b.style.backgroundImage = "url('" + String(c.capa_url).replace(/"/g,"%22") + "')";
+      const svg = b.querySelector('svg'); if(svg) svg.style.display = 'none';
+    }
+    const aulas = todasAulas();
+    const min = c.duracao_min || Math.round(aulas.reduce((s,a)=>s+(a.duracao_seg||0),0)/60);
+    document.getElementById('c-meta').innerHTML =
+      '<span class="nivel-pill '+esc(nivelClasse(c.nivel))+'">'+esc(c.nivel||'')+'</span>'+
+      '<span><b>'+aulas.length+'</b> aula'+(aulas.length===1?'':'s')+'</span><span>'+durFmt(min)+'</span>';
+    if(c.autor){
+      document.getElementById('c-autor').textContent = c.autor;
+      document.getElementById('c-autor-av').textContent = c.autor.trim().split(/\s+/).map(p=>p[0]).slice(0,2).join('').toUpperCase();
+      document.getElementById('c-autor-sub').textContent = 'Instrutor · ' + (c.categoria||'AI Edu');
+    }
+  }
+
+  function primeiraLivre(){
+    const aulas = todasAulas();
+    return aulas.find(a => diasRestantes(a) === 0) || aulas[0] || null;
+  }
+
+  function pintarModulos(){
+    const aulas = todasAulas();
+    const feitas = aulas.filter(a => CONCLUIDAS.has(a.id)).length;
+    const pct = aulas.length ? Math.round(feitas/aulas.length*100) : 0;
+
+    if(!MODULOS.length){
+      vazio('Este curso ainda não tem aulas publicadas.', '📚');
+    } else {
+      document.getElementById('modulos').innerHTML = MODULOS.map(m => {
+        const as = m.aulas || [];
+        return '<div class="modulo"><h4>'+esc(m.titulo)+'<span>'+as.length+' aula'+(as.length===1?'':'s')+'</span></h4>'+
+          (as.length ? as.map(a => {
+            const done = CONCLUIDAS.has(a.id);
+            const restam = diasRestantes(a);
+            const linha = restam > 0
+              ? '<span class="travada" data-trava="'+restam+'">🔒 '+esc(a.titulo)+'</span>'
+              : '<a href="aula.html?id='+a.id+'">'+esc(a.titulo)+'</a>';
+            return '<div class="aula-linha"><span class="tic '+(done?'on':'')+'" aria-hidden="true">'+(done?'✓':'')+'</span>'+linha+
+              '<span class="dur">'+(restam>0 ? '🔒 '+restam+'d' : durFmt(a.duracao_seg))+'</span></div>';
+          }).join('') : '<div class="aula-linha"><span class="dur">Sem aulas neste módulo</span></div>')+
+        '</div>';
+      }).join('');
+    }
+
+    document.getElementById('barra-curso').style.width = pct+'%';
+    document.getElementById('c-prog').textContent = pct+'% concluído · '+feitas+'/'+aulas.length+' aulas';
+    document.getElementById('c-resumo').innerHTML =
+      '<li>📚 <b>'+aulas.length+'</b>&nbsp;aulas em '+MODULOS.length+' módulo'+(MODULOS.length===1?'':'s')+'</li>'+
+      '<li>✅ <b>'+feitas+'</b>&nbsp;concluída'+(feitas===1?'':'s')+'</li>'+
+      '<li>📈 <b>'+pct+'%</b>&nbsp;do curso</li>';
+
+    const btn = document.getElementById('btn-comecar');
+    const alvo = primeiraLivre();
+    btn.disabled = !alvo;
+    btn.textContent = pct>0 ? 'Continuar curso' : 'Começar curso';
+
+    const cert = document.getElementById('btn-cert');
+    if(pct>=100 && aulas.length){
+      cert.disabled = false;
+      cert.textContent = '🏆 Ver certificado';
+      cert.onclick = () => location.href = 'certificados.html';
+    }
+  }
+
+  function carregar(){
+    if(!id){ vazio('Curso não informado. Volte para a lista de cursos.', '⚠️'); return; }
+    Promise.all([
+      window.db.from('cursos')
+        .select('id,titulo,descricao,categoria,nivel,duracao_min,autor,capa_url,modulos(id,titulo,ordem,aulas(id,titulo,ordem,duracao_seg,bloqueada,libera_em_dias))')
+        .eq('id', id).maybeSingle(),
+      window.db.auth.getUser()
+    ]).then(([r,u]) => {
+      if(r.error){ vazio('Não foi possível abrir o curso. '+r.error.message, '⚠️'); return; }
+      if(!r.data){ vazio('Curso não encontrado.', '⚠️'); document.getElementById('c-tit').textContent='Curso não encontrado'; return; }
+      CURSO = r.data;
+      EU = u && u.data && u.data.user ? u.data.user : null;
+      MODULOS = (CURSO.modulos||[])
+        .map(m => ({ id:m.id, titulo:m.titulo, ordem:m.ordem, aulas:(m.aulas||[]).slice().sort((a,b)=>(a.ordem||0)-(b.ordem||0)) }))
+        .sort((a,b)=>(a.ordem||0)-(b.ordem||0));
+      pintarCabecalho();
+
+      const base = EU
+        ? window.db.from('inscricoes').select('criada_em').eq('usuario_id',EU.id).eq('curso_id',CURSO.id).maybeSingle()
+            .then(x => (x.data && x.data.criada_em) ? x.data.criada_em : new Date().toISOString())
+        : Promise.resolve(null);
+      const feitas = EU
+        ? window.db.from('aulas_concluidas').select('aula_id').eq('usuario_id',EU.id).then(x => new Set(((x.data)||[]).map(y=>y.aula_id)))
+        : Promise.resolve(new Set());
+
+      Promise.all([base, feitas]).then(([inicio, feitasSet]) => {
+        INICIO = inicio; CONCLUIDAS = feitasSet;
+        pintarModulos();
+      });
+    }).catch(e => vazio('Erro ao carregar o curso: ' + e.message, '⚠️'));
+  }
+
+  document.getElementById('btn-comecar').addEventListener('click', () => {
+    const alvo = primeiraLivre();
+    if(alvo) location.href = 'aula.html?id=' + alvo.id;
+    else window.toast('Este curso ainda não tem aulas publicadas.');
+  });
   document.getElementById('modulos').addEventListener('click', e => {
-    const t = e.target.closest('.tic');
-    if (!t) return;
-    const a = MODS[+t.dataset.mod].aulas[+t.dataset.a];
-    a[2] = !a[2];
-    feitas += a[2] ? 1 : -1;
-    if (feitas === totalAulas) { window.toast('Curso concluído! Certificado desbloqueado 🎉'); window.confete(); document.getElementById('btn-cert').disabled=false; document.getElementById('btn-cert').textContent='🏆 Ver certificado'; }
-    renderModulos();
+    const t = e.target.closest('[data-trava]');
+    if(t) window.toast('Aula travada — libera em ' + t.dataset.trava + ' dia(s).');
   });
 
-  /* prompts relacionados */
-  document.getElementById('prompts-relacionados').innerHTML = D.prompts.slice(0,2).map(p=>`
-    <div class="card" style="padding:16px">
-      <span class="tag">${p.cat}</span>
-      <h3 style="margin-top:7px">${p.tit}</h3>
-      <p class="prev-prompt" style="margin-top:6px">${p.prev}</p>
-      <button class="btn btn-sec" style="margin-top:10px" data-copiar="${p.prev.replace(/"/g,'&quot;')}">Copiar prompt</button>
-    </div>`).join('');
-
-  document.getElementById('btn-comecar').addEventListener('click', () => { location.href='aula.html'; });
+  if (window.db) carregar();
+  else window.addEventListener('load', carregar);
 })();
 </script>
 </body>

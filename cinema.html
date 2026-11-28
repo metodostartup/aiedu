@@ -9,15 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/app.css">
 <style>
-.filme{position:relative;isolation:isolate;border-radius:16px;overflow:hidden;border:1px solid rgba(200,140,255,.2);transition:var(--trans);background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(110deg,rgba(255,122,24,.05),rgba(255,45,138,.07) 48%,rgba(162,60,255,.08));-webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 6px 0 #1f0e25,0 18px 36px -14px rgba(0,0,0,.7)}
+.filme{position:relative;isolation:isolate;border-radius:16px;overflow:hidden;border:1px solid rgba(200,140,255,.2);transition:var(--trans);background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(110deg,rgba(255,122,24,.05),rgba(255,45,138,.07) 48%,rgba(162,60,255,.08));-webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 6px 0 #1f0e25,0 18px 36px -14px rgba(0,0,0,.7);display:flex;flex-direction:column}
 .filme:hover{transform:translateY(-3px);border-color:rgba(200,140,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 26px rgba(255,255,255,.08),0 0 22px rgba(255,45,138,.35),0 7px 0 #1f0e25,0 22px 44px -12px rgba(0,0,0,.7)}
-.filme .poster{height:210px;overflow:hidden}
-.filme .poster svg{width:100%;height:100%;display:block;transition:transform .6s}
-.filme:hover .poster svg{transform:scale(1.06)}
-.filme .info{padding:13px 15px}
+.filme .poster{height:210px;overflow:hidden;position:relative}
+.filme .poster svg,.filme .poster img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .6s}
+.filme:hover .poster svg,.filme:hover .poster img{transform:scale(1.06)}
+.filme .info{padding:13px 15px 0}
 .filme h3{font-size:14px}
 .filme p{font-size:11.5px;color:var(--mut);margin-top:4px}
 .filme .dur{position:absolute;top:12px;right:12px;z-index:2;font-size:10.5px;font-weight:700;background:rgba(10,4,14,.75);border:1px solid var(--borda-forte);border-radius:7px;padding:3px 9px;color:#fff}
+.filme .nivel{position:absolute;top:12px;left:12px;z-index:2;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#fff;padding:4px 11px;border-radius:9px;background:linear-gradient(135deg,#ff7a18,#ff2d8a 55%,#a23cff);box-shadow:0 0 14px rgba(255,45,138,.45),inset 0 1px 0 rgba(255,255,255,.4)}
+.filme .rodape{margin-top:auto;padding:0 15px 15px}
 </style>
 </head>
 <body data-pagina="cinema.html">
@@ -37,10 +39,12 @@
   <main class="dmain">
     <div class="pagehead">
       <h1>Cursos</h1>
-      <p>Documentários, masterclasses e aulas longas em formato de filme.</p>
+      <p>Escolha um curso e abra a trilha completa de aulas, do primeiro módulo ao certificado.</p>
     </div>
 
-    <section class="grid" id="grid-cinema"></section>
+    <section class="grid" id="grid-cursos" aria-live="polite">
+      <p class="vazio" style="grid-column:1/-1"><span class="ico">⏳</span>Carregando cursos…</p>
+    </section>
   </main>
 </div>
 
@@ -51,12 +55,15 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  const grid = document.getElementById('grid-cinema');
-  function durFmt(seg){
-    seg = Math.round((seg||0)/60);
-    const h = Math.floor(seg/60), m = seg%60;
+  const grid = document.getElementById('grid-cursos');
+
+  function durFmt(min){
+    min = Math.round(min||0);
+    const h = Math.floor(min/60), m = min%60;
     return h ? h + 'h ' + String(m).padStart(2,'0') + 'm' : m + 'm';
   }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
   function capas(i, t){
     const tipo = ['ceu1','fita2','portal3'][i % 3];
     const svg = tipo==='ceu1'
@@ -64,55 +71,71 @@
       : tipo==='fita2'
       ? '<rect width="400" height="210" fill="#12061a"/><path d="M-20 150 C 100 50, 220 200, 320 100 S 480 20, 520 80" stroke="url(#fita2)" stroke-width="18" fill="none" stroke-linecap="round"/>'
       : '<rect width="400" height="210" fill="#07040c"/><circle cx="200" cy="105" r="80" fill="url(#portal3)" opacity=".9"/><ellipse cx="200" cy="105" rx="120" ry="42" fill="none" stroke="#d9a8ff" stroke-opacity=".5" transform="rotate(-18 200 105)"/>';
-    return '<svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" role="img" aria-label="'+t.replace(/"/g,'&quot;')+'">'+svg+'<rect width="400" height="210" filter="url(#grao)"/></svg>';
+    return '<svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" role="img" aria-label="'+esc(t)+'">'+svg+'<rect width="400" height="210" filter="url(#grao)"/></svg>';
   }
+
   function desenhar(itens){
-    grid.innerHTML = itens.map((a,i) => `
+    if(!itens.length){
+      grid.innerHTML = '<p class="vazio" style="grid-column:1/-1"><span class="ico">🎓</span>Nenhum curso publicado ainda — eles aparecem aqui assim que o admin publica um curso.</p>';
+      return;
+    }
+    grid.innerHTML = itens.map((c,i) => {
+      const pct = c.pct;
+      const rotulo = !c.total ? 'Em breve' : pct>=100 ? 'Revisar curso' : pct>0 ? 'Continuar' : 'Começar curso';
+      const destino = !c.total ? '#' : 'curso.html?id='+encodeURIComponent(c.id);
+      return `
       <article class="filme">
-        <div class="poster">${a.capa ? '<img src="'+a.capa+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">' : capas(i, a.titulo)}</div>
-        <span class="dur">⏱ ${durFmt(a.duracao_seg)}</span>
-        <span class="nivel" style="position:absolute;top:12px;left:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#fff;padding:4px 11px;border-radius:9px;background:linear-gradient(135deg,#ff7a18,${a.pct>=50?'#ff2d8a':'#c026d3'} ${a.pct>=50?'55%':'65%'},#a23cff);box-shadow:0 0 14px rgba(255,45,138,.45),inset 0 1px 0 rgba(255,255,255,.4)" aria-label="Nível ${a.pct}% do curso">${a.pct}%</span>
-        ${a.concluida ? '<span style="position:absolute;bottom:12px;right:12px;z-index:2;font-size:10px;font-weight:800;color:#9be89b;background:rgba(10,4,14,.8);border:1px solid rgba(155,232,155,.4);border-radius:7px;padding:3px 8px">✓ CONCLUÍDA</span>' : ''}
-        <div class="info"><h3>${a.titulo}</h3><p>${a.curso||'Aula avulsa'}</p>
-        <div class="barra-nivel" style="height:6px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:8px"><i style="display:block;height:100%;width:${a.pct}%;background:linear-gradient(90deg,#ff7a18,#ff2d8a,#a23cff);border-radius:4px"></i></div>
-        <div class="meta-linha" style="margin-top:7px;display:flex;justify-content:space-between;align-items:center"><span>Original AI Edu</span><span style="font-size:10.5px;font-weight:700;color:#d9a8ff">NÍVEL ${a.pct}%</span></div></div>
-        <a class="btn btn-pri" style="margin:0 15px 15px;text-decoration:none" href="aula.html?id=${a.id}">${a.concluida?'Revisar aula':'Assistir agora'}</a>
-      </article>`).join('') || '<p style="color:var(--mut);grid-column:1/-1">Nenhuma aula publicada ainda — elas aparecem aqui assim que o admin adiciona cursos e aulas.</p>';
+        <div class="poster">${c.capa_url ? '<img src="'+esc(c.capa_url)+'" alt="" loading="lazy">' : capas(i, c.titulo)}</div>
+        <span class="dur">⏱ ${durFmt(c.min)}</span>
+        <span class="nivel" aria-label="Nível ${esc(c.nivel)}">${esc(c.nivel)}</span>
+        ${pct>=100 ? '<span style="position:absolute;bottom:12px;right:12px;z-index:2;font-size:10px;font-weight:800;color:#9be89b;background:rgba(10,4,14,.8);border:1px solid rgba(155,232,155,.4);border-radius:7px;padding:3px 8px">✓ CONCLUÍDO</span>' : ''}
+        <div class="info">
+          <h3>${esc(c.titulo)}</h3>
+          <p>${esc(c.categoria)} · ${c.total ? c.total+' aula'+(c.total===1?'':'s') : 'sem aulas ainda'}</p>
+          <div class="barra-nivel" style="height:6px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:8px"><i style="display:block;height:100%;width:${pct}%;background:linear-gradient(90deg,#ff7a18,#ff2d8a,#a23cff);border-radius:4px"></i></div>
+          <div class="meta-linha" style="margin-top:7px;display:flex;justify-content:space-between;align-items:center"><span>${c.feitas}/${c.total} aulas</span><span style="font-size:10.5px;font-weight:700;color:#d9a8ff">NÍVEL ${pct}%</span></div>
+        </div>
+        <div class="rodape">
+          <a class="btn btn-pri" style="width:100%;justify-content:center;text-decoration:none${c.total?'':';opacity:.5;pointer-events:none'}" href="${destino}" aria-disabled="${c.total?0:1}">${rotulo}</a>
+        </div>
+      </article>`;
+    }).join('');
   }
+
+  function erro(msg){
+    grid.innerHTML = '<p class="vazio" style="grid-column:1/-1"><span class="ico">⚠️</span>'+esc(msg)+'</p>';
+  }
+
   function carregar(){
     Promise.all([
-      window.db.from('aulas')
-        .select('id,titulo,duracao_seg,ordem,modulos:modulo_id(titulo,ordem,cursos:curso_id(titulo,capa_url))')
-        .order('ordem'),
+      window.db.from('cursos')
+        .select('id,titulo,categoria,nivel,duracao_min,capa,capa_url,modulos(id,aulas(id,duracao_seg))')
+        .eq('ativo', true)
+        .order('criado_em', { ascending: true }),
       window.db.auth.getUser()
     ]).then(([r,u]) => {
-      if (r.error) { grid.innerHTML = '<p style="color:var(--mut);grid-column:1/-1">Não foi possível carregar as aulas. ' + r.error.message + '</p>'; return; }
+      if (r.error) { erro('Não foi possível carregar os cursos. ' + r.error.message); return; }
       const uid = u && u.data && u.data.user ? u.data.user.id : null;
-      window.db.from('aulas_concluidas').select('aula_id').eq('usuario_id', uid || '00000000-0000-0000-0000-000000000000').then(c => {
-        const feitas = new Set(((c.data)||[]).map(x => x.aula_id));
-        // progresso por curso: aulas concluídas do curso / total de aulas do curso
-        const porCurso = {};
-        (r.data||[]).forEach(a => {
-          const cid = a.modulos && a.modulos.cursos ? a.modulos.cursos.titulo : null;
-          if (!cid) return;
-          porCurso[cid] = porCurso[cid] || {total:0, feitas:0};
-          porCurso[cid].total++;
-          if (feitas.has(a.id)) porCurso[cid].feitas++;
-        });
-        desenhar((r.data||[]).map(a => {
-          const nomeCurso = a.modulos && a.modulos.cursos ? a.modulos.cursos.titulo : null;
-          const p = nomeCurso && porCurso[nomeCurso] ? porCurso[nomeCurso] : null;
+      const concluir = (feitas) => {
+        desenhar((r.data||[]).map(c => {
+          const aulas = (c.modulos||[]).flatMap(m => m.aulas||[]);
+          const total = aulas.length;
+          const done = aulas.filter(a => feitas.has(a.id)).length;
+          const seg = aulas.reduce((s,a) => s + (a.duracao_seg||0), 0);
           return {
-            id:a.id, titulo:a.titulo, duracao_seg:a.duracao_seg,
-            curso:nomeCurso,
-            capa:a.modulos && a.modulos.cursos ? a.modulos.cursos.capa_url : null,
-            concluida:feitas.has(a.id),
-            pct:p && p.total ? Math.round(p.feitas/p.total*100) : 0
+            id:c.id, titulo:c.titulo, categoria:c.categoria, nivel:c.nivel,
+            capa_url:c.capa_url, total, feitas:done,
+            pct: total ? Math.round(done/total*100) : 0,
+            min: c.duracao_min || Math.round(seg/60)
           };
         }));
-      });
-    });
+      };
+      if(!uid) return concluir(new Set());
+      window.db.from('aulas_concluidas').select('aula_id').eq('usuario_id', uid)
+        .then(c => concluir(new Set(((c.data)||[]).map(x => x.aula_id))));
+    }).catch(e => erro('Erro ao carregar: ' + e.message));
   }
+
   if (window.db) carregar();
   else window.addEventListener('load', carregar);
 })();
