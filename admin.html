@@ -86,6 +86,7 @@ td{padding:10px;border-bottom:1px solid rgba(200,140,255,.09);vertical-align:top
 .aula-linha .ordem{font-size:10.5px;font-weight:800;color:var(--mut);min-width:20px;text-align:center}
 .aula-linha .vid{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;border:1px solid var(--borda);color:var(--mut);flex-shrink:0}
 .aula-linha .vid.tem{color:#9be89b;border-color:rgba(155,232,155,.4)}
+.aula-linha .vid.bloq{color:#ffd479;border-color:rgba(255,212,121,.45)}
 .aula-vazia{padding:14px;font-size:12.5px;color:var(--mut)}
 
 /* modal */
@@ -339,6 +340,12 @@ dialog.modal h3{margin:0 0 16px;color:#fff;font-size:17px}
       <div class="campo" style="grid-column:1/-1"><label for="a-titulo">Título da aula</label><input id="a-titulo" required maxlength="140"></div>
       <div class="campo"><label for="a-duracao">Duração (min)</label><input id="a-duracao" type="number" min="0" value="10"></div>
       <div class="campo"><label for="a-ordem">Ordem</label><input id="a-ordem" type="number" min="1" value="1"></div>
+      <div class="campo" style="grid-column:1/-1"><label class="chk"><input id="a-bloqueada" type="checkbox"> Deixar esta aula travada</label></div>
+      <div class="campo" id="a-dias-wrap" style="grid-column:1/-1" hidden>
+        <label for="a-dias">Liberar depois de quantos dias</label>
+        <input id="a-dias" type="number" min="1" max="365" step="1" value="7">
+        <p style="font-size:11px;color:var(--mut);margin:6px 0 0">Contado a partir do primeiro acesso do aluno ao curso. Até lá a aula aparece com cadeado e o vídeo não abre.</p>
+      </div>
     </div>
     <div style="margin-top:12px">
       <label style="display:block;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);margin-bottom:7px">Vídeo da aula</label>
@@ -618,7 +625,9 @@ function desenharModulos(){
           var tv=tipoVideo(a.video_url);
           return '<div class="aula-linha"><span class="ordem">'+(a.ordem||'·')+'</span>'+
             '<b>'+esc(a.titulo)+'</b><span style="color:var(--mut);font-size:11.5px">'+minFmt(a.duracao_seg)+'</span>'+
-            '<span class="vid'+(tv?' tem':'')+'">'+(tv?'▶ '+tv:'sem vídeo')+'</span><span style="flex:1"></span>'+
+            '<span class="vid'+(tv?' tem':'')+'">'+(tv?'▶ '+tv:'sem vídeo')+'</span>'+
+            (a.bloqueada?'<span class="vid bloq">🔒 '+(a.libera_em_dias||0)+' dia'+((a.libera_em_dias===1)?'':'s')+'</span>':'')+
+            '<span style="flex:1"></span>'+
             '<button class="acao mini ghost" data-editar-aula="'+a.id+'" data-mod="'+m.id+'">Editar</button>'+
             '<button class="acao mini perigo" data-apagar-aula="'+a.id+'">Apagar</button></div>';
         }).join(''):'<div class="aula-vazia">Nenhuma aula neste módulo ainda.</div>')+
@@ -674,6 +683,10 @@ function preverVideo(u){
   if(yt)el.innerHTML='<iframe src="https://www.youtube.com/embed/'+yt[1]+'" allowfullscreen title="Prévia"></iframe>';
   else el.innerHTML='<video src="'+esc(u)+'" controls muted></video>';
 }
+document.getElementById('a-bloqueada').addEventListener('change',function(){
+  document.getElementById('a-dias-wrap').hidden=!this.checked;
+  if(this.checked){var i=document.getElementById('a-dias');if(!(+i.value>0))i.value=7;i.focus();}
+});
 document.getElementById('a-video-url').addEventListener('input',function(){preverVideo(this.value.trim());});
 document.getElementById('a-video-file').addEventListener('change',function(){
   var f=this.files[0];
@@ -695,12 +708,18 @@ function abrirModalAula(moduloId,aulaId){
     if(!a)return;
     document.getElementById('ma-titulo').textContent='Editar aula';
     set('a-titulo',a.titulo);set('a-duracao',Math.round((a.duracao_seg||0)/60));set('a-ordem',a.ordem||1);
+    document.getElementById('a-bloqueada').checked=!!a.bloqueada;
+    set('a-dias',a.libera_em_dias>0?a.libera_em_dias:7);
+    document.getElementById('a-dias-wrap').hidden=!a.bloqueada;
     set('a-video-url',a.video_url||'');
     if(a.video_url){abaVideo='link';preverVideo(a.video_url);}
     else{abaVideo='upload';document.getElementById('a-preview').innerHTML='<p style="padding:12px;color:var(--mut);font-size:12px">Aula sem vídeo ainda — envie um arquivo ou cole um link.</p>';}
   } else {
     document.getElementById('ma-titulo').textContent='Nova aula';
     set('a-titulo','');set('a-duracao','10');set('a-ordem',n);set('a-video-url','');
+    document.getElementById('a-bloqueada').checked=false;
+    set('a-dias',7);
+    document.getElementById('a-dias-wrap').hidden=true;
     document.getElementById('a-video-file').value='';delete document.getElementById('a-video-file').dataset.pendente;
     document.getElementById('a-upload-info').textContent='Escolha um arquivo ou use a aba de link.';
     document.getElementById('a-preview').innerHTML='';
@@ -714,7 +733,9 @@ function abrirModalAula(moduloId,aulaId){
 document.getElementById('a-cancelar').addEventListener('click',function(){fecharModal();});
 function salvarAula(videoUrlFinal){
   var aulaId=val('a-id');
-  var d={titulo:val('a-titulo'),duracao_seg:(+val('a-duracao')||0)*60,ordem:+val('a-ordem')||1,video_url:videoUrlFinal||''};
+  var bloqueada=document.getElementById('a-bloqueada').checked;
+  var d={titulo:val('a-titulo'),duracao_seg:(+val('a-duracao')||0)*60,ordem:+val('a-ordem')||1,video_url:videoUrlFinal||'',
+    bloqueada:bloqueada,libera_em_dias:bloqueada?Math.min(365,Math.max(1,+val('a-dias')||7)):0};
   var p=aulaId?db().from('aulas').update(d).eq('id',aulaId):db().from('aulas').insert(Object.assign({modulo_id:modal.dataset.modulo},d));
   p.then(function(r){
     if(r.error)return falha(r.error);
