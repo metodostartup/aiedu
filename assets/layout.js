@@ -29,7 +29,7 @@
     { href:'skills.html',    ic:'skills',      t:'Skills' },
     { href:'squads.html',    ic:'squads',      t:'Squads' },
     { href:'prompts.html',   ic:'prompts',     t:'Prompts', count:'48' },
-    { href:'cinema.html',    ic:'cinema',      t:'Aulas' },
+    { href:'cinema.html',    ic:'cinema',      t:'Cursos' },
     { href:'mcps.html',      ic:'mcps',        t:'Conexões e MCPs' },
     { href:'guias.html',     ic:'guias',       t:'Guias e tutoriais' },
     { href:'plantas.html',   ic:'plantas',     t:'Plantas' },
