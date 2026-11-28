@@ -87,6 +87,23 @@ td{padding:10px;border-bottom:1px solid rgba(200,140,255,.09);vertical-align:top
 .aula-linha .vid{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;border:1px solid var(--borda);color:var(--mut);flex-shrink:0}
 .aula-linha .vid.tem{color:#9be89b;border-color:rgba(155,232,155,.4)}
 .aula-linha .vid.bloq{color:#ffd479;border-color:rgba(255,212,121,.45)}
+.sup-layout{display:grid;grid-template-columns:280px 1fr;gap:14px;align-items:stretch}
+.sup-lista{max-height:60vh;overflow:auto}
+.sup-lista .conv{display:flex;flex-direction:column;gap:3px;padding:10px 12px;border-radius:10px;border:1px solid transparent;cursor:pointer;font-size:12.5px;margin-bottom:6px}
+.sup-lista .conv:hover{background:rgba(255,255,255,.05)}
+.sup-lista .conv.on{background:rgba(162,60,255,.16);border-color:rgba(200,140,255,.45)}
+.sup-lista .conv b{color:#fff;font-size:12.5px}
+.sup-lista .conv span{color:var(--mut);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sup-chat{display:flex;flex-direction:column;height:60vh;min-height:380px;padding:0;overflow:hidden}
+.sup-cab{padding:13px 16px;border-bottom:1px solid var(--borda);font-size:13px;font-weight:700;color:#fff}
+.sup-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px}
+.sup-msgs .m{max-width:78%;padding:9px 13px;border-radius:13px;font-size:12.5px;line-height:1.5;word-wrap:break-word}
+.sup-msgs .m.aluno{align-self:flex-start;background:rgba(255,255,255,.07);border:1px solid var(--borda)}
+.sup-msgs .m.admin{align-self:flex-end;background:linear-gradient(135deg,#ff7a18,#ff2d8a 55%,#a23cff);color:#fff;border-bottom-right-radius:4px}
+.sup-msgs .m time{display:block;font-size:10px;opacity:.6;margin-top:3px}
+.sup-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--borda)}
+.sup-form input{flex:1;background:rgba(7,4,12,.55);border:1px solid var(--borda-forte);border-radius:9px;padding:10px 12px;color:#fff;font:inherit;font-size:13px}
+@media(max-width:900px){.sup-layout{grid-template-columns:1fr}.sup-lista{max-height:200px}.sup-chat{height:60vh}}
 .aula-vazia{padding:14px;font-size:12.5px;color:var(--mut)}
 
 /* modal */
@@ -131,6 +148,12 @@ dialog.modal h3{margin:0 0 16px;color:#fff;font-size:17px}
         <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 6h6M9 10h6M9 14h3"/></svg>Prompts</a>
       <a class="sitem" data-p="ferramentas" href="#ferramentas" role="button" tabindex="0">
         <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Ferramentas</a>
+      <a class="sitem" data-p="parceiros" href="#parceiros" role="button" tabindex="0">
+        <svg viewBox="0 0 24 24"><path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.6-4.6a2 2 0 0 0 0-2.8l-2.6-2.6a2 2 0 0 0-2.8 0L12 10"/><path d="M7 7 4.4 9.6a2 2 0 0 0 0 2.8l2.6 2.6a2 2 0 0 0 2.8 0l1.2-1.2"/><path d="m8 8 4 4"/></svg>Produtos Parceiros</a>
+      <a class="sitem" data-p="afiliados" href="#afiliados" role="button" tabindex="0">
+        <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18"/><path d="M12 8S10.5 3 7.5 3a2.5 2.5 0 0 0 0 5z"/><path d="M12 8s1.5-5 4.5-5a2.5 2.5 0 0 1 0 5z"/></svg>Afiliados</a>
+      <a class="sitem" data-p="suporte" href="#suporte" role="button" tabindex="0">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 3.6 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>Suporte</a>
       <div class="slabel">Plataforma</div>
       <a class="sitem" data-p="usuarios" href="#usuarios" role="button" tabindex="0">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a7 7 0 0 1 14 0v1M17 3.5a4 4 0 0 1 0 7.7M22 21v-1a7 7 0 0 0-4-6.3"/></svg>Usuários</a>
@@ -331,6 +354,80 @@ dialog.modal h3{margin:0 0 16px;color:#fff;font-size:17px}
       </div>
     </section>
 
+    <!-- PRODUTOS PARCEIROS -->
+    <section class="painel" id="p-parceiros">
+      <div class="pagehead"><div><h1>Produtos Parceiros</h1><p>Cards com foto e link para o site de cada parceiro na área do aluno.</p></div></div>
+      <div class="cartao">
+        <h3 id="form-parc-titulo">Novo parceiro</h3>
+        <form id="form-parceiro" class="grade">
+          <div class="campo" style="grid-column:1/-1"><label for="pp-titulo">Nome do parceiro</label><input id="pp-titulo" required maxlength="120" placeholder="ex.: Lovable"></div>
+          <div class="campo"><label for="pp-categoria">Categoria</label><input id="pp-categoria" maxlength="40" placeholder="ex.: Ferramenta de IA"></div>
+          <div class="campo"><label for="pp-ordem">Ordem</label><input id="pp-ordem" type="number" value="0"></div>
+          <div class="campo"><label class="chk"><input id="pp-ativo" type="checkbox" checked> Visível na dashboard</label></div>
+          <div class="campo" style="grid-column:1/-1"><label for="pp-desc">Descrição</label><input id="pp-desc" maxlength="280" placeholder="Uma linha sobre o que o parceiro oferece."></div>
+          <div class="campo" style="grid-column:1/-1"><label for="pp-link">Link do site do parceiro</label><input id="pp-link" type="url" placeholder="https://…" required></div>
+          <div class="campo" style="grid-column:1/-1"><label for="pp-imagem-file">Foto do card (PNG/JPG/WebP até 5 MB)</label>
+            <input id="pp-imagem-file" type="file" accept="image/png,image/jpeg,image/webp,image/avif">
+            <input type="hidden" id="pp-imagem-url">
+            <div id="pp-imagem-preview"></div>
+            <div class="barra" id="pp-imagem-bar" hidden><i style="width:0%"></i></div>
+          </div>
+          <button class="acao fim" type="submit" id="pp-salvar" style="grid-column:1/-1">Salvar parceiro</button>
+          <button type="button" class="acao" id="pp-cancelar" hidden style="grid-column:1/-1;margin-top:8px">Cancelar edição</button>
+        </form>
+      </div>
+      <div class="cartao rolagem">
+        <h3>Parceiros cadastrados</h3>
+        <table><thead><tr><th>Foto</th><th>Nome</th><th>Categoria</th><th>Site</th><th>Status</th><th></th></tr></thead><tbody id="tb-parceiros"></tbody></table>
+      </div>
+    </section>
+
+    <!-- AFILIADOS -->
+    <section class="painel" id="p-afiliados">
+      <div class="pagehead"><div><h1>Afiliados</h1><p>Percentual de comissão, prazo de liberação e vendas indicadas pelos alunos.</p></div></div>
+      <div class="cartao">
+        <h3>Programa de indicações</h3>
+        <form id="form-afiliados" class="grade">
+          <div class="campo"><label for="af-percentual">Comissão do aluno (%)</label><input id="af-percentual" type="number" min="0" max="100" step="0.5" value="30"></div>
+          <div class="campo"><label for="af-dias">Liberar o saldo após (dias)</label><input id="af-dias" type="number" min="0" max="365" value="30"></div>
+          <button class="acao fim" type="submit" style="grid-column:1/-1">Salvar configuração</button>
+        </form>
+        <p style="font-size:11.5px;color:var(--mut);margin:10px 0 0">Vale para novas vendas registradas. Cada venda guarda o percentual usado no momento do registro.</p>
+      </div>
+      <div class="cartao">
+        <h3>Registrar venda indicada</h3>
+        <form id="form-venda" class="grade">
+          <div class="campo" style="grid-column:1/-1"><label for="v-afiliado">Aluno que indicou</label><select id="v-afiliado" required></select></div>
+          <div class="campo"><label for="v-valor">Valor da venda (R$)</label><input id="v-valor" type="number" min="0" step="0.01" placeholder="497.00" required></div>
+          <div class="campo"><label for="v-desc">Descrição</label><input id="v-desc" maxlength="120" placeholder="ex.: Plano vitalício"></div>
+          <button class="acao fim" type="submit" style="grid-column:1/-1">Registrar venda</button>
+        </form>
+      </div>
+      <div class="cartao rolagem">
+        <h3>Comissões registradas</h3>
+        <table><thead><tr><th>Data</th><th>Aluno</th><th>Descrição</th><th>Venda</th><th>Comissão</th><th>Libera em</th><th></th></tr></thead><tbody id="tb-vendas"></tbody></table>
+      </div>
+    </section>
+
+    <!-- SUPORTE -->
+    <section class="painel" id="p-suporte">
+      <div class="pagehead"><div><h1>Suporte</h1><p>Converse com os alunos que pediram ajuda pelo chat da plataforma.</p></div></div>
+      <div class="sup-layout">
+        <div class="cartao sup-lista">
+          <h3>Conversas</h3>
+          <div id="sup-conv"><p style="font-size:12px;color:var(--mut)">Carregando…</p></div>
+        </div>
+        <div class="cartao sup-chat">
+          <div class="sup-cab" id="sup-cabecalho">Selecione uma conversa à esquerda</div>
+          <div class="sup-msgs" id="sup-msgs"></div>
+          <form class="sup-form" id="sup-form" autocomplete="off">
+            <input id="sup-texto" maxlength="4000" placeholder="Escreva a resposta para o aluno…" aria-label="Resposta">
+            <button class="acao" type="submit" id="sup-enviar" disabled>Enviar</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <!-- USUÁRIOS -->
     <section class="painel" id="p-usuarios">
       <div class="pagehead"><div><h1>Usuários cadastrados</h1><p>Perfis dos alunos; o papel define quem acessa este painel.</p></div></div>
@@ -441,6 +538,7 @@ db().auth.getUser().then(function(r){
     return;
   }
   carregarTudo();
+  setInterval(function(){ if(document.getElementById('p-suporte').classList.contains('on')) suporte(); }, 10000);
 }).catch(function(){});
 
 document.getElementById('sair').addEventListener('click',function(e){e.preventDefault();db().auth.signOut().then(function(){location.href='login.html';});});
@@ -467,7 +565,7 @@ document.getElementById('admin-backdrop').addEventListener('click',function(){
 });
 
 /* ---------- visão geral ---------- */
-function carregarTudo(){visao();cursos();skills();prompts();ferramentas();usuarios();pagamentos();}
+function carregarTudo(){visao();cursos();skills();prompts();ferramentas();parceiros();afiliados();suporte();usuarios();pagamentos();}
 function visao(){
   Promise.all([
     db().from('cursos').select('id',{count:'exact',head:true}),
@@ -974,6 +1072,204 @@ document.getElementById('tb-ferramentas').addEventListener('click',function(e){
     db().from('ferramentas').delete().eq('id',b.dataset.apagar).then(function(r){
       if(r.error)return falha(r.error);msg('Ferramenta apagada.');ferramentas();visao();});
   }
+});
+
+/* ============ PARCEIROS ============ */
+var editandoParc=null;
+function parceiros(){
+  db().from('parceiros').select('*').order('ordem',{ascending:true}).order('criado_em',{ascending:false}).then(function(r){
+    if(r.error)return falha(r.error);
+    document.getElementById('tb-parceiros').innerHTML=r.data.map(function(p){
+      var foto=p.imagem_url
+        ? '<img src="'+esc(p.imagem_url)+'" alt="" style="width:56px;height:38px;object-fit:cover;border-radius:7px;border:1px solid var(--borda-forte)">'
+        : '<div style="width:56px;height:38px;border-radius:7px;display:grid;place-items:center;background:var(--grad);font-weight:800;color:#fff">'+esc((p.titulo||'?').charAt(0).toUpperCase())+'</div>';
+      return '<tr><td>'+foto+'</td><td><b>'+esc(p.titulo)+'</b></td><td>'+esc(p.categoria||'—')+'</td>'+
+        '<td>'+(p.link_url?'<a href="'+esc(p.link_url)+'" target="_blank" rel="noopener noreferrer" style="color:#d9a8ff">abrir ↗</a>':'—')+'</td>'+
+        '<td>'+(p.ativo?'Visível':'Oculta')+'</td>'+
+        '<td><button class="acao mini ghost" data-parc-editar="'+p.id+'">Editar</button> '+
+        '<button class="acao mini perigo" data-parc-apagar="'+p.id+'">Apagar</button></td></tr>';
+    }).join('')||'<tr><td colspan="6" style="color:var(--mut)">Nenhum parceiro ainda.</td></tr>';
+  });
+}
+function limparParceiro(){
+  editandoParc=null;
+  document.getElementById('form-parceiro').reset();
+  document.getElementById('pp-ativo').checked=true;
+  set('pp-ordem','0');set('pp-imagem-url','');
+  document.getElementById('pp-imagem-preview').innerHTML='';
+  document.getElementById('form-parc-titulo').textContent='Novo parceiro';
+  document.getElementById('pp-salvar').textContent='Salvar parceiro';
+  document.getElementById('pp-cancelar').hidden=true;
+}
+document.getElementById('pp-imagem-file').addEventListener('change',function(){
+  var file=this.files[0];if(!file)return;
+  if(!/image\/(png|jpe?g|webp|avif)/.test(file.type)){this.value='';return falha(new Error('Use uma imagem PNG, JPG, WebP ou AVIF.'));}
+  if(file.size>5*1024*1024){this.value='';return falha(new Error('A foto deve ter no máximo 5 MB.'));}
+  var ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+  var path='parceiros/'+Date.now()+'-'+(file.name.replace(/\.[^.]+$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,40)||'foto')+'.'+ext;
+  enviarStorage('ferramentas',path,file,'pp-imagem-bar',function(url){
+    set('pp-imagem-url',url);
+    document.getElementById('pp-imagem-preview').innerHTML='<img src="'+esc(url)+'" alt="" style="max-width:220px;border-radius:10px;border:1px solid var(--borda-forte);margin-top:8px">';
+    msg('Foto enviada — salve o parceiro.');
+  });
+});
+document.getElementById('pp-cancelar').addEventListener('click',limparParceiro);
+document.getElementById('form-parceiro').addEventListener('submit',function(e){
+  e.preventDefault();
+  if(!val('pp-link'))return falha(new Error('Informe o link do site do parceiro.'));
+  var d={titulo:val('pp-titulo'),categoria:val('pp-categoria')||'Parceiro',descricao:val('pp-desc'),
+    imagem_url:val('pp-imagem-url'),link_url:val('pp-link'),ativo:document.getElementById('pp-ativo').checked,
+    ordem:+val('pp-ordem')||0};
+  (editandoParc?db().from('parceiros').update(d).eq('id',editandoParc):db().from('parceiros').insert(d))
+  .then(function(r){
+    if(r.error)return falha(r.error);
+    msg(editandoParc?'Parceiro atualizado.':'Parceiro criado.');
+    limparParceiro();parceiros();
+  });
+});
+document.getElementById('tb-parceiros').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.parcEditar){
+    db().from('parceiros').select('*').eq('id',b.dataset.parcEditar).single().then(function(r){
+      if(r.error)return falha(r.error);
+      var p=r.data;editandoParc=p.id;
+      set('pp-titulo',p.titulo);set('pp-categoria',p.categoria);set('pp-ordem',p.ordem||0);
+      document.getElementById('pp-desc').value=p.descricao||'';
+      document.getElementById('pp-ativo').checked=!!p.ativo;
+      set('pp-link',p.link_url||'');set('pp-imagem-url',p.imagem_url||'');
+      document.getElementById('pp-imagem-preview').innerHTML=p.imagem_url?'<img src="'+esc(p.imagem_url)+'" alt="" style="max-width:220px;border-radius:10px;border:1px solid var(--borda-forte);margin-top:8px">':'';
+      document.getElementById('form-parc-titulo').textContent='Editando: '+p.titulo;
+      document.getElementById('pp-salvar').textContent='Salvar alterações';
+      document.getElementById('pp-cancelar').hidden=false;
+      irPara('parceiros');
+    });
+  } else if(b.dataset.parcApagar){
+    if(!confirm('Apagar este parceiro?'))return;
+    db().from('parceiros').delete().eq('id',b.dataset.parcApagar).then(function(r){
+      if(r.error)return falha(r.error);msg('Parceiro apagado.');parceiros();});
+  }
+});
+
+/* ============ AFILIADOS ============ */
+function afiliados(){
+  db().from('afiliados_config').select('*').eq('id',1).maybeSingle().then(function(r){
+    if(r.error)return falha(r.error);
+    if(r.data){set('af-percentual',r.data.percentual);set('af-dias',r.data.dias_liberacao);}
+  });
+  db().from('perfis').select('id,nome').order('nome').then(function(r){
+    var sel=document.getElementById('v-afiliado');
+    sel.innerHTML='<option value="">Selecione o aluno…</option>'+(r.data||[]).map(function(p){
+      return '<option value="'+p.id+'">'+esc(p.nome)+'</option>';}).join('');
+  });
+  vendas();
+}
+function brl(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function vendas(){
+  db().from('afiliados_vendas').select('*').order('criado_em',{ascending:false}).then(function(r){
+    if(r.error)return falha(r.error);
+    var lista=r.data||[];
+    var ids=[];lista.forEach(function(v){if(ids.indexOf(v.afiliado_id)<0)ids.push(v.afiliado_id);});
+    var nomes={};
+    var pronto = ids.length ? db().from('perfis').select('id,nome').in('id',ids).then(function(p){(p.data||[]).forEach(function(x){nomes[x.id]=x.nome;});}) : Promise.resolve();
+    pronto.then(function(){
+      document.getElementById('tb-vendas').innerHTML=lista.map(function(v){
+        var aberto=new Date(v.libera_em)>new Date();
+        return '<tr><td>'+new Date(v.criado_em).toLocaleDateString('pt-BR')+'</td>'+
+          '<td>'+esc(nomes[v.afiliado_id]||'Aluno')+'</td><td>'+esc(v.descricao||'—')+'</td>'+
+          '<td>'+brl(v.valor)+'</td><td><b style="color:#fff">'+brl(v.comissao)+'</b> ('+Number(v.percentual||0).toFixed(0)+'%)</td>'+
+          '<td style="color:'+(aberto?'#ffd479':'#9be89b')+'">'+(aberto?'em ':'liberado ')+new Date(v.libera_em).toLocaleDateString('pt-BR')+'</td>'+
+          '<td><button class="acao mini perigo" data-venda-apagar="'+v.id+'">Apagar</button></td></tr>';
+      }).join('')||'<tr><td colspan="7" style="color:var(--mut)">Nenhuma comissão registrada.</td></tr>';
+    });
+  });
+}
+document.getElementById('form-afiliados').addEventListener('submit',function(e){
+  e.preventDefault();
+  var p=+val('af-percentual'),d=+val('af-dias');
+  if(isNaN(p)||p<0||p>100)return falha(new Error('O percentual deve ficar entre 0 e 100.'));
+  if(isNaN(d)||d<0||d>365)return falha(new Error('O prazo deve ficar entre 0 e 365 dias.'));
+  db().from('afiliados_config').update({percentual:p,dias_liberacao:d,atualizado_em:new Date().toISOString()}).eq('id',1)
+    .then(function(r){
+      if(r.error)return falha(r.error);
+      msg('Configuração salva: '+p+'% e liberação em '+d+' dia(s).');
+    });
+});
+document.getElementById('form-venda').addEventListener('submit',function(e){
+  e.preventDefault();
+  var fid=val('v-afiliado'),valor=+val('v-valor');
+  if(!fid)return falha(new Error('Selecione o aluno que indicou.'));
+  if(!(valor>0))return falha(new Error('Informe o valor da venda.'));
+  db().from('afiliados_vendas').insert({afiliado_id:fid,valor:valor,descricao:val('v-desc')||'Indicação'})
+    .then(function(r){
+      if(r.error)return falha(r.error);
+      msg('Venda registrada — comissão calculada pelo percentual atual.');
+      document.getElementById('form-venda').reset();
+      vendas();
+    });
+});
+document.getElementById('tb-vendas').addEventListener('click',function(e){
+  var b=e.target.closest('[data-venda-apagar]');if(!b)return;
+  if(!confirm('Apagar esta comissão?'))return;
+  db().from('afiliados_vendas').delete().eq('id',b.dataset.vendaApagar).then(function(r){
+    if(r.error)return falha(r.error);msg('Comissão apagada.');vendas();});
+});
+
+/* ============ SUPORTE ============ */
+var SUPCONV=null, SUPULTIMO=null;
+function suporte(){
+  db().from('suporte_conversas').select('*').order('atualizado_em',{ascending:false}).then(function(r){
+    if(r.error)return falha(r.error);
+    var box=document.getElementById('sup-conv'), lista=r.data||[];
+    if(!lista.length){
+      box.innerHTML='<p style="font-size:12px;color:var(--mut)">Nenhuma conversa ainda. Quando um aluno escrever no Suporte Chat, a conversa aparece aqui.</p>';
+      return;
+    }
+    box.innerHTML=lista.map(function(c){
+      return '<div class="conv'+(SUPCONV===c.id?' on':'')+'" data-conv="'+c.id+'"><b>'+esc(c.usuario_nome||'Aluno')+'</b>'+
+        '<span>'+(c.status==='aberta'?'aberta':'fechada')+' · '+new Date(c.atualizado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</span></div>';
+    }).join('');
+    if(!SUPCONV && lista.length){ SUPCONV=lista[0].id; }
+    if(SUPCONV) carregarMsgsAdm();
+  });
+}
+function cabecalhoAdm(nome){
+  document.getElementById('sup-cabecalho').textContent='Conversa com '+nome;
+  document.getElementById('sup-enviar').disabled=false;
+}
+function carregarMsgsAdm(){
+  var conv=SUPCONV;if(!conv)return;
+  db().from('suporte_conversas').select('usuario_nome').eq('id',conv).maybeSingle().then(function(c){
+    if(c.data) cabecalhoAdm(c.data.usuario_nome||'Aluno');
+  });
+  db().from('suporte_mensagens').select('*').eq('conversa_id',conv).order('criado_em',{ascending:true}).then(function(r){
+    if(r.error||SUPCONV!==conv)return;
+    var el=document.getElementById('sup-msgs'), lista=r.data||[];
+    var chave=lista.length?lista[lista.length-1].id:'vazio';
+    if(chave===SUPULTIMO) return;
+    SUPULTIMO=chave;
+    el.innerHTML=lista.map(function(m){
+      return '<div class="m '+(m.autor==='admin'?'admin':'aluno')+'">'+esc(m.texto).replace(/\n/g,'<br>')+
+        '<time>'+new Date(m.criado_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>';
+    }).join('')||'<p style="color:var(--mut);font-size:12px">Sem mensagens nesta conversa.</p>';
+    el.scrollTop=el.scrollHeight;
+  });
+}
+document.getElementById('sup-conv').addEventListener('click',function(e){
+  var c=e.target.closest('[data-conv]');if(!c)return;
+  SUPCONV=c.dataset.conv;SUPULTIMO=null;
+  document.querySelectorAll('#sup-conv .conv').forEach(function(x){x.classList.toggle('on',x===c);});
+  carregarMsgsAdm();
+});
+document.getElementById('sup-form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var t=val('sup-texto');
+  if(!t||!SUPCONV)return;
+  db().from('suporte_mensagens').insert({conversa_id:SUPCONV,autor:'admin',autor_id:eu?eu.id:null,texto:t})
+    .then(function(r){
+      if(r.error)return falha(r.error);
+      set('sup-texto','');SUPULTIMO=null;
+      carregarMsgsAdm();suporte();
+    });
 });
 
 /* ============ USUÁRIOS ============ */

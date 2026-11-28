@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suporte Chat | AI Edu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.chat{display:flex;flex-direction:column;height:calc(100vh - 190px);min-height:420px;border-radius:18px;overflow:hidden;
+  border:1px solid rgba(200,140,255,.22);
+  background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02) 55%,rgba(255,255,255,.04));
+  -webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 6px 0 #1f0e25,0 20px 40px -16px rgba(0,0,0,.8)}
+.chat-topo{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--borda)}
+.chat-topo .av{width:38px;height:38px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-weight:800;color:#fff}
+.chat-topo b{font-size:13.5px;color:#fff;display:block}
+.chat-topo span{font-size:11px;color:var(--mut)}
+.chat-topo .on{width:8px;height:8px;border-radius:50%;background:#9be89b;box-shadow:0 0 8px #9be89b;margin-left:auto}
+.chat-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:76%;padding:10px 14px;border-radius:14px;font-size:12.8px;line-height:1.5;word-wrap:break-word}
+.msg.aluno{align-self:flex-end;background:linear-gradient(135deg,#ff7a18,#ff2d8a 55%,#a23cff);color:#fff;border-bottom-right-radius:4px;box-shadow:0 8px 18px -10px rgba(255,45,138,.9)}
+.msg.admin{align-self:flex-start;background:rgba(255,255,255,.07);border:1px solid var(--borda);color:var(--txt);border-bottom-left-radius:4px}
+.msg time{display:block;font-size:10px;opacity:.65;margin-top:4px}
+.chat-vazio{margin:auto;text-align:center;color:var(--mut);font-size:12.5px;max-width:320px;line-height:1.6}
+.chat-vazio .ico{font-size:26px;display:block;margin-bottom:8px}
+.chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--borda);background:rgba(7,4,12,.35)}
+.chat-form input{flex:1;background:rgba(7,4,12,.55);border:1px solid var(--borda-forte);border-radius:11px;padding:12px 14px;color:#fff;font:inherit;font-size:13px}
+.chat-form input:focus{outline:none;border-color:rgba(200,140,255,.6);box-shadow:0 0 0 3px rgba(162,60,255,.18)}
+.chat-form button{white-space:nowrap}
+@media(max-width:640px){.chat{height:calc(100vh - 250px)}.msg{max-width:88%}}
+</style>
+</head>
+<body data-pagina="suporte.html">
+<header class="topbar" id="topbar" data-onde="Suporte Chat"></header>
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Suporte Chat</h1>
+      <p>Fale direto com o time da AI Edu — a resposta aparece aqui mesmo.</p>
+    </div>
+
+    <section class="chat">
+      <div class="chat-topo">
+        <div class="av" aria-hidden="true">S</div>
+        <div><b>Suporte AI Edu</b><span id="chat-status">Conectando…</span></div>
+        <span class="on" id="chat-on" hidden aria-label="online"></span>
+      </div>
+      <div class="chat-msgs" id="chat-msgs" aria-live="polite">
+        <div class="chat-vazio"><span class="ico">💬</span>Carregando conversa…</div>
+      </div>
+      <form class="chat-form" id="chat-form" autocomplete="off">
+        <input id="chat-texto" maxlength="4000" placeholder="Escreva sua mensagem para o suporte…" aria-label="Mensagem" required>
+        <button class="btn btn-pri" type="submit" id="chat-enviar">Enviar</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const msgsEl = document.getElementById('chat-msgs');
+  const form = document.getElementById('chat-form');
+  const input = document.getElementById('chat-texto');
+  const btn = document.getElementById('chat-enviar');
+  const statusEl = document.getElementById('chat-status');
+  let CONVERSA = null, UID = null, ultimoId = null, timer = null;
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function hora(iso){ const d = new Date(iso); return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+
+  function pintarVazio(){
+    msgsEl.innerHTML = '<div class="chat-vazio"><span class="ico">💬</span>Nenhuma mensagem ainda.<br>Manda um "oi" que a gente continua por aqui.</div>';
+  }
+
+  function pintar(lista){
+    if(!lista.length){ pintarVazio(); ultimoId = null; return; }
+    const ultimo = lista[lista.length-1].id;
+    if(ultimo === ultimoId) return;
+    ultimoId = ultimo;
+    msgsEl.innerHTML = lista.map(m =>
+      '<div class="msg '+(m.autor==='admin'?'admin':'aluno')+'">'+esc(m.texto).replace(/\n/g,'<br>')+
+      '<time>'+hora(m.criado_em)+'</time></div>'
+    ).join('');
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+  }
+
+  function carregar(){
+    return window.db.from('suporte_mensagens').select('id,autor,texto,criado_em')
+      .eq('conversa_id', CONVERSA.id).order('criado_em',{ascending:true})
+      .then(r => { if(!r.error) pintar(r.data||[]); });
+  }
+
+  function erro(msg){
+    statusEl.textContent = msg;
+    msgsEl.innerHTML = '<div class="chat-vazio"><span class="ico">⚠️</span>'+esc(msg)+'</div>';
+  }
+
+  function abrirConversa(user){
+    UID = user.id;
+    return window.db.from('suporte_conversas').select('*').eq('usuario_id', user.id).maybeSingle()
+      .then(r => {
+        if(r.data) return r.data;
+        return window.db.from('perfis').select('nome').eq('id', user.id).maybeSingle().then(p => {
+          const nome = (p.data && p.data.nome) || (user.email||'Aluno');
+          return window.db.from('suporte_conversas')
+            .insert({ usuario_id: user.id, usuario_nome: nome })
+            .select().maybeSingle()
+            .then(ins => {
+              if(ins.data) return ins.data;
+              return window.db.from('suporte_conversas').select('*').eq('usuario_id', user.id).maybeSingle().then(x => x.data);
+            });
+        });
+      });
+  }
+
+  function iniciar(){
+    window.db.auth.getUser().then(({ data }) => {
+      const user = data && data.user;
+      if(!user) return;
+      abrirConversa(user).then(conv => {
+        if(!conv){ erro('Não foi possível abrir o atendimento. Tente recarregar a página.'); return; }
+        CONVERSA = conv;
+        statusEl.textContent = 'Online · costumamos responder em minutos';
+        document.getElementById('chat-on').hidden = false;
+        carregar();
+        timer = setInterval(carregar, 4000);
+      }).catch(e => erro('Falha ao abrir o chat: ' + e.message));
+    });
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const texto = input.value.trim();
+    if(!texto || !CONVERSA) return;
+    btn.disabled = true;
+    window.db.from('suporte_mensagens')
+      .insert({ conversa_id: CONVERSA.id, autor: 'aluno', autor_id: UID, texto: texto })
+      .then(r => {
+        btn.disabled = false;
+        if(r.error){ window.toast(r.error.message, 'err'); return; }
+        input.value = '';
+        ultimoId = null;
+        carregar();
+      }).catch(() => { btn.disabled = false; window.toast('Falha ao enviar. Tente de novo.', 'err'); });
+  });
+
+  window.addEventListener('beforeunload', () => { if(timer) clearInterval(timer); });
+  iniciar();
+})();
+</script>
+</body>
+</html>

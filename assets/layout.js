@@ -16,7 +16,10 @@
     missoes:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
     guardados:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16l5-3 5 3V4"/>',
     certificados:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-    conquistas:'<circle cx="12" cy="8" r="6"/><path d="M15.5 13 17 22l-5-3-5 3 1.5-9"/>'
+    conquistas:'<circle cx="12" cy="8" r="6"/><path d="M15.5 13 17 22l-5-3-5 3 1.5-9"/>',
+    parceiro:'<path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.6-4.6a2 2 0 0 0 0-2.8l-2.6-2.6a2 2 0 0 0-2.8 0L12 10"/><path d="M7 7 4.4 9.6a2 2 0 0 0 0 2.8l2.6 2.6a2 2 0 0 0 2.8 0l1.2-1.2"/><path d="m8 8 4 4"/>',
+    presente:'<rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13"/><path d="M3 12h18"/><path d="M12 8S10.5 3 7.5 3a2.5 2.5 0 0 0 0 5z"/><path d="M12 8s1.5-5 4.5-5a2.5 2.5 0 0 1 0 5z"/>',
+    chat:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 3.6 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/>'
   };
 
   function icones(nome) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONES[nome] || '') + '</svg>'; }
@@ -26,6 +29,7 @@
     { href:'mais-curtidos.html', ic:'coracao', t:'Mais curtidos' },
     { sec:'Bibliotecas' },
     { href:'aplicativos.html', ic:'apps',    t:'Ferramentas' },
+    { href:'parceiros.html',  ic:'parceiro',   t:'Produtos Parceiros' },
     { href:'skills.html',    ic:'skills',      t:'Skills' },
     { href:'squads.html',    ic:'squads',      t:'Squads' },
     { href:'prompts.html',   ic:'prompts',     t:'Prompts', count:'48' },
@@ -37,6 +41,9 @@
     { href:'missoes.html',   ic:'missoes',     t:'Missões e progresso', count:'0/12' },
     { href:'cursos.html',    ic:'guardados',   t:'Cursos guardados', count:'3' },
     { href:'certificados.html', ic:'conquistas', t:'Certificados', count:'2' },
+    { sec:'Sua conta' },
+    { href:'indique-ganhe.html', ic:'presente', t:'Indique e Ganhe' },
+    { href:'suporte.html',   ic:'chat',        t:'Suporte Chat' },
     { href:'conquistas.html', ic:'conquistas',  t:'Conquistas' }
   ];
 
@@ -94,6 +101,7 @@
         '</div>' +
         '<label class="busca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
         '<input type="search" placeholder="Pesquisar cursos, prompts, skills…" aria-label="Pesquisar na plataforma"><span class="kbd">/</span></label>' +
+        '<a class="hbtn-indique" href="indique-ganhe.html" title="Indique e Ganhe"><span aria-hidden="true">🎁</span><b>Indique e Ganhe</b></a>' +
         '<div class="userbox">' +
           '<button class="ic-btn" data-menu="menu-notif" aria-label="Notificações">🔔<span class="bola"></span></button>' +
           '<div class="menu-perfil" id="menu-notif"><a href="#">🎉 Nova masterclass amanhã às 19h</a><a href="#">✅ Missão “Assistir a 3 aulas” em progresso</a><a href="#">🏅 Certificado disponível: Fundamentos de IA</a></div>' +

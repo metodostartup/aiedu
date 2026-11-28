@@ -8,6 +8,10 @@
     { "source": "/login", "destination": "/login.html" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/dashboard", "destination": "/cinema.html" },
-    { "source": "/inicio", "destination": "/inicio.html" }
+    { "source": "/inicio", "destination": "/inicio.html" },
+    { "source": "/parceiros", "destination": "/parceiros.html" },
+    { "source": "/indique-ganhe", "destination": "/indique-ganhe.html" },
+    { "source": "/suporte", "destination": "/suporte.html" },
+    { "source": "/ferramentas", "destination": "/aplicativos.html" }
   ]
 }

@@ -1161,5 +1161,26 @@ function tstScroll(dir){
     setInterval(function(){i=(i+1)%order.length;show(order[i])},3200);}
 })();
 </script>
+<script src="assets/config.js"></script>
+<script>
+/* Indique e Ganhe: registra o clique de quem chega pelo link do aluno (?ref=<id>) */
+(function(){
+  var ref = new URLSearchParams(location.search).get('ref');
+  if(!ref || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ref)) return;
+  var c = window.NEXORA_CONFIG;
+  if(!c) return;
+  var origem = (document.referrer || 'direto').slice(0, 120);
+  try {
+    if (sessionStorage.getItem('aiedu_ref_click') === ref) return;
+    sessionStorage.setItem('aiedu_ref_click', ref);
+    localStorage.setItem('aiedu_ref', ref);
+  } catch(e) {}
+  fetch(c.url + '/rest/v1/rpc/registrar_clique', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', apikey: c.anonKey, Authorization: 'Bearer ' + c.anonKey },
+    body: JSON.stringify({ ref: ref, origem: origem })
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>

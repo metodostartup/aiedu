@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indique e Ganhe | AI Edu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.ind-hero{position:relative;border-radius:18px;padding:26px;margin-bottom:18px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,122,24,.16),rgba(255,45,138,.16) 48%,rgba(162,60,255,.18)),linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  border:1px solid rgba(200,140,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 6px 0 #1f0e25,0 20px 40px -16px rgba(0,0,0,.8)}
+.ind-hero h2{font-size:19px;margin-bottom:6px}
+.ind-hero p{font-size:12.5px;color:var(--lav);opacity:.85;max-width:640px}
+.ind-link{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.ind-link input{flex:1;min-width:220px;background:rgba(7,4,12,.65);border:1px solid var(--borda-forte);border-radius:10px;padding:12px 14px;color:#fff;font:inherit;font-size:12.5px}
+.ind-link .btn{white-space:nowrap}
+.ind-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.ind-stat{padding:16px 18px;border-radius:14px;border:1px solid rgba(200,140,255,.2);
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05));
+  -webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 4px 0 #1f0e25,0 14px 28px -14px rgba(0,0,0,.7)}
+.ind-stat .rotulo{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.ind-stat .valor{font-family:'Sora',sans-serif;font-size:23px;font-weight:800;color:#fff;margin-top:6px}
+.ind-stat .sub{font-size:11px;color:var(--mut);margin-top:2px}
+.ind-regras{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:18px}
+.ind-regra{padding:16px 18px;border-radius:14px;border:1px solid var(--borda);background:rgba(255,255,255,.03);font-size:12.5px;color:var(--lav)}
+.ind-regra b{display:block;color:#fff;margin-bottom:4px;font-size:13px}
+.ind-regra .num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--grad);color:#fff;font-size:11px;font-weight:800;margin-right:7px}
+.tabela-ind{width:100%;border-collapse:collapse;font-size:12.5px}
+.tabela-ind th{text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);padding:0 10px 10px}
+.tabela-ind td{padding:11px 10px;border-top:1px solid var(--borda)}
+.tag-livre{color:#9be89b;font-weight:700}
+.tag-espera{color:#ffd479;font-weight:700}
+</style>
+</head>
+<body data-pagina="indique-ganhe.html">
+<header class="topbar" id="topbar" data-onde="Indique e Ganhe"></header>
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Indique e Ganhe</h1>
+      <p>Compartilhe seu link, acompanhe os cliques e receba comissão por cada indicação confirmada.</p>
+    </div>
+
+    <section class="ind-hero">
+      <h2>Seu link de indicação</h2>
+      <p id="ind-regra-topo">Carregando as regras do programa…</p>
+      <div class="ind-link">
+        <input id="ind-link" type="text" readonly value="Carregando…" aria-label="Seu link de indicação">
+        <button class="btn btn-pri" id="ind-copiar">Copiar link</button>
+        <button class="btn btn-sec" id="ind-compartilhar">Compartilhar</button>
+      </div>
+    </section>
+
+    <section class="ind-stats" aria-live="polite">
+      <div class="ind-stat"><div class="rotulo">Cliques no link</div><div class="valor" id="s-cliques">—</div><div class="sub">visitas pelo seu link</div></div>
+      <div class="ind-stat"><div class="rotulo">Indicações confirmadas</div><div class="valor" id="s-vendas">—</div><div class="sub">vendas aprovadas</div></div>
+      <div class="ind-stat"><div class="rotulo">Total ganho</div><div class="valor" id="s-total">—</div><div class="sub">em comissões</div></div>
+      <div class="ind-stat"><div class="rotulo">Disponível agora</div><div class="valor" id="s-livre">—</div><div class="sub" id="s-pendente">a liberar: —</div></div>
+    </section>
+
+    <section class="ind-regras">
+      <div class="ind-regra"><b><span class="num">1</span>Compartilhe</b>Envie seu link para amigos, grupos e redes sociais.</div>
+      <div class="ind-regra"><b><span class="num">2</span>Eles entram</b>Cada visita pelo link conta como clique no seu painel.</div>
+      <div class="ind-regra"><b><span class="num">3</span>Você recebe</b><span id="regra-dias">A comissão fica liberada depois do prazo do programa.</span></div>
+    </section>
+
+    <div class="secao-tit" style="margin-top:6px"><h2>Suas comissões</h2><span class="pct" id="ind-contagem"></span></div>
+    <div class="cartao" style="padding:6px 14px 10px;overflow-x:auto">
+      <table class="tabela-ind">
+        <thead><tr><th>Data</th><th>Indicação</th><th>Venda</th><th>Comissão</th><th>Situação</th></tr></thead>
+        <tbody id="tb-indicacoes"><tr><td colspan="5" style="color:var(--mut)">Carregando…</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const brl = v => 'R$ ' + Number(v||0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const campoLink = document.getElementById('ind-link');
+  const DIA = 86400000;
+
+  function regras(cfg){
+    const pct = Number(cfg.percentual||0), dias = Number(cfg.dias_liberacao||0);
+    document.getElementById('ind-regra-topo').textContent =
+      'Você ganha ' + pct.toFixed(0) + '% de comissão por indicação confirmada. O saldo fica disponível ' +
+      dias + ' dia' + (dias===1?'':'s') + ' após a confirmação.';
+    document.getElementById('regra-dias').textContent = 'A comissão fica liberada ' + dias + ' dia' + (dias===1?'':'s') + ' depois da venda confirmada.';
+  }
+
+  function copiar(){
+    const v = campoLink.value;
+    const ok = () => window.toast('Link copiado!');
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(v).then(ok).catch(() => { campoLink.select(); document.execCommand('copy'); ok(); });
+    } else { campoLink.select(); document.execCommand('copy'); ok(); }
+  }
+  document.getElementById('ind-copiar').addEventListener('click', copiar);
+  document.getElementById('ind-compartilhar').addEventListener('click', () => {
+    const v = campoLink.value;
+    if(navigator.share) navigator.share({ title:'AI Edu — indique e ganhe', text:'Estou estudando IA na AI Edu. Entra pelo meu link:', url:v }).catch(()=>{});
+    else copiar();
+  });
+
+  window.db.auth.getUser().then(({ data }) => {
+    const user = data && data.user;
+    if(!user) return;
+    const link = location.origin + '/?ref=' + user.id;
+    campoLink.value = link;
+
+    Promise.all([
+      window.db.from('afiliados_config').select('percentual,dias_liberacao').eq('id',1).maybeSingle(),
+      window.db.from('afiliados_cliques').select('id',{count:'exact',head:true}).eq('afiliado_id', user.id),
+      window.db.from('afiliados_vendas').select('*').eq('afiliado_id', user.id).order('criado_em',{ascending:false})
+    ]).then(([c,cliques,vendas]) => {
+      regras(c.data || {});
+      document.getElementById('s-cliques').textContent = cliques.count || 0;
+
+      const lista = vendas.data || [];
+      const total = lista.reduce((s,v) => s + Number(v.comissao||0), 0);
+      const livre = lista.filter(v => new Date(v.libera_em) <= new Date()).reduce((s,v) => s + Number(v.comissao||0), 0);
+      document.getElementById('s-vendas').textContent = lista.length;
+      document.getElementById('s-total').textContent = brl(total);
+      document.getElementById('s-livre').textContent = brl(livre);
+      document.getElementById('s-pendente').textContent = 'a liberar: ' + brl(total - livre);
+      document.getElementById('ind-contagem').textContent = lista.length + ' ' + (lista.length===1?'comissão':'comissões');
+
+      const tb = document.getElementById('tb-indicacoes');
+      if(!lista.length){
+        tb.innerHTML = '<tr><td colspan="5" style="color:var(--mut);padding:16px 10px">Nenhuma comissão ainda. Compartilhe seu link para começar.</td></tr>';
+        return;
+      }
+      tb.innerHTML = lista.map(v => {
+        const solto = new Date(v.libera_em) <= new Date();
+        const falta = Math.max(1, Math.ceil((new Date(v.libera_em) - Date.now())/DIA));
+        return '<tr><td>'+new Date(v.criado_em).toLocaleDateString('pt-BR')+'</td>'+
+          '<td>'+esc(v.descricao||'Indicação')+'</td>'+
+          '<td>'+brl(v.valor)+'</td>'+
+          '<td><b style="color:#fff">'+brl(v.comissao)+'</b> <span style="color:var(--mut);font-size:11px">('+Number(v.percentual||0).toFixed(0)+'%)</span></td>'+
+          '<td>'+(solto ? '<span class="tag-livre">✓ Liberado</span>' : '<span class="tag-espera">⏳ libera em '+falta+'d</span>')+'</td></tr>';
+      }).join('');
+    });
+  });
+})();
+</script>
+</body>
+</html>

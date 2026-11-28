@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produtos Parceiros | AI Edu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.parc{display:flex;flex-direction:column;border-radius:16px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(110deg,rgba(255,122,24,.05),rgba(255,45,138,.07) 48%,rgba(162,60,255,.08));
+  -webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);
+  border:1px solid rgba(200,140,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 6px 0 #1f0e25,0 18px 36px -14px rgba(0,0,0,.7);
+  transition:var(--trans)}
+.parc:hover{transform:translateY(-3px);border-color:rgba(200,140,255,.5);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 26px rgba(255,255,255,.08),0 0 22px rgba(255,45,138,.35),0 7px 0 #1f0e25,0 22px 44px -12px rgba(0,0,0,.7)}
+.parc .foto{height:160px;background:#100618;position:relative;overflow:hidden}
+.parc .foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.parc:hover .foto img{transform:scale(1.06)}
+.parc .foto .fallback{width:100%;height:100%;display:grid;place-items:center;font-family:'Sora',sans-serif;font-size:32px;font-weight:800;color:#fff;background:var(--grad)}
+.parc .foto .cat{position:absolute;top:11px;left:11px;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:8px;background:rgba(10,4,14,.72);border:1px solid rgba(200,140,255,.45)}
+.parc .corpo{padding:14px 15px 15px;display:flex;flex-direction:column;gap:6px;flex:1}
+.parc h3{font-size:14.5px}
+.parc p{font-size:12px;color:var(--mut);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.parc .acoes{margin-top:auto;padding-top:12px;display:flex}
+.parc .acoes .btn{flex:1;justify-content:center;text-decoration:none}
+</style>
+</head>
+<body data-pagina="parceiros.html">
+<header class="topbar" id="topbar" data-onde="Produtos Parceiros"></header>
+<div class="shell">
+  <aside class="side" id="sidebar"></aside>
+  <main class="dmain">
+    <div class="pagehead">
+      <h1>Produtos Parceiros</h1>
+      <p>Ferramentas e serviços das marcas que indicamos — abra o site do parceiro e conheça.</p>
+    </div>
+    <section class="grid" id="grid-parceiros" aria-live="polite"></section>
+    <div class="vazio" id="vazio-parceiros" hidden></div>
+  </main>
+</div>
+
+<script src="assets/layout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/supabase-client.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const grid = document.getElementById('grid-parceiros');
+  const vazio = document.getElementById('vazio-parceiros');
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  function render(lista){
+    if(!lista.length){
+      grid.innerHTML=''; vazio.hidden=false;
+      vazio.innerHTML='<span class="ico">🤝</span>Nenhum parceiro publicado ainda.';
+      return;
+    }
+    vazio.hidden=true;
+    grid.innerHTML = lista.map(p => `
+      <article class="parc">
+        <div class="foto">${p.imagem_url
+          ? '<img src="'+esc(p.imagem_url)+'" alt="" loading="lazy">'
+          : '<div class="fallback" aria-hidden="true">'+esc((p.titulo||'?').charAt(0).toUpperCase())+'</div>'}
+          <span class="cat">${esc(p.categoria||'Parceiro')}</span>
+        </div>
+        <div class="corpo">
+          <h3>${esc(p.titulo)}</h3>
+          ${p.descricao ? '<p>'+esc(p.descricao)+'</p>' : ''}
+          <div class="acoes">${p.link_url
+            ? '<a class="btn btn-pri" href="'+esc(p.link_url)+'" target="_blank" rel="noopener noreferrer">Visitar site ↗</a>'
+            : '<button class="btn btn-sec" disabled>Link em breve</button>'}</div>
+        </div>
+      </article>`).join('');
+  }
+
+  window.db.from('parceiros').select('*').eq('ativo', true)
+    .order('ordem', { ascending: true }).order('criado_em', { ascending: false })
+    .then(r => {
+      if(r.error){
+        grid.innerHTML=''; vazio.hidden=false;
+        vazio.innerHTML='<span class="ico">⚠️</span>Não foi possível carregar os parceiros. '+esc(r.error.message);
+        return;
+      }
+      render(r.data || []);
+    });
+})();
+</script>
+</body>
+</html>
