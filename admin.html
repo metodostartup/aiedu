@@ -129,6 +129,8 @@ dialog.modal h3{margin:0 0 16px;color:#fff;font-size:17px}
         <svg viewBox="0 0 24 24"><path d="M12 2 9.8 8.8H3l5.6 4.3-2.2 6.9 5.6-4.4 5.6 4.4-2.2-6.9L21 8.8h-6.8z"/></svg>Skills de IA</a>
       <a class="sitem" data-p="prompts" href="#prompts" role="button" tabindex="0">
         <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 6h6M9 10h6M9 14h3"/></svg>Prompts</a>
+      <a class="sitem" data-p="ferramentas" href="#ferramentas" role="button" tabindex="0">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Ferramentas</a>
       <div class="slabel">Plataforma</div>
       <a class="sitem" data-p="usuarios" href="#usuarios" role="button" tabindex="0">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a7 7 0 0 1 14 0v1M17 3.5a4 4 0 0 1 0 7.7M22 21v-1a7 7 0 0 0-4-6.3"/></svg>Usuários</a>
@@ -295,6 +297,40 @@ dialog.modal h3{margin:0 0 16px;color:#fff;font-size:17px}
       </div>
     </section>
 
+    <!-- FERRAMENTAS -->
+    <section class="painel" id="p-ferramentas">
+      <div class="pagehead"><div><h1>Ferramentas</h1><p>Cards que aparecem em Ferramentas na área do aluno: foto, arquivo para download ou link.</p></div></div>
+      <div class="cartao">
+        <h3 id="form-ferramenta-titulo">Nova ferramenta</h3>
+        <form id="form-ferramenta" class="grade">
+          <div class="campo" style="grid-column:1/-1"><label for="f-titulo">Nome da ferramenta</label><input id="f-titulo" required maxlength="120" placeholder="ex.: Pack de 50 prompts de vendas"></div>
+          <div class="campo"><label for="f-categoria">Categoria</label><input id="f-categoria" maxlength="40" placeholder="ex.: Prompts, Templates, Planilhas"></div>
+          <div class="campo"><label for="f-ordem">Ordem</label><input id="f-ordem" type="number" value="0"></div>
+          <div class="campo"><label class="chk"><input id="f-ativo" type="checkbox" checked> Visível na dashboard</label></div>
+          <div class="campo" style="grid-column:1/-1"><label for="f-desc">Descrição</label><input id="f-desc" maxlength="280" placeholder="Uma linha explicando o que a ferramenta faz."></div>
+          <div class="campo" style="grid-column:1/-1"><label for="f-imagem-file">Foto do card (PNG/JPG/WebP até 5 MB)</label>
+            <input id="f-imagem-file" type="file" accept="image/png,image/jpeg,image/webp,image/avif">
+            <input type="hidden" id="f-imagem-url">
+            <div id="f-imagem-preview"></div>
+            <div class="barra" id="f-imagem-bar" hidden><i style="width:0%"></i></div>
+          </div>
+          <div class="campo"><label for="f-arquivo-file">Arquivo para download (até 50 MB)</label>
+            <input id="f-arquivo-file" type="file" accept=".pdf,.zip,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.png,.jpg,.jpeg,.webp">
+            <input type="hidden" id="f-arquivo-url"><input type="hidden" id="f-arquivo-nome">
+            <p id="f-arquivo-info" style="font-size:11px;color:var(--mut);margin:6px 0 0"></p>
+            <div class="barra" id="f-arquivo-bar" hidden><i style="width:0%"></i></div>
+          </div>
+          <div class="campo"><label for="f-link">Ou link externo</label><input id="f-link" type="url" placeholder="https://…"></div>
+          <button class="acao fim" type="submit" id="f-salvar" style="grid-column:1/-1">Salvar ferramenta</button>
+          <button type="button" class="acao" id="f-cancelar" hidden style="grid-column:1/-1;margin-top:8px">Cancelar edição</button>
+        </form>
+      </div>
+      <div class="cartao rolagem">
+        <h3>Ferramentas cadastradas</h3>
+        <table><thead><tr><th>Foto</th><th>Nome</th><th>Categoria</th><th>Entrega</th><th>Status</th><th></th></tr></thead><tbody id="tb-ferramentas"></tbody></table>
+      </div>
+    </section>
+
     <!-- USUÁRIOS -->
     <section class="painel" id="p-usuarios">
       <div class="pagehead"><div><h1>Usuários cadastrados</h1><p>Perfis dos alunos; o papel define quem acessa este painel.</p></div></div>
@@ -431,16 +467,17 @@ document.getElementById('admin-backdrop').addEventListener('click',function(){
 });
 
 /* ---------- visão geral ---------- */
-function carregarTudo(){visao();cursos();skills();prompts();usuarios();pagamentos();}
+function carregarTudo(){visao();cursos();skills();prompts();ferramentas();usuarios();pagamentos();}
 function visao(){
   Promise.all([
     db().from('cursos').select('id',{count:'exact',head:true}),
     db().from('aulas').select('id',{count:'exact',head:true}),
     db().from('skills').select('id',{count:'exact',head:true}),
     db().from('prompts').select('id',{count:'exact',head:true}),
-    db().from('perfis').select('id',{count:'exact',head:true})
+    db().from('perfis').select('id',{count:'exact',head:true}),
+    db().from('ferramentas').select('id',{count:'exact',head:true})
   ]).then(function(rs){
-    var nomes=['Cursos','Aulas','Skills','Prompts','Usuários'];
+    var nomes=['Cursos','Aulas','Skills','Prompts','Usuários','Ferramentas'];
     document.getElementById('stats').innerHTML=rs.map(function(r,i){
       return '<div class="stat"><b>'+((r&&r.count!=null)?r.count:'—')+'</b><span>'+nomes[i]+'</span></div>';
     }).join('');
@@ -837,6 +874,105 @@ document.getElementById('tb-prompts').addEventListener('click',function(e){
   } else if(b.dataset.apagar){
     db().from('prompts').delete().eq('id',b.dataset.apagar).then(function(r){
       if(r.error)return falha(r.error);msg('Prompt apagado.');prompts();visao();});
+  }
+});
+
+/* ============ FERRAMENTAS ============ */
+var editandoFerr=null;
+function ferrTipo(x){
+  var t=[];
+  if(x.arquivo_url)t.push('Download');
+  if(x.link_url)t.push('Link');
+  return t.length?t.join(' + '):'—';
+}
+function ferramentas(){
+  db().from('ferramentas').select('*').order('ordem',{ascending:true}).order('criado_em',{ascending:false}).then(function(r){
+    if(r.error)return falha(r.error);
+    document.getElementById('tb-ferramentas').innerHTML=r.data.map(function(f){
+      var foto=f.imagem_url
+        ? '<img src="'+esc(f.imagem_url)+'" alt="" style="width:56px;height:38px;object-fit:cover;border-radius:7px;border:1px solid var(--borda-forte)">'
+        : '<div style="width:56px;height:38px;border-radius:7px;display:grid;place-items:center;background:var(--grad);font-weight:800;color:#fff">'+esc((f.titulo||'?').charAt(0).toUpperCase())+'</div>';
+      return '<tr><td>'+foto+'</td><td><b>'+esc(f.titulo)+'</b></td><td>'+esc(f.categoria||'—')+'</td><td>'+ferrTipo(f)+'</td>'+
+        '<td>'+(f.ativo?'Visível':'Oculta')+'</td>'+
+        '<td><button class="acao mini ghost" data-editar="'+f.id+'">Editar</button> '+
+        '<button class="acao mini perigo" data-apagar="'+f.id+'">Apagar</button></td></tr>';
+    }).join('')||'<tr><td colspan="6" style="color:var(--mut)">Nenhuma ferramenta ainda.</td></tr>';
+  });
+}
+function limparFerramenta(){
+  editandoFerr=null;
+  document.getElementById('form-ferramenta').reset();
+  document.getElementById('f-ativo').checked=true;
+  set('f-ordem','0');set('f-imagem-url','');set('f-arquivo-url','');set('f-arquivo-nome','');set('f-link','');
+  document.getElementById('f-imagem-preview').innerHTML='';
+  document.getElementById('f-arquivo-info').textContent='';
+  document.getElementById('f-salvar').textContent='Salvar ferramenta';
+  document.getElementById('form-ferramenta-titulo').textContent='Nova ferramenta';
+  document.getElementById('f-cancelar').hidden=true;
+}
+document.getElementById('f-imagem-file').addEventListener('change',function(){
+  var file=this.files[0];if(!file)return;
+  if(!/image\/(png|jpe?g|webp|avif)/.test(file.type)){this.value='';return falha(new Error('Use uma imagem PNG, JPG, WebP ou AVIF.'));}
+  if(file.size>5*1024*1024){this.value='';return falha(new Error('A foto deve ter no máximo 5 MB.'));}
+  var ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+  var path='imagens/'+Date.now()+'-'+(file.name.replace(/\.[^.]+$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,40)||'foto')+'.'+ext;
+  enviarStorage('ferramentas',path,file,'f-imagem-bar',function(url){
+    set('f-imagem-url',url);
+    document.getElementById('f-imagem-preview').innerHTML='<img src="'+esc(url)+'" alt="" style="max-width:220px;border-radius:10px;border:1px solid var(--borda-forte);margin-top:8px">';
+    msg('Foto enviada — salve a ferramenta.');
+  });
+});
+document.getElementById('f-arquivo-file').addEventListener('change',function(){
+  var file=this.files[0];if(!file)return;
+  if(file.size>50*1024*1024){this.value='';return falha(new Error('O arquivo deve ter no máximo 50 MB.'));}
+  var ext=(file.name.split('.').pop()||'bin').toLowerCase();
+  var path='arquivos/'+Date.now()+'-'+(file.name.replace(/\.[^.]+$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,40)||'arquivo')+'.'+ext;
+  enviarStorage('ferramentas',path,file,'f-arquivo-bar',function(url){
+    set('f-arquivo-url',url);set('f-arquivo-nome',file.name);
+    document.getElementById('f-arquivo-info').textContent='Enviado: '+file.name;
+    msg('Arquivo enviado — salve a ferramenta.');
+  });
+});
+document.getElementById('f-cancelar').addEventListener('click',limparFerramenta);
+document.getElementById('form-ferramenta').addEventListener('submit',function(e){
+  e.preventDefault();
+  var arquivo=val('f-arquivo-url'),link=val('f-link').trim();
+  if(!val('f-titulo').trim())return falha(new Error('Digite o nome da ferramenta.'));
+  if(!arquivo&&!link)return falha(new Error('Anexe um arquivo para download ou informe um link.'));
+  var d={titulo:val('f-titulo').trim(),categoria:val('f-categoria').trim()||'Ferramenta',
+    descricao:val('f-desc').trim(),imagem_url:val('f-imagem-url'),
+    arquivo_url:arquivo,arquivo_nome:val('f-arquivo-nome'),
+    link_url:link,ativo:document.getElementById('f-ativo').checked,
+    ordem:+val('f-ordem')||0};
+  var q=editandoFerr?db().from('ferramentas').update(d).eq('id',editandoFerr):db().from('ferramentas').insert(d);
+  q.then(function(r){
+    if(r.error)return falha(r.error);
+    msg(editandoFerr?'Ferramenta atualizada.':'Ferramenta criada.');
+    limparFerramenta();ferramentas();visao();
+  });
+});
+document.getElementById('tb-ferramentas').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.editar){
+    db().from('ferramentas').select('*').eq('id',b.dataset.editar).single().then(function(r){
+      if(r.error)return falha(r.error);
+      var f=r.data;editandoFerr=f.id;
+      set('f-titulo',f.titulo);set('f-categoria',f.categoria);set('f-ordem',f.ordem||0);
+      document.getElementById('f-desc').value=f.descricao||'';
+      document.getElementById('f-ativo').checked=!!f.ativo;
+      set('f-imagem-url',f.imagem_url||'');set('f-arquivo-url',f.arquivo_url||'');
+      set('f-arquivo-nome',f.arquivo_nome||'');set('f-link',f.link_url||'');
+      document.getElementById('f-imagem-preview').innerHTML=f.imagem_url?'<img src="'+esc(f.imagem_url)+'" alt="" style="max-width:220px;border-radius:10px;border:1px solid var(--borda-forte);margin-top:8px">':'';
+      document.getElementById('f-arquivo-info').textContent=f.arquivo_nome?'Enviado: '+f.arquivo_nome:'';
+      document.getElementById('form-ferramenta-titulo').textContent='Editando: '+f.titulo;
+      document.getElementById('f-salvar').textContent='Salvar alterações';
+      document.getElementById('f-cancelar').hidden=false;
+      irPara('ferramentas');
+    });
+  } else if(b.dataset.apagar){
+    if(!confirm('Apagar esta ferramenta? O card sai da dashboard.'))return;
+    db().from('ferramentas').delete().eq('id',b.dataset.apagar).then(function(r){
+      if(r.error)return falha(r.error);msg('Ferramenta apagada.');ferramentas();visao();});
   }
 });
 

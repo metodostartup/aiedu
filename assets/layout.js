@@ -25,7 +25,7 @@
     { href:'inicio.html',    ic:'inicio',      t:'Início' },
     { href:'mais-curtidos.html', ic:'coracao', t:'Mais curtidos' },
     { sec:'Bibliotecas' },
-    { href:'aplicativos.html', ic:'apps',    t:'Aplicativos' },
+    { href:'aplicativos.html', ic:'apps',    t:'Ferramentas' },
     { href:'skills.html',    ic:'skills',      t:'Skills' },
     { href:'squads.html',    ic:'squads',      t:'Squads' },
     { href:'prompts.html',   ic:'prompts',     t:'Prompts', count:'48' },

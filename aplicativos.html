@@ -3,18 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aplicativos | AI Edu</title>
+<title>Ferramentas | AI Edu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/app.css">
 <style>
-.app-card{padding:18px}
-.app-head{display:flex;gap:13px;align-items:center}
-.app-logo{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#fff;background:var(--grad);flex-shrink:0}
-.app-head h3{font-size:15px}
-.app-head .cat{font-size:11px;color:var(--mut)}
-.preco{font-size:11.5px;color:var(--pri-soft);font-weight:700}
+.ferr{position:relative;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05)),linear-gradient(110deg,rgba(255,122,24,.05),rgba(255,45,138,.07) 48%,rgba(162,60,255,.08));
+  -webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);
+  border:1px solid rgba(200,140,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 6px 0 #1f0e25,0 18px 36px -14px rgba(0,0,0,.7);
+  transition:var(--trans)}
+.ferr:hover{transform:translateY(-3px);border-color:rgba(200,140,255,.5);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 26px rgba(255,255,255,.08),0 0 22px rgba(255,45,138,.35),0 7px 0 #1f0e25,0 22px 44px -12px rgba(0,0,0,.7)}
+.ferr .foto{height:170px;background:#100618;position:relative;overflow:hidden}
+.ferr .foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.ferr:hover .foto img{transform:scale(1.06)}
+.ferr .foto .fallback{width:100%;height:100%;display:grid;place-items:center;font-family:'Sora',sans-serif;font-size:34px;font-weight:800;color:#fff;background:var(--grad)}
+.ferr .foto .cat{position:absolute;top:11px;left:11px;z-index:2;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:8px;background:rgba(10,4,14,.72);border:1px solid rgba(200,140,255,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.ferr .corpo{padding:14px 15px 15px;display:flex;flex-direction:column;gap:6px;flex:1}
+.ferr h3{font-size:14.5px;line-height:1.3}
+.ferr p{font-size:12px;color:var(--mut);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ferr .acoes{margin-top:auto;display:flex;gap:8px;padding-top:12px}
+.ferr .acoes .btn{flex:1;justify-content:center;text-decoration:none}
+.ferr .acoes .btn-sec{flex:0 0 auto}
+.ferr .tipo{display:flex;gap:8px;font-size:10.5px;color:var(--mut);flex-wrap:wrap}
+.ferr .tipo span{padding:2px 8px;border-radius:6px;border:1px solid var(--borda)}
 </style>
 </head>
 <body data-pagina="aplicativos.html">
@@ -22,28 +36,23 @@
   <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c026d3"/><stop offset="1" stop-color="#a23cff"/></linearGradient>
 </defs></svg>
 
-<header class="topbar" id="topbar" data-onde="Aplicativos"></header>
+<header class="topbar" id="topbar" data-onde="Ferramentas"></header>
 
 <div class="shell">
   <aside class="side" id="sidebar"></aside>
 
   <main class="dmain">
     <div class="pagehead">
-      <h1>Aplicativos de IA</h1>
-      <p>As ferramentas certas para cada tarefa, com análise da equipe AI Edu.</p>
+      <h1>Ferramentas</h1>
+      <p>Templates, packs, planilhas e utilitários prontos para baixar ou acessar.</p>
     </div>
 
-    <div class="filtros" id="filtros-apps">
+    <div class="filtros" id="filtros-ferramentas">
       <button class="chip ativo" data-valor="Todas">Todas</button>
-      <button class="chip" data-valor="Assistente">Assistentes</button>
-      <button class="chip" data-valor="Imagem">Imagem</button>
-      <button class="chip" data-valor="Automação">Automação</button>
-      <button class="chip" data-valor="Voz">Voz</button>
-      <button class="chip" data-valor="Pesquisa">Pesquisa</button>
     </div>
 
-    <section class="grid" id="grid-apps" aria-live="polite"></section>
-    <div class="vazio" id="vazio-apps" hidden><span class="ico">🔍</span>Nenhum aplicativo nesta categoria com essa pesquisa.</div>
+    <section class="grid" id="grid-ferramentas" aria-live="polite"></section>
+    <div class="vazio" id="vazio-ferramentas" hidden><span class="ico">🧰</span>Nenhuma ferramenta nesta categoria com essa pesquisa.</div>
   </main>
 </div>
 
@@ -54,39 +63,85 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  const D = window.DEMO;
-  let estado = { cat:'Todas', q:'' };
+  const grid = document.getElementById('grid-ferramentas');
+  const vazio = document.getElementById('vazio-ferramentas');
+  const filtros = document.getElementById('filtros-ferramentas');
+  let FERR = [], estado = { cat:'Todas', q:'' };
 
-  function render(){
-    const lista = D.apps.filter(a =>
-      (estado.cat==='Todas' || a.cat===estado.cat) &&
-      (a.nome+a.desc+a.cat).toLowerCase().includes(estado.q)
-    );
-    document.getElementById('vazio-apps').hidden = lista.length>0;
-    document.getElementById('grid-apps').innerHTML = lista.map(a => `
-      <article class="card app-card">
-        <div class="app-head">
-          <div class="app-logo">${a.nome[0]}</div>
-          <div><h3>${a.nome}</h3><span class="cat">${a.cat}</span></div>
-          <span class="nivel-pill ${a.dificuldade.toLowerCase()}" style="margin-left:auto">${a.dificuldade}</span>
-        </div>
-        <p style="margin-top:12px">${a.desc}</p>
-        <div class="meta-linha" style="margin-top:8px"><span class="estrela">★ ${a.nota}</span><span class="preco">${a.preco}</span></div>
-        <div style="display:flex;gap:9px;margin-top:12px">
-          <button class="btn btn-pri" style="flex:1;justify-content:center" data-abrir-app="${a.nome}">Abrir app</button>
-          <button class="btn btn-sec btn-fav" aria-label="Guardar app" aria-pressed="false">♡</button>
-        </div>
-      </article>`).join('');
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function baixarComNome(url, nome){
+    if(!url) return url;
+    return url + (url.indexOf('?')>=0?'&':'?') + 'download=' + encodeURIComponent(nome||'ferramenta');
   }
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-abrir-app]');
-    if (b) window.toast('Abrindo ' + b.dataset.abrirApp + ' em nova aba…');
-  });
-  document.addEventListener('filtro:mudou', e => { if (e.detail.grupo==='filtros-apps'){ estado.cat=e.detail.valor; render(); } });
-  document.addEventListener('busca:mudou', e => { estado.q=e.detail.q; render(); });
+  function montarFiltros(){
+    const cats = ['Todas'].concat([...new Set(FERR.map(f => f.categoria || 'Ferramenta'))]);
+    filtros.innerHTML = cats.map(c =>
+      '<button class="chip'+(c===estado.cat?' ativo':'')+'" data-valor="'+esc(c)+'">'+esc(c)+'</button>'
+    ).join('');
+  }
 
-  render();
+  function render(){
+    const lista = FERR.filter(f => {
+      const alvo = [f.titulo, f.descricao, f.categoria, f.arquivo_nome, f.link_url].join(' ').toLowerCase();
+      return (estado.cat==='Todas' || (f.categoria||'Ferramenta')===estado.cat) && alvo.includes(estado.q);
+    });
+    vazio.hidden = lista.length>0;
+    if(!lista.length && !FERR.length){
+      vazio.innerHTML = '<span class="ico">🧰</span>Nenhuma ferramenta publicada ainda — o admin adiciona em /admin → Ferramentas.';
+      grid.innerHTML = ''; return;
+    }
+    vazio.innerHTML = '<span class="ico">🔍</span>Nenhuma ferramenta nesta categoria com essa pesquisa.';
+    grid.innerHTML = lista.map(f => {
+      const temArq = !!f.arquivo_url, temLink = !!f.link_url;
+      const nomeArq = f.arquivo_nome || (f.titulo+'.arquivo');
+      const botoes = [];
+      if(temArq) botoes.push('<a class="btn btn-pri" href="'+esc(baixarComNome(f.arquivo_url,nomeArq))+'" download="'+esc(nomeArq)+'" rel="noopener" title="Baixar '+esc(nomeArq)+'">⬇ Baixar</a>');
+      if(temLink) botoes.push('<a class="'+(temArq?'btn btn-sec':'btn btn-pri')+'" href="'+esc(f.link_url)+'" target="_blank" rel="noopener noreferrer">'+(temArq?'🌐 Site':'🔗 Acessar')+'</a>');
+      return `
+      <article class="ferr">
+        <div class="foto">${f.imagem_url
+          ? '<img src="'+esc(f.imagem_url)+'" alt="" loading="lazy">'
+          : '<div class="fallback" aria-hidden="true">'+esc((f.titulo||'?').charAt(0).toUpperCase())+'</div>'}
+          <span class="cat">${esc(f.categoria||'Ferramenta')}</span>
+        </div>
+        <div class="corpo">
+          <h3>${esc(f.titulo)}</h3>
+          ${f.descricao ? '<p>'+esc(f.descricao)+'</p>' : ''}
+          <div class="tipo">${temArq?'<span>📦 '+esc(nomeArq)+'</span>':''}${temLink?'<span>🔗 link externo</span>':''}</div>
+          <div class="acoes">${botoes.join('')}</div>
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  filtros.addEventListener('click', e => {
+    const b = e.target.closest('.chip[data-valor]');
+    if(!b) return;
+    estado.cat = b.dataset.valor;
+    filtros.querySelectorAll('.chip').forEach(c => c.classList.toggle('ativo', c===b));
+    render();
+  });
+  document.addEventListener('busca:mudou', e => { estado.q = e.detail.q; render(); });
+
+  function carregar(){
+    window.db.from('ferramentas').select('*').eq('ativo', true)
+      .order('ordem', { ascending: true }).order('criado_em', { ascending: false })
+      .then(r => {
+        if(r.error){
+          grid.innerHTML = '';
+          vazio.hidden = false;
+          vazio.innerHTML = '<span class="ico">⚠️</span>Não foi possível carregar as ferramentas. '+esc(r.error.message);
+          return;
+        }
+        FERR = r.data || [];
+        montarFiltros();
+        render();
+      });
+  }
+
+  if(window.db) carregar();
+  else window.addEventListener('load', carregar);
 })();
 </script>
 </body>
